@@ -1,218 +1,258 @@
 <template>
-  <div style="position: relative; height: 100%">
-    <v-app-bar flat extended extension-height="132px">
-      <v-app-bar-nav-icon
-        class="white--text"
-        @click="drawer = true"
-      ></v-app-bar-nav-icon>
+  <div style="position: relative; min-height: calc(100vh - 32px)">
+    <v-app-bar
+      flat
+      dark
+      elevation="0"
+      extended
+      extension-height="212px"
+      style="z-index: 1000"
+    >
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-toolbar-title class="text-h6">ChatCat</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-title class="white--text">ChatCat</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon color="white">
-        <v-icon size="large">mdi-scan-helper</v-icon>
-      </v-btn>
+      <template v-slot:extension>
+        <div class="d-flex flex-column full-width">
+          <v-text-field
+            solo
+            height="56px"
+            flat
+            clearable
+            full-width
+            type="number"
+            label="加入一个聊天室"
+            prepend-inner-icon="mdi-magnify"
+            append-icon="mdi-qrcode"
+            hint="当前为演示版本，不代表最终效果"
+            persistent-hint
+            class="pb-2 full-width"
+          >
+          </v-text-field>
+
+          <v-chip-group
+            class="pb-4 full-width"
+            column
+            active-class="primary--text"
+          >
+            <v-chip color="grey darken-3"> 历史搜索记录 </v-chip>
+            <v-chip
+              v-for="(record, i) in records"
+              :key="i"
+              close
+              close-icon="mdi-close"
+              color="grey darken-3"
+            >
+              {{ record }}
+            </v-chip>
+          </v-chip-group>
+        </div>
+      </template>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      temporary
+      style="z-index: 2000"
+    >
       <v-list class="mt-12">
         <v-list-item>
-          <v-avatar size="96" class="my-4">
-            <v-img
-              src="https://file.lifeni.life/avatar.jpg"
-              alt="Your Avatar"
-            ></v-img>
+          <v-avatar size="96" class="avatar ma-4">
+            <v-img src="default_avatar.png" alt="Your Avatar"></v-img>
           </v-avatar>
         </v-list-item>
 
         <v-list-item link>
-          <v-list-item-content>
-            <v-list-item-title class="title">Your Name</v-list-item-title>
-            <v-list-item-subtitle>Your Description</v-list-item-subtitle>
+          <v-list-item-content class="px-4 py-8">
+            <v-list-item-title class="text-h6 mb-2">你的名字</v-list-item-title>
+            <v-list-item-subtitle class="text-subtitle-1"
+              >这里是个性签名</v-list-item-subtitle
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-divider></v-divider>
       <v-list nav>
         <v-list-item-group>
           <v-list-item>
             <v-list-item-action>
-              <v-icon>mdi-home</v-icon>
+              <v-icon>mdi-view-dashboard-outline</v-icon>
             </v-list-item-action>
-            <v-list-item-title>Home</v-list-item-title>
+            <v-list-item-title>主页</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-action>
-              <v-icon>mdi-account-circle</v-icon>
+              <v-icon>mdi-account-circle-outline</v-icon>
             </v-list-item-action>
-            <v-list-item-title>Profile</v-list-item-title>
+            <v-list-item-title>个人资料</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-action>
-              <v-icon>mdi-information</v-icon>
+              <v-icon>mdi-cog-outline</v-icon>
             </v-list-item-action>
-            <v-list-item-title>About</v-list-item-title>
+            <v-list-item-title>设置</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-action>
+              <v-icon>mdi-information-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>关于 ChatCat</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-text-field
-      outlined
-      flat
-      clearable
-      type="number"
-      label="Join A Chat Room"
-      prepend-inner-icon="mdi-magnify"
-      hint="Currently In Beta, For Testing Only."
-      persistent-hint
-      class="mx-4"
-      style="margin-top: -120px"
-    >
-    </v-text-field>
+
     <v-main>
-      <v-toolbar flat>
-        <v-icon>mdi-view-dashboard</v-icon>
-        <v-toolbar-title class="mx-4 text-body-1">Chat Room</v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
-      <div class="scroll">
-        <v-sheet class="sheet">
-          <v-card elevation="0" class="card">
-            <v-img class="image white--text" src="svg/Create.svg">
-              <v-card-title class="text-subtitle-2">New Chatroom</v-card-title>
-            </v-img>
-          </v-card>
-
-          <v-card
-            v-for="(room, index) in roomList"
-            :key="index"
-            class="card"
-            elevation="0"
+      <v-btn fixed dark fab large color="primary" class="fab">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <div class="board d-flex flex-row flex-wrap pa-2">
+        <v-card
+          v-for="(room, i) in rooms"
+          :key="i"
+          ripple
+          elevation="0"
+          class="card grey lighten-4 d-flex flex-column align-start justify-space-between"
+        >
+          <div class="full-width">
+            <p class="text-caption ma-0 px-4 pt-4 pb-1">
+              <strong>{{ room.creator }}</strong> 在
+              <strong>{{ fromNow(room.date) }}</strong> 创建
+            </p>
+            <v-card-title class="text-h6 font-weight-bold py-0">{{
+              room.title
+            }}</v-card-title>
+          </div>
+          <p
+            :class="`text-body-2 pt-0 px-4 d-flex align-center status ${
+              room.status.code === 0
+                ? 'waiting font-weight-bold'
+                : room.status.code === 1
+                ? 'online font-weight-bold'
+                : 'offline'
+            }`"
           >
-            <v-img
-              class="image white--text"
-              :src="
-                room.status === 0
-                  ? 'svg/Processing.svg'
-                  : room.status === 1
-                  ? 'svg/Closed.svg'
-                  : 'svg/Error.svg'
-              "
-            >
-              <v-card-title class="text-subtitle-2">{{
-                room.name
-              }}</v-card-title>
-            </v-img>
-          </v-card>
-        </v-sheet>
+            {{
+              room.status.code === 0
+                ? '等待加入'
+                : room.status.code === 1
+                ? `${room.status.count} 人在线`
+                : '已结束'
+            }}
+          </p>
+        </v-card>
       </div>
-
-      <v-toolbar flat>
-        <v-icon>mdi-account-box</v-icon>
-        <v-toolbar-title class="mx-4 text-body-1"
-          >Recent Contact</v-toolbar-title
-        >
-        <v-spacer></v-spacer>
-      </v-toolbar>
-
-      <div class="scroll">
-        <v-sheet class="sheet">
-          <v-avatar
-            v-for="(name, i) in nameList"
-            :key="i"
-            size="64"
-            color="accent"
-            class="avatar text-button cyan lighten-2"
-          >
-            {{ name.slice(0, 3).toUpperCase() }}
-          </v-avatar>
-        </v-sheet>
-      </div>
-
-      <v-toolbar flat>
-        <v-icon>mdi-bullhorn</v-icon>
-        <v-toolbar-title class="mx-4 text-body-1"
-          >Bulletin Board</v-toolbar-title
-        >
-        <v-spacer></v-spacer>
-      </v-toolbar>
-
-      <v-responsive :aspect-ratio="16 / 9">
-        <v-carousel
-          cycle
-          hide-delimiter-background
-          show-arrows-on-hover
-          height="100%"
-        >
-          <v-carousel-item>
-            <v-sheet height="100%">
-              <v-row class="fill-height" align="center" justify="center">
-                <v-img
-                  src="no_announcement.png"
-                  class="align-center text-center"
-                >
-                </v-img>
-              </v-row>
-            </v-sheet>
-          </v-carousel-item>
-        </v-carousel>
-      </v-responsive>
     </v-main>
-    <v-footer padless>
-      <v-col class="text-center" cols="12">
-        {{ new Date().getFullYear() }} © <strong>ChatCat-Team</strong>
-      </v-col>
-    </v-footer>
   </div>
 </template>
 
 <style scoped>
-.image {
-  width: 100%;
-  height: 100%;
-}
-
-.scroll {
-  width: 100vw;
-  overflow: auto hidden;
-}
-
-.sheet {
-  min-width: 100%;
-  height: auto;
-  padding: 8px;
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
-.sheet.wrap {
-  flex-wrap: wrap;
-}
-
 .card {
-  width: 150px;
-  height: 150px;
+  width: calc(50% - 16px);
+  height: 200px;
   margin: 8px;
+}
+
+.fab {
+  left: calc(50% - 32px);
+  bottom: 32px;
 }
 
 .avatar {
-  margin: 8px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.creator {
+  padding: 0 16px;
+}
+
+.status::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 12px;
+  border-radius: 1rem;
+  background-color: #ffffff;
+}
+
+.status.online::before {
+  background-color: #69c667;
+}
+
+.status.waiting::before {
+  background-color: #4fc3f7;
+}
+
+.status.offline::before {
+  background-color: #bdbdbd;
 }
 </style>
 
 <script>
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
+dayjs.locale('zh-cn')
+
 export default {
   layout: 'default',
   data: () => ({
     drawer: false,
-    roomList: [
-      { name: 'Example Room', status: 0 },
-      { name: 'Bad Room', status: -1 },
-      { name: 'Closed Room', status: 1 },
+    fromNow: (d) => dayjs.unix(d).fromNow(),
+    rooms: [
+      {
+        id: 454781,
+        title: '测试一下',
+        creator: '小白',
+        date: '1600694209',
+        status: {
+          code: 1,
+          count: 45,
+        },
+      },
+      {
+        id: 57471,
+        title: '这是一个长长长长长长标题',
+        creator: '隔壁老王',
+        date: '1600692209',
+        status: {
+          code: 2,
+        },
+      },
+      {
+        id: 5381,
+        title: '这是一个标题',
+        creator: '老黑',
+        date: '1600694109',
+        status: {
+          code: 0,
+        },
+      },
+      {
+        id: 781,
+        title: '讨论一下关于今天早上吃什么的问题',
+        creator: '匿名',
+        date: '1600634209',
+        status: {
+          code: 1,
+          count: 3,
+        },
+      },
+      {
+        id: 387954,
+        title: '前后端对接讨论',
+        creator: '张三',
+        date: '1600694009',
+        status: {
+          code: 2,
+        },
+      },
     ],
-    nameList: ['Tonya', 'Simons', 'Harry', 'Vincent', 'Roscoe', 'Pearson'],
-    slideList: ['Example Slide 1', 'Example Slide 2'],
+    records: ['搜索', '可以输入', '房间号', '房间名', '💩', '都 👌'],
   }),
 }
 </script>

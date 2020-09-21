@@ -1,3 +1,26 @@
+.v-application,
+.v-application * {
+  font-family: 'Roboto', 'Source Han Sans SC', 'Source Han Sans', sans-serif !important;
+}
+
+.v-input__append-outer {
+  margin: 0 !important;
+}
+
 .v-input__prepend-inner {
   margin-right: 8px !important;
+}
+
+.v-list-item__action {
+  margin: 0 24px 0 8px !important;
+}
+
+.v-slide-group__next,
+.v-slide-group__prev {
+  width: 32px;
+  min-width: 32px;
+}
+
+.full-width {
+  width: 100%;
 }

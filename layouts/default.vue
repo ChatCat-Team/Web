@@ -12,7 +12,7 @@
             </v-col>
           </v-row>
           <v-row no-gutters>
-            <v-col cols="12">
+            <v-col cols="12" style="min-height： 100vh">
               <nuxt />
             </v-col>
           </v-row>
@@ -32,7 +32,7 @@
   max-width: 420px;
   min-height: 100vh;
   margin: 0 auto;
-  box-shadow: 0 0 64px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 128px rgba(0, 0, 0, 0.15);
   overflow: hidden auto;
 }
 </style>
