@@ -19,7 +19,7 @@
             flat
             clearable
             full-width
-            type="number"
+            type="text"
             label="加入一个聊天室"
             prepend-inner-icon="mdi-magnify"
             append-icon="mdi-qrcode"
@@ -71,35 +71,7 @@
         </v-list-item>
       </v-list>
       <v-list nav>
-        <v-list-item-group>
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-view-dashboard-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-title>主页</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-account-circle-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-title>个人资料</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-cog-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-title>设置</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-action>
-              <v-icon>mdi-information-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-title>关于 ChatCat</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
+        <v-drawer-item></v-drawer-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -147,59 +119,20 @@
   </div>
 </template>
 
-<style scoped>
-.card {
-  width: calc(50% - 16px);
-  height: 200px;
-  margin: 8px;
-}
-
-.fab {
-  left: calc(50% - 32px);
-  bottom: 32px;
-}
-
-.avatar {
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
-}
-
-.creator {
-  padding: 0 16px;
-}
-
-.status::before {
-  content: '';
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  margin-right: 12px;
-  border-radius: 1rem;
-  background-color: #ffffff;
-}
-
-.status.online::before {
-  background-color: #69c667;
-}
-
-.status.waiting::before {
-  background-color: #4fc3f7;
-}
-
-.status.offline::before {
-  background-color: #bdbdbd;
-}
-</style>
-
 <script>
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import drawerItem from '../components/drawer'
 
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
 
 export default {
   layout: 'default',
+  components: {
+    'v-drawer-item': drawerItem,
+  },
   data: () => ({
     drawer: false,
     fromNow: (d) => dayjs.unix(d).fromNow(),
@@ -256,3 +189,46 @@ export default {
   }),
 }
 </script>
+
+<style scoped>
+.card {
+  width: calc(50% - 16px);
+  height: 200px;
+  margin: 8px;
+}
+
+.fab {
+  left: calc(50% - 32px);
+  bottom: 32px;
+}
+
+.avatar {
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.creator {
+  padding: 0 16px;
+}
+
+.status::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 12px;
+  border-radius: 1rem;
+  background-color: #ffffff;
+}
+
+.status.online::before {
+  background-color: #69c667;
+}
+
+.status.waiting::before {
+  background-color: #4fc3f7;
+}
+
+.status.offline::before {
+  background-color: #bdbdbd;
+}
+</style>

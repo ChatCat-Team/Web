@@ -1,0 +1,109 @@
+<template>
+  <div style="position: relative; min-height: calc(100vh - 32px)">
+    <v-app-bar flat dark elevation="0" style="z-index: 1000">
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-toolbar-title class="text-h6">关于 ChatCat</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      light
+      temporary
+      style="heigh: 100vh; z-index: 2000"
+    >
+      <v-list class="mt-12">
+        <v-list-item>
+          <v-avatar size="96" class="avatar ma-4">
+            <v-img src="default_avatar.png" alt="Your Avatar"></v-img>
+          </v-avatar>
+        </v-list-item>
+
+        <v-list-item link>
+          <v-list-item-content class="px-4 py-8">
+            <v-list-item-title class="text-h6 mb-2">你的名字</v-list-item-title>
+            <v-list-item-subtitle class="text-subtitle-1"
+              >这里是个性签名</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-list nav>
+        <v-drawer-item></v-drawer-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-main>
+      <article class="pa-8">
+        <h2 class="pb-4">这是什么？</h2>
+        <p>
+          这是一个小组合作的课程设计，目标是完成一个具有注册和登录功能的 Web
+          应用，然后进行测试。
+        </p>
+        <h2 class="pb-4">目前完成了哪些功能？</h2>
+        <p>
+          详见我们在 GitHub 上的看板：<a
+            href="https://github.com/orgs/ChatCat-Team/projects/1"
+            target="_blank"
+            rel="noopener noreferrer"
+            >https://github.com/orgs/ChatCat-Team/projects/1</a
+          >
+        </p>
+        <h2 class="pb-4">网站用什么做的？</h2>
+        <p>
+          网站采用了前后端分离的技术，前端用的是基于 Vue2 的 Nuxt.js 框架，UI
+          部分用的是 Vuetify，后端使用 Java 的 Spring 框架实现，数据库选择的是
+          MySQL，网站的图标是用 Figma 画的。
+        </p>
+        <p>
+          由于是聊天室，所以主要用到了 WebSocket 技术来实现消息的发送和接收。
+        </p>
+        <h2 class="pb-4">在哪可以找到我们？</h2>
+        <p>
+          我们小组的页面是：
+          <br />
+          <a
+            href="https://github.com/ChatCat-Team"
+            target="_blank"
+            rel="noopener noreferrer"
+            >https://github.com/ChatCat-Team</a
+          >
+          <br />
+          前端部分的仓库：
+          <br />
+          <a
+            href="https://github.com/ChatCat-Team/Web"
+            target="_blank"
+            rel="noopener noreferrer"
+            >https://github.com/ChatCat-Team/Web</a
+          >
+          <br />
+          后端部分的仓库：
+          <br />
+          <a
+            href="https://github.com/ChatCat-Team/Server"
+            target="_blank"
+            rel="noopener noreferrer"
+            >https://github.com/ChatCat-Team/Server</a
+          >
+        </p>
+        <h2 class="pb-4">开源协议？</h2>
+        <p>MIT License</p>
+      </article>
+    </v-main>
+  </div>
+</template>
+
+<script>
+import drawerItem from '../components/drawer'
+export default {
+  layout: 'default',
+  components: {
+    'v-drawer-item': drawerItem,
+  },
+  data: () => ({
+    drawer: false,
+  }),
+}
+</script>
+
+<style scoped></style>
