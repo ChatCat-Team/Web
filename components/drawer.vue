@@ -9,9 +9,9 @@
 
       <v-list-item link>
         <v-list-item-content class="px-4 py-8">
-          <v-list-item-title class="text-h6 mb-2">你的名字</v-list-item-title>
+          <v-list-item-title class="text-h6 mb-2">王小花</v-list-item-title>
           <v-list-item-subtitle class="text-subtitle-1"
-            >这里是个性签名</v-list-item-subtitle
+            >念念不忘 必有回响</v-list-item-subtitle
           >
         </v-list-item-content>
       </v-list-item>

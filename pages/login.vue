@@ -165,6 +165,7 @@
 
 <script>
 export default {
+  layout: 'blank',
   data() {
     return {
       tab: null,
