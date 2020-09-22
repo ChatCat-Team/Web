@@ -62,40 +62,46 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <div class="board d-flex flex-row flex-wrap pa-2">
-        <v-card
+        <NuxtLink
           v-for="(room, i) in rooms"
           :key="i"
-          ripple
-          elevation="0"
-          class="card grey lighten-4 d-flex flex-column align-start justify-space-between"
+          :to="`/room/${room.id}`"
+          class="card d-flex text-decoration-none"
         >
-          <div class="full-width">
-            <p class="text-caption ma-0 px-4 pt-4 pb-1">
-              <strong>{{ room.creator }}</strong> 在
-              <strong>{{ fromNow(room.date) }}</strong> 创建
-            </p>
-            <v-card-title class="text-h6 font-weight-bold py-0">{{
-              room.title
-            }}</v-card-title>
-          </div>
-          <p
-            :class="`text-body-2 pt-0 px-4 d-flex align-center status ${
-              room.status.code === 0
-                ? 'waiting font-weight-bold'
-                : room.status.code === 1
-                ? 'online font-weight-bold'
-                : 'offline'
-            }`"
+          <v-card
+            ripple
+            elevation="0"
+            nuxt
+            class="grey full-width lighten-4 d-flex flex-column align-start justify-space-between"
           >
-            {{
-              room.status.code === 0
-                ? '等待加入'
-                : room.status.code === 1
-                ? `${room.status.count} 人在线`
-                : '已结束'
-            }}
-          </p>
-        </v-card>
+            <div class="full-width">
+              <p class="text-caption ma-0 px-4 pt-4 pb-1">
+                <strong>{{ room.creator }}</strong> 在
+                <strong>{{ fromNow(room.date) }}</strong> 创建
+              </p>
+              <v-card-title class="text-h6 font-weight-bold py-0">{{
+                room.title
+              }}</v-card-title>
+            </div>
+            <p
+              :class="`text-body-2 pt-0 px-4 d-flex align-center status ${
+                room.status.code === 0
+                  ? 'waiting font-weight-bold'
+                  : room.status.code === 1
+                  ? 'online font-weight-bold'
+                  : 'offline'
+              }`"
+            >
+              {{
+                room.status.code === 0
+                  ? '等待加入'
+                  : room.status.code === 1
+                  ? `${room.status.count} 人在线`
+                  : '已结束'
+              }}
+            </p>
+          </v-card>
+        </NuxtLink>
       </div>
     </v-main>
   </div>

@@ -38,10 +38,7 @@
     </v-app-bar>
     <v-main>
       <div class="pa-8">
-        <v-form
-          v-model="valid.password"
-          class="d-flex flex-column align-center"
-        >
+        <v-form v-model="valid" class="d-flex flex-column align-center">
           <v-text-field
             v-model="phone"
             :rules="rules.phone"
@@ -91,6 +88,7 @@
             class="mx-auto mt-6 mb-10"
             large
             aria-label="注册"
+            :disabled="!valid"
             @click="signup"
           >
             <v-icon>mdi-arrow-right</v-icon>
@@ -111,13 +109,10 @@ export default {
   data() {
     return {
       tab: null,
-      valid: {
-        password: false,
-        code: false,
-      },
-      phone: null,
+      valid: false,
+      phone: '',
       password: '',
-      code: null,
+      code: '',
       rules: {
         phone: [
           (v) => !!v || '手机号为必填项',
@@ -131,7 +126,10 @@ export default {
           (v) => v.length >= 8 || '最少 8 个字符',
           (v) => v.length <= 24 || '最多 24 个字符',
         ],
-        code: [(v) => !!v || '短信验证码为必填项'],
+        code: [
+          (v) => !!v || '短信验证码为必填项',
+          (v) => v.length === 6 || '短信验证码为 6 个字符',
+        ],
       },
       show: {
         password: false,
@@ -142,8 +140,19 @@ export default {
     }
   },
   methods: {
-    signup() {
-      this.$router.push({ path: '/' })
+    async signup() {
+      await this.$axios
+        .$post('https://test.lifeni.life/api/register', {
+          phone: this.phone,
+          pwd: this.password,
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+      // this.$router.push({ path: '/' })
     },
   },
 }

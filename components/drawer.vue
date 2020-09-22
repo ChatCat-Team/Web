@@ -3,7 +3,7 @@
     <v-list class="mt-12">
       <v-list-item>
         <v-avatar size="96" class="avatar ma-4">
-          <v-img src="default_avatar.png" alt="Your Avatar"></v-img>
+          <v-img src="/default_avatar.png" alt="Your Avatar"></v-img>
         </v-avatar>
       </v-list-item>
 
