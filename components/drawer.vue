@@ -9,7 +9,7 @@
       </v-list-item>
     </NuxtLink>
 
-    <NuxtLink to="/account" class="text-decoration-none">
+    <NuxtLink to="/profile" class="text-decoration-none">
       <v-list-item nuxt class="py-1 px-2">
         <v-list-item-action>
           <v-icon>mdi-account-circle-outline</v-icon>

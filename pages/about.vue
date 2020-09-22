@@ -41,10 +41,13 @@
         </p>
         <h2 class="pb-4">目前完成了哪些功能？</h2>
         <p>
-          详见我们在 GitHub 上的看板：<a
+          详见我们在 GitHub 上的看板：
+          <br />
+          <a
             href="https://github.com/orgs/ChatCat-Team/projects/1"
             target="_blank"
             rel="noopener noreferrer"
+            class="text-decoration-none"
             >https://github.com/orgs/ChatCat-Team/projects/1</a
           >
         </p>
@@ -65,6 +68,7 @@
             href="https://github.com/ChatCat-Team"
             target="_blank"
             rel="noopener noreferrer"
+            class="text-decoration-none"
             >https://github.com/ChatCat-Team</a
           >
           <br />
@@ -74,6 +78,7 @@
             href="https://github.com/ChatCat-Team/Web"
             target="_blank"
             rel="noopener noreferrer"
+            class="text-decoration-none"
             >https://github.com/ChatCat-Team/Web</a
           >
           <br />
@@ -83,6 +88,7 @@
             href="https://github.com/ChatCat-Team/Server"
             target="_blank"
             rel="noopener noreferrer"
+            class="text-decoration-none"
             >https://github.com/ChatCat-Team/Server</a
           >
         </p>

@@ -91,7 +91,7 @@
               required
               filled
               clearable
-              class="full-width"
+              class="full-width fix-margin"
               counter="6"
             >
               <template v-slot:append-outer>

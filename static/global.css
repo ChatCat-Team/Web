@@ -1,9 +1,4 @@
-.v-application,
-.v-application * {
-  font-family: 'Roboto', 'Source Han Sans SC', 'Source Han Sans', sans-serif !important;
-}
-
-.v-input__append-outer {
+.fix-margin .v-input__append-outer {
   margin: 0 !important;
 }
 
@@ -21,6 +16,15 @@
   min-width: 32px;
 }
 
+.v-list--two-line .v-list-item .v-list-item__icon,
+.v-list-item--two-line .v-list-item__icon {
+  margin: 24px 24px 24px 12px !important;
+}
+
 .full-width {
   width: 100%;
+}
+
+html {
+  overflow-y: overlay !important;
 }
