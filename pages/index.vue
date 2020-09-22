@@ -54,25 +54,7 @@
       temporary
       style="z-index: 2000"
     >
-      <v-list class="mt-12">
-        <v-list-item>
-          <v-avatar size="96" class="avatar ma-4">
-            <v-img src="default_avatar.png" alt="Your Avatar"></v-img>
-          </v-avatar>
-        </v-list-item>
-
-        <v-list-item link>
-          <v-list-item-content class="px-4 py-8">
-            <v-list-item-title class="text-h6 mb-2">你的名字</v-list-item-title>
-            <v-list-item-subtitle class="text-subtitle-1"
-              >这里是个性签名</v-list-item-subtitle
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-list nav>
-        <v-drawer-item></v-drawer-item>
-      </v-list>
+      <v-drawer></v-drawer>
     </v-navigation-drawer>
 
     <v-main>
@@ -131,7 +113,7 @@ dayjs.locale('zh-cn')
 export default {
   layout: 'default',
   components: {
-    'v-drawer-item': drawerItem,
+    'v-drawer': drawerItem,
   },
   data: () => ({
     drawer: false,
@@ -200,10 +182,6 @@ export default {
 .fab {
   left: calc(50% - 32px);
   bottom: 32px;
-}
-
-.avatar {
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
 }
 
 .creator {

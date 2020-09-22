@@ -6,8 +6,10 @@
           <v-icon>mdi-arrow-left</v-icon>
         </NuxtLink>
       </v-btn>
-      <v-toolbar-title>注册</v-toolbar-title>
+
+      <v-toolbar-title>重置密码</v-toolbar-title>
       <v-spacer></v-spacer>
+
       <v-dialog v-model="dialog.help" width="372">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon color="white" v-bind="attrs" v-on="on">
@@ -17,11 +19,8 @@
 
         <v-card>
           <v-card-title>使用帮助</v-card-title>
-          <v-card-text class="px-6 pb-2">
-            注册时需要使用手机号注册，并需要输入自定义的密码和短信验证码。
-          </v-card-text>
           <v-card-text class="px-6 pb-4">
-            密码需要满足 8 到 24 个字符，并且必须包含字母、数字和符号。
+            找回密码需要进行短信验证。如果你更换了手机号，请与我们联系：help@example.com。
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -55,21 +54,6 @@
             class="full-width"
           ></v-text-field>
           <v-text-field
-            v-model="password"
-            :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show.password ? 'text' : 'password'"
-            :rules="rules.password"
-            label="密码"
-            prepend-inner-icon="mdi-form-textbox-password"
-            hint="8 - 24 个字符，且包含字母、数字、符号"
-            required
-            filled
-            counter="24"
-            clearable
-            class="full-width"
-            @click:append="show.password = !show.password"
-          ></v-text-field>
-          <v-text-field
             v-model="code"
             :rules="rules.code"
             type="number"
@@ -85,20 +69,46 @@
               <v-btn depressed x-large class="my-1 ml-4">发送验证码</v-btn>
             </template>
           </v-text-field>
+          <v-text-field
+            v-model="password.first"
+            :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show.password ? 'text' : 'password'"
+            :rules="rules.password"
+            label="新的密码"
+            prepend-inner-icon="mdi-form-textbox-password"
+            hint="8 - 24 个字符，且包含字母、数字、符号"
+            required
+            filled
+            counter="24"
+            clearable
+            class="full-width"
+            @click:append="show.password = !show.password"
+          ></v-text-field>
+          <v-text-field
+            v-model="password.second"
+            :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show.password ? 'text' : 'password'"
+            :rules="rules.password"
+            label="再输入一次新的密码"
+            prepend-inner-icon="mdi-form-textbox-password"
+            hint="两次输入的密码需要一致"
+            required
+            filled
+            counter="24"
+            clearable
+            class="full-width"
+            @click:append="show.password = !show.password"
+          ></v-text-field>
           <v-btn
             fab
             color="primary"
             class="mx-auto mt-6 mb-10"
             large
-            aria-label="注册"
-            @click="signup"
+            aria-label="保存"
+            @click="save"
           >
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
-          <p class="grey--text darken-2 ma-1">
-            已经注册过了？
-            <NuxtLink to="/login" class="text-decoration-none">登录</NuxtLink>
-          </p>
         </v-form>
       </div>
     </v-main>
@@ -115,7 +125,10 @@ export default {
         code: false,
       },
       phone: null,
-      password: '',
+      password: {
+        first: '',
+        second: '',
+      },
       code: null,
       rules: {
         phone: [
@@ -141,7 +154,7 @@ export default {
     }
   },
   methods: {
-    signup() {
+    save() {
       this.$router.push({ path: '/' })
     },
   },

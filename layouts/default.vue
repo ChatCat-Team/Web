@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-container fluid class="pa-0">
       <v-row no-gutters>
         <v-col cols="12" class="view">

@@ -74,6 +74,17 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+  pwa: {
+    icon: {
+      source: './static/icon.png',
+      size: [64, 120, 144, 152, 192, 384, 512],
+    },
+    manifest: {
+      name: 'ChatCat',
+      short_name: 'ChatCat',
+      description: '一个简单的聊天室',
+    },
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

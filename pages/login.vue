@@ -1,9 +1,12 @@
 <template>
   <div style="position: relative; height: 100%">
-    <v-app-bar dark shrink-on-scroll prominent>
+    <v-app-bar dark prominent>
       <v-btn icon color="white">
-        <v-icon>mdi-help-circle-outline</v-icon>
+        <NuxtLink to="/welcome" class="white--text text-decoration-none">
+          <v-icon>mdi-arrow-left</v-icon>
+        </NuxtLink>
       </v-btn>
+
       <v-toolbar-title>登录</v-toolbar-title>
       <v-spacer></v-spacer>
       <template v-slot:extension>
@@ -12,6 +15,31 @@
           <v-tab href="#tab-code">短信验证码</v-tab>
         </v-tabs>
       </template>
+
+      <v-dialog v-model="dialog.help" width="372">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon color="white" v-bind="attrs" v-on="on">
+            <v-icon>mdi-help-circle-outline</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title>使用帮助</v-card-title>
+          <v-card-text class="px-6 pb-4"
+            >登录时可以使用密码和短信验证码两种方式。</v-card-text
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              text
+              color="deep-purple accent-4"
+              @click="dialog.help = false"
+            >
+              知道了
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-app-bar>
     <v-main>
       <v-tabs-items v-model="tab" class="pa-8">
@@ -47,7 +75,14 @@
               class="full-width"
               @click:append="show.password = !show.password"
             ></v-text-field>
-            <v-btn fab color="primary" class="mx-auto mt-2 mb-8" large>
+            <v-btn
+              fab
+              color="primary"
+              class="mx-auto mt-6 mb-10"
+              large
+              aria-label="登录"
+              @click="login"
+            >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
             <p class="grey--text darken-2 ma-1">
@@ -98,7 +133,14 @@
                 <v-btn depressed x-large class="my-1 ml-4">发送验证码</v-btn>
               </template>
             </v-text-field>
-            <v-btn fab color="primary" class="mx-auto mt-6 mb-10" large>
+            <v-btn
+              fab
+              color="primary"
+              class="mx-auto mt-6 mb-10"
+              large
+              aria-label="登录"
+              @click="login"
+            >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
             <p class="grey--text darken-2 ma-1">
@@ -151,7 +193,15 @@ export default {
       show: {
         password: false,
       },
+      dialog: {
+        help: false,
+      },
     }
+  },
+  methods: {
+    login() {
+      this.$router.push({ path: '/' })
+    },
   },
 }
 </script>

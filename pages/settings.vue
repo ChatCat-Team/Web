@@ -12,30 +12,12 @@
       temporary
       style="heigh: 100vh; z-index: 2000"
     >
-      <v-list class="mt-12">
-        <v-list-item>
-          <v-avatar size="96" class="avatar ma-4">
-            <v-img src="default_avatar.png" alt="Your Avatar"></v-img>
-          </v-avatar>
-        </v-list-item>
-
-        <v-list-item link>
-          <v-list-item-content class="px-4 py-8">
-            <v-list-item-title class="text-h6 mb-2">你的名字</v-list-item-title>
-            <v-list-item-subtitle class="text-subtitle-1"
-              >这里是个性签名</v-list-item-subtitle
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-list nav>
-        <v-drawer-item></v-drawer-item>
-      </v-list>
+      <v-drawer></v-drawer>
     </v-navigation-drawer>
     <v-list subheader two-line flat class="py-4">
       <v-subheader class="px-6">外观</v-subheader>
       <v-list-item-group>
-        <v-dialog v-model="dialog.color" width="300">
+        <v-dialog v-model="dialog.color" width="372">
           <template v-slot:activator="{ on, attrs }">
             <v-list-item ripple v-bind="attrs" v-on="on">
               <v-list-item-icon>
@@ -49,7 +31,11 @@
           </template>
 
           <v-card>
-            <v-color-picker v-model="settings.color" flat></v-color-picker>
+            <v-color-picker
+              v-model="settings.color"
+              flat
+              width="372"
+            ></v-color-picker>
             <v-card-actions>
               <v-btn
                 text
@@ -72,7 +58,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialog.font" width="300">
+        <v-dialog v-model="dialog.font" width="372">
           <template v-slot:activator="{ on, attrs }">
             <v-list-item ripple v-bind="attrs" v-on="on">
               <v-list-item-icon>
@@ -154,7 +140,7 @@ import drawerItem from '../components/drawer'
 export default {
   layout: 'default',
   components: {
-    'v-drawer-item': drawerItem,
+    'v-drawer': drawerItem,
   },
   data: () => ({
     drawer: false,
