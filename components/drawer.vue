@@ -3,16 +3,21 @@
     <v-list class="mt-12">
       <v-list-item>
         <v-avatar size="96" class="avatar ma-4">
-          <v-img src="/default_avatar.png" alt="Your Avatar"></v-img>
+          <v-img
+            :src="user.avatar || '/default_avatar.png'"
+            alt="Your Avatar"
+          ></v-img>
         </v-avatar>
       </v-list-item>
 
       <v-list-item link>
         <v-list-item-content class="px-4 py-8">
-          <v-list-item-title class="text-h6 mb-2">王小花</v-list-item-title>
-          <v-list-item-subtitle class="text-subtitle-1"
-            >念念不忘 必有回响</v-list-item-subtitle
-          >
+          <v-list-item-title class="text-h6 mb-2">{{
+            user.name || '匿名'
+          }}</v-list-item-title>
+          <v-list-item-subtitle class="text-subtitle-1">{{
+            user.bio || '未设置签名'
+          }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -68,7 +73,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {},
+  data() {
+    return {
+      user: this.$store.state.userData,
+    }
+  },
+}
 </script>
 
 <style scoped>
