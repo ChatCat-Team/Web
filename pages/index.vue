@@ -1,13 +1,6 @@
 <template>
   <div style="position: relative; min-height: calc(100vh - 32px)">
-    <v-app-bar
-      flat
-      dark
-      elevation="0"
-      extended
-      extension-height="212px"
-      style="z-index: 1000"
-    >
+    <v-app-bar flat dark elevation="0" extended extension-height="212px">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">ChatCat</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -48,19 +41,53 @@
         </div>
       </template>
     </v-app-bar>
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      temporary
-      style="z-index: 2000"
-    >
+    <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-drawer></v-drawer>
     </v-navigation-drawer>
 
-    <v-main>
-      <v-btn fixed dark fab large color="primary" class="fab">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+    <v-main id="attach">
+      <v-dialog v-model="dialog.new" class="dialog" width="372">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            fixed
+            dark
+            fab
+            large
+            color="primary"
+            class="fab"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </template>
+        <v-card class="mt-12">
+          <v-toolbar dark flat>
+            <v-btn icon dark @click="dialog.new = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-toolbar-title>创建新的聊天室</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon dark @click="dialog.new = false">
+              <v-icon>mdi-check</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-list three-line subheader>
+            <v-list-item link>
+              <v-list-item-content class="px-4 py-8">
+                <v-list-item-title class="text-h6 mb-2"
+                  >王小花</v-list-item-title
+                >
+                <v-list-item-subtitle class="text-subtitle-1"
+                  >念念不忘 必有回响</v-list-item-subtitle
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-dialog>
+
       <div class="board d-flex flex-row flex-wrap pa-2">
         <NuxtLink
           v-for="(room, i) in rooms"
@@ -124,6 +151,9 @@ export default {
   data: () => ({
     drawer: false,
     fromNow: (d) => dayjs.unix(d).fromNow(),
+    dialog: {
+      new: false,
+    },
     rooms: [
       {
         id: 454781,

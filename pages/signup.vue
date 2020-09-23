@@ -123,12 +123,12 @@ export default {
         ],
         password: [
           (v) => !!v || '密码为必填项',
-          (v) => v.length >= 8 || '最少 8 个字符',
-          (v) => v.length <= 24 || '最多 24 个字符',
+          (v) => (v && v.length >= 8) || '最少 8 个字符',
+          (v) => (v && v.length <= 24) || '最多 24 个字符',
         ],
         code: [
           (v) => !!v || '短信验证码为必填项',
-          (v) => v.length === 6 || '短信验证码为 6 个字符',
+          (v) => (v && v.length === 6) || '短信验证码为 6 个字符',
         ],
       },
       show: {
@@ -141,6 +141,7 @@ export default {
   },
   methods: {
     async signup() {
+      // https://test.lifeni.life/api/register
       await this.$axios
         .$post('https://test.lifeni.life/api/register', {
           phone: this.phone,
@@ -148,6 +149,7 @@ export default {
         })
         .then((res) => {
           console.log(res)
+          this.$router.push({ path: '/' })
         })
         .catch((err) => {
           console.error(err)

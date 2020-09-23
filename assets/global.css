@@ -21,6 +21,10 @@
   margin: 24px 24px 24px 12px !important;
 }
 
+.v-snack__wrapper {
+  margin-bottom: 24px !important;
+}
+
 .full-width {
   width: 100%;
 }

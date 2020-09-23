@@ -158,6 +158,14 @@
           </v-form>
         </v-tab-item>
       </v-tabs-items>
+      <v-snackbar v-model="snackbar" bottom class="mb-8">
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
+            关闭
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </div>
 </template>
@@ -175,6 +183,9 @@ export default {
       phone: '',
       password: '',
       code: '',
+      snackbar: false,
+      timeout: 2000,
+      text: '',
       rules: {
         phone: [
           (v) => !!v || '手机号为必填项',
@@ -185,12 +196,12 @@ export default {
         ],
         password: [
           (v) => !!v || '密码为必填项',
-          (v) => v.length >= 8 || '最少 8 个字符',
-          (v) => v.length <= 24 || '最多 24 个字符',
+          (v) => (v && v.length >= 8) || '最少 8 个字符',
+          (v) => (v && v.length <= 24) || '最多 24 个字符',
         ],
         code: [
           (v) => !!v || '短信验证码为必填项',
-          (v) => v.length === 6 || '短信验证码为 6 个字符',
+          (v) => (v && v.length === 6) || '短信验证码为 6 个字符',
         ],
       },
       show: {
@@ -203,6 +214,9 @@ export default {
   },
   methods: {
     async login() {
+      // https://test.lifeni.life/api/login
+      // http://192.168.43.179:8080/login
+      // http://localhost:8080/login
       await this.$axios
         .$post('https://test.lifeni.life/api/login', {
           phone: this.phone,
@@ -210,11 +224,22 @@ export default {
         })
         .then((res) => {
           console.log(res)
+          if (res.code === 0) {
+            this.$router.push({ path: '/' })
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
         })
         .catch((err) => {
           console.error(err)
         })
-      // this.$router.push({ path: '/' })
+      //
+    },
+    to(n) {
+      if (n === null) {
+        return ''
+      }
     },
   },
 }

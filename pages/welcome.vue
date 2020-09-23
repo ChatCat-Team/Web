@@ -22,9 +22,9 @@
               icon
               x-large
               color="white"
+              class="my-4"
               v-bind="attrs"
               v-on="on"
-              class="my-4"
             >
               <v-icon>mdi-qrcode</v-icon>
             </v-btn>
