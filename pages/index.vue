@@ -136,6 +136,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import axios from 'axios'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import drawerItem from '../components/drawer'
@@ -147,6 +148,16 @@ export default {
   layout: 'default',
   components: {
     'v-drawer': drawerItem,
+  },
+  asyncData({ redirect }) {
+    return axios.get('https://test.lifeni.life/api/user').then((res) => {
+      if (res.code === 0) {
+        console.log(res);
+      } else {
+        console.log('redirect to welcome')
+        redirect('/welcome')
+      }
+    })
   },
   data: () => ({
     drawer: false,
