@@ -17,7 +17,7 @@
     <v-list subheader two-line flat class="py-4">
       <v-subheader class="px-6">外观</v-subheader>
       <v-list-item-group>
-        <v-dialog v-model="dialog.color" width="372">
+        <v-dialog v-model="dialog.color" width="300">
           <template v-slot:activator="{ on, attrs }">
             <v-list-item ripple v-bind="attrs" v-on="on">
               <v-list-item-icon>
@@ -40,7 +40,10 @@
               <v-btn
                 text
                 color="deep-purple accent-4"
-                @click="settings.color = settings.default.color"
+                @click="
+                  settings.color =
+                    $store.state.localStorage.default.settings.themeColor
+                "
               >
                 恢复默认
               </v-btn>
@@ -49,9 +52,15 @@
                 text
                 color="deep-purple accent-4"
                 :disabled="
-                  equal(settings.default.color, settings.color) ? '' : false
+                  equal(
+                    $store.state.localStorage.settings.themeColor ||
+                      $store.state.localStorage.default.settings.themeColor,
+                    settings.color
+                  )
+                    ? ''
+                    : false
                 "
-                @click="dialog.color = false"
+                @click="setThemeColor"
               >
                 应用主题颜色
               </v-btn>
@@ -77,7 +86,7 @@
             <v-card-title>设置字体大小</v-card-title>
             <v-slider
               v-model="settings.font"
-              step="1"
+              step="2"
               max="20"
               min="12"
               thumb-label="always"
@@ -98,7 +107,10 @@
               <v-btn
                 text
                 color="deep-purple accent-4"
-                @click="settings.font = settings.default.font"
+                @click="
+                  settings.font =
+                    $store.state.localStorage.default.settings.fontSize
+                "
               >
                 恢复默认
               </v-btn>
@@ -106,8 +118,12 @@
               <v-btn
                 text
                 color="deep-purple accent-4"
-                :disabled="settings.default.font === settings.font ? '' : false"
-                @click="dialog.font = false"
+                :disabled="
+                  $store.state.localStorage.settings.fontSize === settings.font
+                    ? ''
+                    : false
+                "
+                @click="setFontSize"
               >
                 应用字体设定
               </v-btn>
@@ -128,10 +144,22 @@
               >开启后会在主页显示搜索历史记录</v-list-item-subtitle
             >
           </v-list-item-content>
-          <v-switch class="mr-4"></v-switch>
+          <v-switch
+            v-model="settings.history"
+            @click="setEnableSearchHistory"
+            class="mr-4"
+          ></v-switch>
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <v-snackbar v-model="snackbar" bottom class="mb-8">
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text color="success" v-bind="attrs" @click="snackbar = false">
+          关闭
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -142,24 +170,57 @@ export default {
   components: {
     'v-drawer': drawerItem,
   },
-  data: () => ({
-    drawer: false,
-    dialog: {
-      color: false,
-      font: false,
-    },
-    settings: {
-      default: {
-        color: '#69c667',
-        font: 16,
+  data() {
+    return {
+      drawer: false,
+      snackbar: false,
+      text: '',
+      dialog: {
+        color: false,
+        font: false,
       },
-      color: '#69c667',
-      font: 16,
-    },
-  }),
+      settings: {
+        color:
+          this.$store.state.localStorage.settings.themeColor ||
+          this.$store.state.localStorage.default.settings.themeColor,
+        font:
+          this.$store.state.localStorage.settings.fontSize ||
+          this.$store.state.localStorage.default.settings.fontSize,
+        history:
+          (this.$store.state.localStorage.settings.enableSearchHistory ||
+            this.$store.state.localStorage.default.settings
+              .enableSearchHistory) === 'enable',
+      },
+    }
+  },
   methods: {
     equal: (a, b) => {
       return a.toLowerCase() === b.toLowerCase()
+    },
+    setFontSize() {
+      this.dialog.font = false
+      this.$store.commit('localStorage/setFontSize', this.settings.font)
+      document.documentElement.className =
+        'font-' +
+        (this.$store.state.localStorage.settings.fontSize ||
+          this.$store.state.localStorage.default.settings.fontSize)
+
+      this.snackbar = true
+      this.text = '设置保存成功'
+    },
+    setThemeColor() {
+      this.dialog.color = false
+      this.$store.commit('localStorage/setThemeColor', this.settings.color)
+      this.$vuetify.theme.themes.light.primary = this.settings.color
+
+      this.snackbar = true
+      this.text = '设置保存成功'
+    },
+    setEnableSearchHistory() {
+      this.$store.commit(
+        'localStorage/setEnableSearchHistory',
+        this.settings.history ? 'enable' : 'disable'
+      )
     },
   },
 }

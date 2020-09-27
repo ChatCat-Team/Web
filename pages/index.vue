@@ -23,6 +23,11 @@
           </v-text-field>
 
           <v-chip-group
+            v-show="
+              ($store.state.localStorage.settings.enableSearchHistory ||
+                $store.state.localStorage.default.settings
+                  .enableSearchHistory) === 'enable'
+            "
             class="pb-4 full-width"
             column
             active-class="primary--text"
@@ -152,10 +157,10 @@ export default {
     await axios.get('https://test.lifeni.life/api/user').then(async (res) => {
       if (res.data.code === 0) {
         console.log(res)
-        await store.dispatch('setUserData', res.data.extend.user)
+        await store.commit('localStorage/setUserData', res.data.extend.user)
       } else {
         console.log('redirect to welcome')
-        redirect('/welcome')
+        // redirect('/welcome')
       }
     })
   },

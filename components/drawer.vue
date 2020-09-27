@@ -4,7 +4,8 @@
       <v-list-item>
         <v-avatar size="96" class="avatar ma-4">
           <v-img
-            :src="user.avatar || '/default_avatar.png'"
+            v-show="$store.state.localStorage.status"
+            :src="user.avatar"
             alt="Your Avatar"
           ></v-img>
         </v-avatar>
@@ -13,10 +14,10 @@
       <v-list-item link>
         <v-list-item-content class="px-4 py-8">
           <v-list-item-title class="text-h6 mb-2">{{
-            user.name || '匿名'
+            user.name
           }}</v-list-item-title>
           <v-list-item-subtitle class="text-subtitle-1">{{
-            user.bio || '未设置签名'
+            user.bio
           }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -77,7 +78,9 @@ export default {
   methods: {},
   data() {
     return {
-      user: this.$store.state.userData,
+      user:
+        this.$store.state.localStorage.userData ||
+        this.$store.state.localStorage.default.userData,
     }
   },
 }
