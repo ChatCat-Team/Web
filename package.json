@@ -16,6 +16,7 @@
     "@nuxtjs/pwa": "^3.0.2",
     "dayjs": "^1.8.36",
     "nuxt": "^2.14.0",
+    "nuxt-vuex-localstorage": "^1.2.7",
     "qrcode.vue": "^1.7.0"
   },
   "devDependencies": {

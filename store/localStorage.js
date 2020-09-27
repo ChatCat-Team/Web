@@ -1,0 +1,40 @@
+export const state = () => ({
+  userData: null,
+  settings: {
+    themeColor: null,
+    fontSize: null,
+    enableSearchHistory: null,
+  },
+  default: {
+    userData: {
+      avatar: '/default_avatar.png',
+      name: '匿名',
+      bio: '未设置签名',
+      location: '地球某处',
+      phone: 'XXX XXXX XXXX',
+    },
+    settings: {
+      themeColor: '#69c667',
+      fontSize: 16,
+      enableSearchHistory: 'enable',
+    },
+  },
+})
+
+export const mutations = {
+  setUserData(state, data) {
+    state.userData = data
+  },
+
+  setThemeColor(state, data) {
+    state.settings.themeColor = data
+  },
+
+  setFontSize(state, data) {
+    state.settings.fontSize = data
+  },
+
+  setEnableSearchHistory(state, data) {
+    state.settings.enableSearchHistory = data
+  },
+}

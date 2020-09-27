@@ -29,7 +29,7 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>王小花</v-list-item-title>
+          <v-list-item-title>{{ user.name }}</v-list-item-title>
           <v-list-item-subtitle>名字</v-list-item-subtitle>
         </v-list-item-content>
 
@@ -42,7 +42,7 @@
         <v-list-item-action></v-list-item-action>
 
         <v-list-item-content>
-          <v-list-item-title>念念不忘 必有回响</v-list-item-title>
+          <v-list-item-title>{{ user.bio }}</v-list-item-title>
           <v-list-item-subtitle>个性签名</v-list-item-subtitle>
         </v-list-item-content>
 
@@ -57,8 +57,8 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>哈尔滨工程大学</v-list-item-title>
-          <v-list-item-subtitle>学校</v-list-item-subtitle>
+          <v-list-item-title>{{ user.location }}</v-list-item-title>
+          <v-list-item-subtitle>位置</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-icon>
@@ -72,7 +72,7 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>156 XXXX XXXX</v-list-item-title>
+          <v-list-item-title>{{ user.phone }}</v-list-item-title>
           <v-list-item-subtitle>手机号</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -96,9 +96,14 @@ export default {
   components: {
     'v-drawer': drawerItem,
   },
-  data: () => ({
-    drawer: false,
-  }),
+  data() {
+    return {
+      drawer: false,
+      user:
+        this.$store.state.localStorage.userData ||
+        this.$store.state.localStorage.default.userData,
+    }
+  },
 }
 </script>
 

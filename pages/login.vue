@@ -234,7 +234,7 @@ export default {
         .catch((err) => {
           console.error(err)
         })
-      //
+      // this.$router.push({ path: '/' })
     },
     to(n) {
       if (n === null) {

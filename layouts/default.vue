@@ -2,7 +2,7 @@
   <v-app>
     <v-container fluid class="pa-0">
       <v-row no-gutters>
-        <v-col cols="12" class="view">
+        <v-col cols="12" class="view" id="view">
           <v-row no-gutters>
             <v-col cols="12">
               <v-system-bar window dark class="bar justify-center">
@@ -37,6 +37,48 @@
 }
 </style>
 
+<style>
+.font-12 {
+  font-size: 12px !important;
+}
+.font-14 {
+  font-size: 14px !important;
+}
+.font-16 {
+  font-size: 16px !important;
+}
+.font-18 {
+  font-size: 18px !important;
+}
+.font-20 {
+  font-size: 20px !important;
+}
+.font-22 {
+  font-size: 22px !important;
+}
+.font-24 {
+  font-size: 24px !important;
+}
+</style>
+
 <script>
-export default {}
+export default {
+  mounted() {
+    return this.init()
+  },
+  methods: {
+    init() {
+      if (process.client) {
+        document.documentElement.className =
+          'font-' +
+          (this.$store.state.localStorage.settings.fontSize ||
+            this.$store.state.localStorage.default.settings.fontSize)
+
+        this.$vuetify.theme.themes.light.primary =
+          this.$store.state.localStorage.settings.themeColor ||
+          this.$store.state.localStorage.default.settings.themeColor
+      }
+    },
+  },
+}
 </script>
