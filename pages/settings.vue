@@ -146,8 +146,8 @@
           </v-list-item-content>
           <v-switch
             v-model="settings.history"
-            @click="setEnableSearchHistory"
             class="mr-4"
+            @click="setEnableSearchHistory"
           ></v-switch>
         </v-list-item>
       </v-list-item-group>

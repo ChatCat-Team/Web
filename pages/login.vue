@@ -11,8 +11,8 @@
       <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs v-model="tab" align-with-title>
-          <v-tab href="#tab-password" id="password-tab">密码</v-tab>
-          <v-tab href="#tab-code" id="code-tab">短信验证码</v-tab>
+          <v-tab id="password-tab" href="#tab-password">密码</v-tab>
+          <v-tab id="code-tab" href="#tab-code">短信验证码</v-tab>
         </v-tabs>
       </template>
 
@@ -49,6 +49,7 @@
             class="d-flex flex-column align-center"
           >
             <v-text-field
+              id="input-phone-1"
               v-model="phone"
               :rules="rules.phone"
               type="number"
@@ -59,9 +60,9 @@
               filled
               clearable
               class="full-width"
-              id="input-phone-1"
             ></v-text-field>
             <v-text-field
+              id="input-password"
               v-model="password"
               :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show.password ? 'text' : 'password'"
@@ -74,35 +75,34 @@
               counter="24"
               clearable
               class="full-width"
-              id="input-password"
               @click:append="show.password = !show.password"
             ></v-text-field>
             <v-btn
+              id="login-1"
               fab
               color="primary"
               class="mx-auto mt-6 mb-10"
               large
               aria-label="登录"
               :disabled="!valid.password"
-              id="login-1"
               @click="login"
             >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
             <p class="grey--text darken-2 ma-1">
               忘记密码？<NuxtLink
+                id="link-forgot-password-1"
                 to="/forgot-password"
                 class="text-decoration-none"
-                id="link-forgot-password-1"
                 >找回密码</NuxtLink
               >
             </p>
             <p class="grey--text darken-2 ma-1">
               还没有注册？
               <NuxtLink
+                id="link-signup-1"
                 to="/signup"
                 class="text-decoration-none"
-                id="link-signup-1"
                 >加入我们</NuxtLink
               >
             </p>
@@ -111,6 +111,7 @@
         <v-tab-item value="tab-code">
           <v-form v-model="valid.code" class="d-flex flex-column align-center">
             <v-text-field
+              id="input-phone-2"
               v-model="phone"
               :rules="rules.phone"
               type="number"
@@ -121,9 +122,9 @@
               filled
               clearable
               class="full-width"
-              id="input-phone-2"
             ></v-text-field>
             <v-text-field
+              id="input-code"
               v-model="code"
               :rules="rules.code"
               type="number"
@@ -134,45 +135,44 @@
               clearable
               class="full-width fix-margin"
               counter="6"
-              id="input-code"
             >
               <template v-slot:append-outer>
                 <v-btn depressed x-large class="my-1 ml-4">发送验证码</v-btn>
               </template>
             </v-text-field>
             <v-btn
+              id="login-2"
               fab
               color="primary"
               class="mx-auto mt-6 mb-10"
               large
               aria-label="登录"
               :disabled="!valid.code"
-              id="login-2"
               @click="login"
             >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
             <p class="grey--text darken-2 ma-1">
               忘记密码？<NuxtLink
+                id="link-forgot-password-1"
                 to="/forgot-password"
                 class="text-decoration-none"
-                id="link-forgot-password-1"
                 >找回密码</NuxtLink
               >
             </p>
             <p class="grey--text darken-2 ma-1">
               还没有注册？
               <NuxtLink
+                id="link-signup-1"
                 to="/signup"
                 class="text-decoration-none"
-                id="link-signup-1"
                 >加入我们</NuxtLink
               >
             </p>
           </v-form>
         </v-tab-item>
       </v-tabs-items>
-      <v-snackbar v-model="snackbar" bottom class="mb-8" id="snackbar">
+      <v-snackbar id="snackbar" v-model="snackbar" bottom class="mb-8">
         {{ text }}
         <template v-slot:action="{ attrs }">
           <v-btn text color="error" v-bind="attrs" @click="snackbar = false">

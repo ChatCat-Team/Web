@@ -1,8 +1,8 @@
 <template>
   <div style="position: relative; height: calc(100vh - 32px)">
-    <v-app-bar flat color="white" elevation="0" style="z-index: 1000">
+    <v-app-bar flat dark style="z-index: 1000">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-h6">测试一下 </v-toolbar-title>
+      <v-toolbar-title> Room Title </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-chip outlined>{{ id }}</v-chip>
     </v-app-bar>
@@ -21,16 +21,41 @@
     <div class="bar white pa-4 full-width">
       <v-text-field
         v-model="message"
-        filled
-        full-width
-        dense
-        counter
-        label="输入消息，回车发送"
-        hint="当前为演示版本，不代表最终效果"
-        persistent-hint
+        solo
+        flat
+        hide-details
+        label="在此输入消息"
         single-line
         type="text"
-      ></v-text-field>
+        background-color="grey lighten-4"
+        class="fix-margin"
+      >
+        <template v-slot:append-outer>
+          <v-btn
+            rounded
+            color="primary"
+            elevation="0"
+            width="48"
+            height="48"
+            min-width="48"
+            class="ml-4"
+          >
+            <v-icon>mdi-send-outline</v-icon>
+          </v-btn>
+        </template>
+        <!-- <template v-slot:prepend>
+          <v-btn
+            rounded
+            elevation="0"
+            width="48"
+            height="48"
+            min-width="48"
+            class="mr-4"
+          >
+            <v-icon>mdi-image-outline</v-icon>
+          </v-btn>
+        </template> -->
+      </v-text-field>
     </div>
   </div>
 </template>
@@ -60,7 +85,7 @@ export default {
 
 <style scoped>
 .window {
-  height: calc(100vh - 32px - 56px - 96px);
+  height: calc(100vh - 32px - 56px - 80px);
   background-color: #f0f0f0;
 }
 .bar {

@@ -19,11 +19,11 @@
         <v-dialog v-model="dialog" width="300">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              id="button-qrcode"
               icon
               x-large
               color="white"
               class="my-4"
-              id="button-qrcode"
               v-bind="attrs"
               v-on="on"
             >
@@ -33,33 +33,33 @@
 
           <v-card class="pa-8 d-flex align-center justify-center">
             <qrcode-vue
+              id="qrcode"
               :value="page"
               :size="size"
               level="H"
-              id="qrcode"
             ></qrcode-vue>
           </v-card>
         </v-dialog>
         <NuxtLink class="link" to="/signup">
           <v-btn
+            id="button-signup"
             outlined
             x-large
             dark
-            class="button text-center full-width"
-            id="button-signup"
             nuxt
+            class="button text-center full-width"
           >
             注册
           </v-btn>
         </NuxtLink>
         <NuxtLink class="link" to="/login">
           <v-btn
+            id="button-login"
             outlined
             x-large
             dark
-            class="button text-center full-width"
-            id="button-login"
             nuxt
+            class="button text-center full-width"
           >
             登录
           </v-btn>

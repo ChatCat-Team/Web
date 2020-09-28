@@ -51,7 +51,7 @@
     </v-navigation-drawer>
 
     <v-main id="attach">
-      <v-dialog v-model="dialog.new" class="dialog" width="372">
+      <v-dialog v-model="dialog.new" class="dialog" width="372" persistent>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             fixed
@@ -78,18 +78,50 @@
               <v-icon>mdi-check</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-list three-line subheader>
-            <v-list-item link>
-              <v-list-item-content class="px-4 py-8">
-                <v-list-item-title class="text-h6 mb-2"
-                  >王小花</v-list-item-title
-                >
-                <v-list-item-subtitle class="text-subtitle-1"
-                  >念念不忘 必有回响</v-list-item-subtitle
-                >
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+          <v-form class="pa-6 d-flex flex-column align-center">
+            <v-text-field
+              id="input-room-title"
+              v-model="create.title"
+              type="text"
+              label="房间标题"
+              hint="默认公开。不能超过 24 个字符"
+              persistent-hint
+              prepend-inner-icon="mdi-format-header-pound"
+              required
+              filled
+              counter="24"
+              clearable
+              class="full-width"
+            ></v-text-field>
+            <v-textarea
+              v-model="create.description"
+              filled
+              clearable
+              auto-grow
+              full-width
+              counter="100"
+              label="描述房间的信息（可选）"
+              hint="最多 100 个字符"
+              persistent-hint
+              prepend-inner-icon="mdi-text-box-outline"
+              class="full-width"
+            ></v-textarea>
+            <v-text-field
+              id="input-password"
+              v-model="create.password"
+              :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show.password ? 'text' : 'password'"
+              label="房间密码（可选）"
+              prepend-inner-icon="mdi-form-textbox-password"
+              hint="4 个字符的数字"
+              persistent-hint
+              filled
+              counter="4"
+              clearable
+              class="full-width"
+              @click:append="show.password = !show.password"
+            ></v-text-field>
+          </v-form>
         </v-card>
       </v-dialog>
 
@@ -169,6 +201,14 @@ export default {
     fromNow: (d) => dayjs.unix(d).fromNow(),
     dialog: {
       new: false,
+    },
+    create: {
+      title: '',
+      description: '',
+      password: '',
+    },
+    show: {
+      password: false,
     },
     rooms: [
       {

@@ -1,4 +1,5 @@
-.fix-margin .v-input__append-outer {
+.fix-margin .v-input__append-outer,
+.fix-margin .v-input__prepend-outer {
   margin: 0 !important;
 }
 

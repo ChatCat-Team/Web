@@ -2,7 +2,7 @@
   <v-app>
     <v-container fluid class="pa-0">
       <v-row no-gutters>
-        <v-col cols="12" class="view" id="view">
+        <v-col id="view" cols="12" class="view">
           <v-row no-gutters>
             <v-col cols="12">
               <v-system-bar window dark class="bar justify-center">

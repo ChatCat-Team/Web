@@ -40,6 +40,7 @@
       <div class="pa-8">
         <v-form v-model="valid" class="d-flex flex-column align-center">
           <v-text-field
+            id="input-phone"
             v-model="phone"
             :rules="rules.phone"
             type="number"
@@ -50,9 +51,9 @@
             filled
             clearable
             class="full-width"
-            id="input-phone"
           ></v-text-field>
           <v-text-field
+            id="input-password"
             v-model="password"
             :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show.password ? 'text' : 'password'"
@@ -65,10 +66,10 @@
             counter="24"
             clearable
             class="full-width"
-            id="input-password"
             @click:append="show.password = !show.password"
           ></v-text-field>
           <v-text-field
+            id="input-code"
             v-model="code"
             :rules="rules.code"
             type="number"
@@ -79,27 +80,26 @@
             clearable
             counter="6"
             class="full-width fix-margin"
-            id="input-code"
           >
             <template v-slot:append-outer>
-              <v-btn depressed x-large class="my-1 ml-4" id="button-send-code"
+              <v-btn id="button-send-code" depressed x-large class="my-1 ml-4"
                 >发送验证码</v-btn
               >
             </template>
           </v-text-field>
           <v-btn
+            id="signup"
             fab
             color="primary"
             large
             aria-label="注册"
             :disabled="!valid"
             class="mx-auto mt-6 mb-10"
-            id="signup"
             @click="signup"
           >
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
-          <p class="grey--text darken-2 ma-1" id="link-login">
+          <p id="link-login" class="grey--text darken-2 ma-1">
             已经注册过了？
             <NuxtLink to="/login" class="text-decoration-none">登录</NuxtLink>
           </p>

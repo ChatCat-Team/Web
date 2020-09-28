@@ -1,5 +1,11 @@
 export const state = () => ({
-  userData: null,
+  userData: {
+    avatar: null,
+    name: null,
+    bio: null,
+    location: null,
+    phone: null,
+  },
   settings: {
     themeColor: null,
     fontSize: null,
