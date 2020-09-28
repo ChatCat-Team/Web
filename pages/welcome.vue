@@ -23,6 +23,7 @@
               x-large
               color="white"
               class="my-4"
+              id="button-qrcode"
               v-bind="attrs"
               v-on="on"
             >
@@ -31,7 +32,12 @@
           </template>
 
           <v-card class="pa-8 d-flex align-center justify-center">
-            <qrcode-vue :value="page" :size="size" level="H"></qrcode-vue>
+            <qrcode-vue
+              :value="page"
+              :size="size"
+              level="H"
+              id="qrcode"
+            ></qrcode-vue>
           </v-card>
         </v-dialog>
         <NuxtLink class="link" to="/signup">
@@ -40,6 +46,7 @@
             x-large
             dark
             class="button text-center full-width"
+            id="button-signup"
             nuxt
           >
             注册
@@ -51,6 +58,7 @@
             x-large
             dark
             class="button text-center full-width"
+            id="button-login"
             nuxt
           >
             登录

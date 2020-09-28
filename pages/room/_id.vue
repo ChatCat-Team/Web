@@ -23,7 +23,7 @@
         v-model="message"
         filled
         full-width
-        rounded
+        dense
         counter
         label="输入消息，回车发送"
         hint="当前为演示版本，不代表最终效果"

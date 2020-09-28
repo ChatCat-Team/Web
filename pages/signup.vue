@@ -50,6 +50,7 @@
             filled
             clearable
             class="full-width"
+            id="input-phone"
           ></v-text-field>
           <v-text-field
             v-model="password"
@@ -64,6 +65,7 @@
             counter="24"
             clearable
             class="full-width"
+            id="input-password"
             @click:append="show.password = !show.password"
           ></v-text-field>
           <v-text-field
@@ -75,25 +77,29 @@
             required
             filled
             clearable
-            class="full-width fix-margin"
             counter="6"
+            class="full-width fix-margin"
+            id="input-code"
           >
             <template v-slot:append-outer>
-              <v-btn depressed x-large class="my-1 ml-4">发送验证码</v-btn>
+              <v-btn depressed x-large class="my-1 ml-4" id="button-send-code"
+                >发送验证码</v-btn
+              >
             </template>
           </v-text-field>
           <v-btn
             fab
             color="primary"
-            class="mx-auto mt-6 mb-10"
             large
             aria-label="注册"
             :disabled="!valid"
+            class="mx-auto mt-6 mb-10"
+            id="signup"
             @click="signup"
           >
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
-          <p class="grey--text darken-2 ma-1">
+          <p class="grey--text darken-2 ma-1" id="link-login">
             已经注册过了？
             <NuxtLink to="/login" class="text-decoration-none">登录</NuxtLink>
           </p>

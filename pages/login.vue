@@ -11,8 +11,8 @@
       <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs v-model="tab" align-with-title>
-          <v-tab href="#tab-password">密码</v-tab>
-          <v-tab href="#tab-code">短信验证码</v-tab>
+          <v-tab href="#tab-password" id="password-tab">密码</v-tab>
+          <v-tab href="#tab-code" id="code-tab">短信验证码</v-tab>
         </v-tabs>
       </template>
 
@@ -59,6 +59,7 @@
               filled
               clearable
               class="full-width"
+              id="input-phone-1"
             ></v-text-field>
             <v-text-field
               v-model="password"
@@ -73,6 +74,7 @@
               counter="24"
               clearable
               class="full-width"
+              id="input-password"
               @click:append="show.password = !show.password"
             ></v-text-field>
             <v-btn
@@ -82,6 +84,7 @@
               large
               aria-label="登录"
               :disabled="!valid.password"
+              id="login-1"
               @click="login"
             >
               <v-icon>mdi-arrow-right</v-icon>
@@ -90,12 +93,16 @@
               忘记密码？<NuxtLink
                 to="/forgot-password"
                 class="text-decoration-none"
+                id="link-forgot-password-1"
                 >找回密码</NuxtLink
               >
             </p>
             <p class="grey--text darken-2 ma-1">
               还没有注册？
-              <NuxtLink to="/signup" class="text-decoration-none"
+              <NuxtLink
+                to="/signup"
+                class="text-decoration-none"
+                id="link-signup-1"
                 >加入我们</NuxtLink
               >
             </p>
@@ -114,6 +121,7 @@
               filled
               clearable
               class="full-width"
+              id="input-phone-2"
             ></v-text-field>
             <v-text-field
               v-model="code"
@@ -126,6 +134,7 @@
               clearable
               class="full-width fix-margin"
               counter="6"
+              id="input-code"
             >
               <template v-slot:append-outer>
                 <v-btn depressed x-large class="my-1 ml-4">发送验证码</v-btn>
@@ -138,6 +147,7 @@
               large
               aria-label="登录"
               :disabled="!valid.code"
+              id="login-2"
               @click="login"
             >
               <v-icon>mdi-arrow-right</v-icon>
@@ -146,19 +156,23 @@
               忘记密码？<NuxtLink
                 to="/forgot-password"
                 class="text-decoration-none"
+                id="link-forgot-password-1"
                 >找回密码</NuxtLink
               >
             </p>
             <p class="grey--text darken-2 ma-1">
               还没有注册？
-              <NuxtLink to="/signup" class="text-decoration-none"
+              <NuxtLink
+                to="/signup"
+                class="text-decoration-none"
+                id="link-signup-1"
                 >加入我们</NuxtLink
               >
             </p>
           </v-form>
         </v-tab-item>
       </v-tabs-items>
-      <v-snackbar v-model="snackbar" bottom class="mb-8">
+      <v-snackbar v-model="snackbar" bottom class="mb-8" id="snackbar">
         {{ text }}
         <template v-slot:action="{ attrs }">
           <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
