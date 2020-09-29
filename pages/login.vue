@@ -94,7 +94,7 @@
                 id="link-forgot-password-1"
                 to="/forgot-password"
                 class="text-decoration-none"
-                >找回密码</NuxtLink
+                >重置密码</NuxtLink
               >
             </p>
             <p class="grey--text darken-2 ma-1">

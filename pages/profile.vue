@@ -321,7 +321,7 @@
 
       <v-list-item link>
         <v-list-item-icon>
-          <v-icon color="indigo">mdi-lock-outline</v-icon>
+          <v-icon color="indigo">mdi-phone-outline</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
@@ -331,9 +331,83 @@
           <v-list-item-subtitle>手机号</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-dialog v-model="dialog.delete" width="372">
+
+      <v-dialog v-model="dialog.password" width="372" persistent>
         <template v-slot:activator="{ on, attrs }">
           <v-list-item link class="mt-8" v-bind="attrs" v-on="on">
+            <v-list-item-icon>
+              <v-icon color="indigo">mdi-lock-outline</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title> 修改密码 </v-list-item-title>
+              <v-list-item-subtitle
+                >需要提供当前密码和新密码</v-list-item-subtitle
+              >
+            </v-list-item-content>
+
+            <v-list-item-icon>
+              <v-icon>mdi-pencil-outline</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </template>
+        <v-card>
+          <v-card-title>修改密码</v-card-title>
+          <v-text-field
+            v-model="password.old"
+            :append-icon="show.old ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show.old ? 'text' : 'password'"
+            :rules="rules.password"
+            label="旧的密码"
+            prepend-inner-icon="mdi-form-textbox-password"
+            hint="新旧密码必须不同"
+            persistent-hint
+            required
+            filled
+            counter="24"
+            clearable
+            class="mx-4 mt-2"
+            @click:append="show.old = !show.old"
+          ></v-text-field>
+          <v-text-field
+            v-model="password.new"
+            :append-icon="show.new ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show.new ? 'text' : 'password'"
+            :rules="rules.password"
+            label="新的密码"
+            prepend-inner-icon="mdi-form-textbox-password"
+            hint="8 - 24 个字符，且包含字母、数字、符号"
+            persistent-hint
+            required
+            filled
+            counter="24"
+            clearable
+            class="mx-4 mt-2"
+            @click:append="show.new = !show.new"
+          ></v-text-field>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              text
+              color="deep-purple accent-4"
+              @click="dialog.password = false"
+            >
+              取消操作
+            </v-btn>
+            <v-btn
+              text
+              color="deep-purple accent-4"
+              @click="dialog.password = false"
+            >
+              确认修改
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="dialog.delete" width="372">
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item link v-bind="attrs" v-on="on">
             <v-list-item-icon>
               <v-icon color="red accent-4">mdi-delete-outline</v-icon>
             </v-list-item-icon>
@@ -374,7 +448,16 @@ export default {
         name: false,
         bio: false,
         location: false,
+        password: false,
         delete: false,
+      },
+      password: {
+        old: '',
+        new: '',
+      },
+      show: {
+        old: false,
+        new: false,
       },
       user: {
         avatar:
@@ -409,6 +492,11 @@ export default {
         location: [
           (v) => !!v || '位置为必填项',
           (v) => (v && v.length <= 24) || '最多 24 个字符',
+        ],
+        password: [
+          (v) => !!v || '密码为必填项',
+          (v) => v.length >= 8 || '最少 8 个字符',
+          (v) => v.length <= 24 || '最多 24 个字符',
         ],
       },
     }
