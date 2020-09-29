@@ -1,18 +1,18 @@
 <template>
   <div style="position: relative; height: 100%">
-    <v-app-bar dark flat prominent extended>
-      <v-btn icon color="white">
-        <NuxtLink to="/welcome" class="white--text text-decoration-none">
-          <v-icon>mdi-arrow-left</v-icon>
+    <v-app-bar flat prominent height="240" extended>
+      <v-btn icon>
+        <NuxtLink to="/welcome" class="text-decoration-none">
+          <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
         </NuxtLink>
       </v-btn>
 
-      <v-toolbar-title>重置密码</v-toolbar-title>
+      <v-toolbar-title class="my-8">重置密码</v-toolbar-title>
       <v-spacer></v-spacer>
 
       <v-dialog v-model="dialog.help" width="372">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon color="white" v-bind="attrs" v-on="on">
+          <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-help-circle-outline</v-icon>
           </v-btn>
         </template>
@@ -49,7 +49,10 @@
             hint="仅限中国大陆 +86 手机号"
             prepend-inner-icon="mdi-cellphone"
             required
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             clearable
             class="full-width"
           ></v-text-field>
@@ -60,13 +63,18 @@
             label="验证码"
             prepend-inner-icon="mdi-numeric"
             required
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             clearable
             class="full-width fix-margin"
             counter="6"
           >
             <template v-slot:append-outer>
-              <v-btn depressed x-large class="my-1 ml-4">发送验证码</v-btn>
+              <v-btn depressed x-large height="56" class="ml-4">
+                发送验证码
+              </v-btn>
             </template>
           </v-text-field>
           <v-text-field
@@ -78,7 +86,10 @@
             prepend-inner-icon="mdi-form-textbox-password"
             hint="8 - 24 个字符，且包含字母、数字、符号"
             required
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             counter="24"
             clearable
             class="full-width"
@@ -93,7 +104,10 @@
             prepend-inner-icon="mdi-form-textbox-password"
             hint="两次输入的密码需要一致"
             required
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             counter="24"
             clearable
             class="full-width"
@@ -101,6 +115,7 @@
           ></v-text-field>
           <v-btn
             fab
+            elevation="0"
             color="primary"
             class="mx-auto mt-6 mb-10"
             large

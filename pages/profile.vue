@@ -118,7 +118,10 @@
           <v-text-field
             v-model="user.name"
             :placeholder="$store.state.localStorage.default.userData.name"
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             clearable
             counter="24"
             :rules="rules.name"
@@ -193,7 +196,10 @@
           <v-textarea
             v-model="user.bio"
             :placeholder="$store.state.localStorage.default.userData.bio"
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             clearable
             auto-grow
             counter="100"
@@ -267,7 +273,10 @@
           <v-text-field
             v-model="user.location"
             :placeholder="$store.state.localStorage.default.userData.location"
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             clearable
             counter="24"
             :rules="rules.location"
@@ -363,7 +372,10 @@
             hint="新旧密码必须不同"
             persistent-hint
             required
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             counter="24"
             clearable
             class="mx-4 mt-2"
@@ -379,7 +391,10 @@
             hint="8 - 24 个字符，且包含字母、数字、符号"
             persistent-hint
             required
-            filled
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
             counter="24"
             clearable
             class="mx-4 mt-2"

@@ -1,20 +1,15 @@
 <template>
   <div style="position: relative; height: calc(100vh - 32px)">
-    <v-app-bar flat dark style="z-index: 1000">
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+    <v-app-bar flat color="white" style="z-index: 1000">
+      <v-btn icon>
+        <NuxtLink to="/" class="text-decoration-none">
+          <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
+        </NuxtLink>
+      </v-btn>
       <v-toolbar-title> Room Title </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-chip outlined>{{ id }}</v-chip>
     </v-app-bar>
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      light
-      temporary
-      style="heigh: 100vh; z-index: 2000"
-    >
-      <v-drawer></v-drawer>
-    </v-navigation-drawer>
     <v-sheet class="window d-flex flex-column align-center justify-center">
       <h3 class="text-h6 grey--text lighten-2">没有消息</h3>
     </v-sheet>
@@ -23,11 +18,12 @@
         v-model="message"
         solo
         flat
+        height="56"
+        background-color="grey lighten-4"
         hide-details
         label="在此输入消息"
         single-line
         type="text"
-        background-color="grey lighten-4"
         class="fix-margin"
       >
         <template v-slot:append-outer>
@@ -38,7 +34,7 @@
             width="48"
             height="48"
             min-width="48"
-            class="ml-4"
+            class="ml-4 my-1"
           >
             <v-icon>mdi-send-outline</v-icon>
           </v-btn>
@@ -61,12 +57,8 @@
 </template>
 
 <script>
-import drawerItem from '../../components/drawer'
 export default {
   layout: 'default',
-  components: {
-    'v-drawer': drawerItem,
-  },
   asyncData({ params }) {
     return {
       id: params.id,

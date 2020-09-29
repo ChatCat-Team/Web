@@ -1,6 +1,12 @@
 <template>
   <div style="position: relative; min-height: calc(100vh - 32px)">
-    <v-app-bar flat dark elevation="0" extended extension-height="212px">
+    <v-app-bar
+      flat
+      color="white"
+      elevation="0"
+      extended
+      extension-height="96px"
+    >
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">ChatCat</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -8,8 +14,9 @@
         <div class="d-flex flex-column full-width">
           <v-text-field
             solo
-            height="56px"
             flat
+            height="56"
+            background-color="grey lighten-4"
             clearable
             full-width
             type="text"
@@ -22,7 +29,7 @@
           >
           </v-text-field>
 
-          <v-chip-group
+          <!-- <v-chip-group
             v-show="
               ($store.state.localStorage.settings.enableSearchHistory ||
                 $store.state.localStorage.default.settings
@@ -32,17 +39,16 @@
             column
             active-class="primary--text"
           >
-            <v-chip color="grey darken-3"> 历史搜索记录 </v-chip>
+            <v-chip> 历史访问记录 </v-chip>
             <v-chip
               v-for="(record, i) in records"
               :key="i"
               close
               close-icon="mdi-close"
-              color="grey darken-3"
             >
               {{ record }}
             </v-chip>
-          </v-chip-group>
+          </v-chip-group> -->
         </div>
       </template>
     </v-app-bar>
@@ -59,6 +65,7 @@
             fab
             large
             color="primary"
+            elevation="0"
             class="fab"
             v-bind="attrs"
             v-on="on"
@@ -66,36 +73,41 @@
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <v-card class="mt-12">
-          <v-toolbar dark flat>
-            <v-btn icon dark @click="dialog.new = false">
+        <v-card>
+          <v-toolbar flat>
+            <v-btn icon @click="dialog.new = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-toolbar-title>创建新的聊天室</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon dark @click="dialog.new = false">
+            <v-btn icon @click="dialog.new = false">
               <v-icon>mdi-check</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-form class="pa-6 d-flex flex-column align-center">
+          <v-form class="pa-4 pt-2 d-flex flex-column align-center">
             <v-text-field
               id="input-room-title"
               v-model="create.title"
               type="text"
               label="房间标题"
-              hint="默认公开。不能超过 24 个字符"
+              hint="默认公开。不能超过 20 个字符"
               persistent-hint
               prepend-inner-icon="mdi-format-header-pound"
               required
-              filled
-              counter="24"
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              counter="20"
               clearable
               class="full-width"
             ></v-text-field>
             <v-textarea
               v-model="create.description"
-              filled
+              solo
+              flat
+              background-color="grey lighten-4"
               clearable
               auto-grow
               full-width
@@ -115,7 +127,10 @@
               prepend-inner-icon="mdi-form-textbox-password"
               hint="4 个字符的数字"
               persistent-hint
-              filled
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
               counter="4"
               clearable
               class="full-width"
@@ -139,21 +154,24 @@
             class="grey full-width lighten-4 d-flex flex-column align-start justify-space-between"
           >
             <div class="full-width">
-              <p class="text-caption ma-0 px-4 pt-4 pb-1">
-                <strong>{{ room.creator }}</strong> 在
-                <strong>{{ fromNow(room.date) }}</strong> 创建
+              <p class="text-caption font-weight-light ma-0 px-4 pt-4 pb-1">
+                <span class="font-weight-regular">{{ room.creator }}</span> 在
+                <span class="font-weight-regular">{{
+                  fromNow(room.date)
+                }}</span>
+                创建
               </p>
-              <v-card-title class="text-h6 font-weight-bold py-0">{{
+              <v-card-title class="text-h6 font-weight-regular py-0">{{
                 room.title
               }}</v-card-title>
             </div>
             <p
               :class="`text-body-2 pt-0 px-4 d-flex align-center status ${
                 room.status.code === 0
-                  ? 'waiting font-weight-bold'
+                  ? 'waiting font-weight-regular'
                   : room.status.code === 1
-                  ? 'online font-weight-bold'
-                  : 'offline'
+                  ? 'online font-weight-regular'
+                  : 'offline font-weight-light'
               }`"
             >
               {{
@@ -259,7 +277,7 @@ export default {
         },
       },
     ],
-    records: ['搜索', '可以输入', '房间号', '房间名', '💩', '都 👌'],
+    records: ['这里', '显示的是', '曾经加入过的', '房间名', '默认开启'],
     user: {
       avatar: null,
       bio: null,

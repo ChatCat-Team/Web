@@ -3,14 +3,14 @@
     <div
       class="background d-flex flex-column align-center justify-space-around"
     >
-      <div class="header px-10 pt-8 full-width text-center">
+      <div class="header px-10 pt-12 full-width text-center">
         <h1 class="title text-h4 font-weight-light white--text py-2">
           ChatCat
         </h1>
         <h2 class="title text-h5 font-weight-light white--text">
           一个简单的聊天室
         </h2>
-        <v-chip outlined dark class="my-4"> 演示版本 </v-chip>
+        <v-chip outlined dark class="my-4 text-subtitle-1"> 演示版本 </v-chip>
         <v-spacer></v-spacer>
       </div>
       <div
@@ -106,18 +106,18 @@ export default {
   background-attachment: fixed;
   background-image: radial-gradient(
       rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.3) 100%
+      rgba(0, 0, 0, 0.65) 100%
     ),
-    radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.2) 166%),
+    radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.4) 166%),
     linear-gradient(
       180deg,
       rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0) 0% 75%,
       rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.2) 100%
+      rgba(0, 0, 0, 0.4) 100%
     );
 
-  /* backdrop-filter: blur(10px); */
+  /* backdrop-filter: brightness(0.8); */
 }
 
 .link {
@@ -131,6 +131,6 @@ export default {
 }
 
 .title {
-  text-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
 }
 </style>

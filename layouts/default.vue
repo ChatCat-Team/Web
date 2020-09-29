@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container fluid class="pa-0">
-      <v-row no-gutters>
+      <v-row no-gutters class="mask">
         <v-col id="view" cols="12" class="view">
           <v-row no-gutters>
             <v-col cols="12">
@@ -11,7 +11,7 @@
               </v-system-bar>
             </v-col>
           </v-row>
-          <v-row no-gutters>
+          <v-row no-gutters class="screen">
             <v-col cols="12" style="min-height： 100vh">
               <nuxt />
             </v-col>
@@ -32,8 +32,16 @@
   max-width: 420px;
   min-height: 100vh;
   margin: 0 auto;
-  box-shadow: 0 0 128px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 128px rgba(0, 0, 0, 0.2);
   overflow: hidden auto;
+}
+
+.mask {
+  background-color: #ffffff;
+}
+
+.screen {
+  background-color: #ffffff;
 }
 </style>
 

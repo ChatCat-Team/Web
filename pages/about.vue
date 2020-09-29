@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative; min-height: calc(100vh - 32px)">
-    <v-app-bar flat dark elevation="0" style="z-index: 1000">
+    <v-app-bar flat elevation="0" color="white" style="z-index: 1000">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">关于 ChatCat</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -91,4 +91,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+h2 {
+  font-weight: normal;
+}
+</style>

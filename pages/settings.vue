@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative; min-height: calc(100vh - 32px)">
-    <v-app-bar flat dark elevation="0" style="z-index: 1000">
+    <v-app-bar flat elevation="0" color="white">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">设置</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -139,9 +139,9 @@
             <v-icon>mdi-history</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>启用搜索历史记录 </v-list-item-title>
+            <v-list-item-title>启用房间历史记录 </v-list-item-title>
             <v-list-item-subtitle
-              >开启后会在主页显示搜索历史记录</v-list-item-subtitle
+              >开启后会在主页显示加入过的房间</v-list-item-subtitle
             >
           </v-list-item-content>
           <v-switch
