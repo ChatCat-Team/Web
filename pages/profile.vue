@@ -198,7 +198,6 @@
             :placeholder="$store.state.localStorage.default.userData.bio"
             solo
             flat
-            height="56"
             background-color="grey lighten-4"
             clearable
             auto-grow
@@ -364,7 +363,7 @@
           <v-card-title>修改密码</v-card-title>
           <v-text-field
             v-model="password.old"
-            :append-icon="show.old ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="show.old ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
             :type="show.old ? 'text' : 'password'"
             :rules="rules.password"
             label="旧的密码"
@@ -383,7 +382,7 @@
           ></v-text-field>
           <v-text-field
             v-model="password.new"
-            :append-icon="show.new ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="show.new ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
             :type="show.new ? 'text' : 'password'"
             :rules="rules.password"
             label="新的密码"
@@ -451,7 +450,6 @@
 <script>
 import drawerItem from '../components/drawer'
 export default {
-  layout: 'default',
   components: {
     'v-drawer': drawerItem,
   },
@@ -512,6 +510,10 @@ export default {
           (v) => !!v || '密码为必填项',
           (v) => v.length >= 8 || '最少 8 个字符',
           (v) => v.length <= 24 || '最多 24 个字符',
+          (v) =>
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+              v
+            ) || '密码不符合要求',
         ],
       },
     }

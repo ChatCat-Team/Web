@@ -1,32 +1,11 @@
 <template>
-  <v-app>
-    <v-container fluid class="pa-0">
-      <v-row no-gutters class="mask">
-        <v-col id="view" cols="12" class="view">
-          <v-row no-gutters>
-            <v-col cols="12">
-              <v-system-bar window dark class="bar justify-center">
-                <v-icon>mdi-check</v-icon>
-                <span>Connected To Server</span>
-              </v-system-bar>
-            </v-col>
-          </v-row>
-          <v-row no-gutters class="screen">
-            <v-col cols="12" style="min-height： 100vh">
-              <nuxt />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-app class="view">
+    <div class="mask"></div>
+    <nuxt />
   </v-app>
 </template>
 
 <style scoped>
-.bar {
-  width: 100%;
-}
-
 .view {
   width: 100%;
   max-width: 420px;
@@ -37,10 +16,12 @@
 }
 
 .mask {
-  background-color: #ffffff;
-}
-
-.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
   background-color: #ffffff;
 }
 </style>
@@ -71,23 +52,17 @@
 
 <script>
 export default {
-  mounted() {
-    return this.init()
+  created() {
+    this.$vuetify.theme.themes.light.primary =
+      this.$store.state.localStorage.settings.themeColor ||
+      this.$store.state.localStorage.default.settings.themeColor
   },
-  methods: {
-    init() {
-      if (process.client) {
-        document.documentElement.className =
-          'font-' +
-          (this.$store.state.localStorage.settings.fontSize ||
-            this.$store.state.localStorage.default.settings.fontSize)
-        this.$meta().refresh()
-        this.$vuetify.theme.themes.light.primary =
-          this.$store.state.localStorage.settings.themeColor ||
-          this.$store.state.localStorage.default.settings.themeColor
-        // console.log(this.$vuetify.theme.themes.light.primary)
-      }
-    },
+  mounted() {
+    this.$meta().refresh()
+    document.documentElement.className =
+      'font-' +
+      (this.$store.state.localStorage.settings.fontSize ||
+        this.$store.state.localStorage.default.settings.fontSize)
   },
 }
 </script>

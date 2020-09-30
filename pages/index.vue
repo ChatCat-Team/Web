@@ -5,11 +5,12 @@
       color="white"
       elevation="0"
       extended
-      extension-height="96px"
+      extension-height="56px"
     >
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-h6">ChatCat</v-toolbar-title>
+      <v-toolbar-title class="text-h6"> ChatCat </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-chip color="grey lighten-4">演示版本</v-chip>
       <template v-slot:extension>
         <div class="d-flex flex-column full-width">
           <v-text-field
@@ -23,9 +24,8 @@
             label="输入 ID 加入一个聊天室"
             prepend-inner-icon="mdi-magnify"
             append-icon="mdi-qrcode"
-            hint="当前为演示版本，不代表最终效果"
-            persistent-hint
-            class="pb-2 full-width"
+            hide-details
+            class="full-width"
           >
           </v-text-field>
 
@@ -196,7 +196,6 @@ dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
 
 export default {
-  layout: 'default',
   components: {
     'v-drawer': drawerItem,
   },

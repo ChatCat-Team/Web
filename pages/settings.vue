@@ -166,7 +166,6 @@
 <script>
 import drawerItem from '../components/drawer'
 export default {
-  layout: 'default',
   components: {
     'v-drawer': drawerItem,
   },

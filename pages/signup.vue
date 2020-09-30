@@ -38,27 +38,36 @@
     </v-app-bar>
     <v-main>
       <div class="pa-8">
-        <v-form v-model="valid" class="d-flex flex-column align-center">
-          <v-text-field
-            id="input-phone"
-            v-model="phone"
-            :rules="rules.phone"
-            type="number"
-            label="手机号"
-            hint="仅限中国大陆 +86 手机号"
-            prepend-inner-icon="mdi-cellphone"
-            required
-            solo
-            flat
-            height="56"
-            background-color="grey lighten-4"
-            clearable
-            class="full-width"
-          ></v-text-field>
+        <v-form
+          v-model="valid.all"
+          :disabled="disabled"
+          class="d-flex flex-column align-center"
+        >
+          <v-form v-model="valid.phone" class="full-width">
+            <v-text-field
+              id="input-phone"
+              v-model="phone"
+              :rules="rules.phone"
+              type="number"
+              label="手机号"
+              hint="仅限中国大陆 +86 手机号"
+              prepend-inner-icon="mdi-cellphone"
+              required
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              clearable
+              class="full-width"
+            ></v-text-field>
+          </v-form>
+
           <v-text-field
             id="input-password"
             v-model="password"
-            :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="
+              show.password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+            "
             :type="show.password ? 'text' : 'password'"
             :rules="rules.password"
             label="密码"
@@ -76,7 +85,7 @@
           ></v-text-field>
           <v-text-field
             id="input-code"
-            v-model="code"
+            v-model="code.input"
             :rules="rules.code"
             type="number"
             label="验证码"
@@ -88,6 +97,7 @@
             background-color="grey lighten-4"
             clearable
             counter="6"
+            :disabled="!!code.clock || !valid.phone"
             class="full-width fix-margin"
           >
             <template v-slot:append-outer>
@@ -97,8 +107,10 @@
                 x-large
                 height="56"
                 class="ml-4"
+                :disabled="!!code.clock || !valid.phone"
+                @click="sendCode"
               >
-                发送验证码
+                {{ (code.clock === 0 ? '' : code.clock + ' ') + code.text }}
               </v-btn>
             </template>
           </v-text-field>
@@ -109,7 +121,8 @@
             color="primary"
             large
             aria-label="注册"
-            :disabled="!valid"
+            :disabled="!valid.all"
+            :loading="loading"
             class="mx-auto mt-6 mb-10"
             @click="signup"
           >
@@ -121,20 +134,37 @@
           </p>
         </v-form>
       </div>
+      <v-snackbar id="snackbar" v-model="snackbar" bottom class="mb-8">
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
+            关闭
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </div>
 </template>
 
 <script>
 export default {
-  layout: 'blank',
   data() {
     return {
       tab: null,
-      valid: false,
+      valid: {
+        all: false,
+        phone: false,
+      },
       phone: '',
       password: '',
-      code: '',
+      code: {
+        input: '',
+        clock: 0,
+        text: '发送验证码',
+      },
+      snackbar: false,
+      timeout: 2000,
+      text: '',
       rules: {
         phone: [
           (v) => !!v || '手机号为必填项',
@@ -147,6 +177,10 @@ export default {
           (v) => !!v || '密码为必填项',
           (v) => (v && v.length >= 8) || '最少 8 个字符',
           (v) => (v && v.length <= 24) || '最多 24 个字符',
+          (v) =>
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+              v
+            ) || '密码不符合要求',
         ],
         code: [
           (v) => !!v || '短信验证码为必填项',
@@ -159,24 +193,70 @@ export default {
       dialog: {
         help: false,
       },
+      disabled: false,
+      loading: false,
     }
   },
   methods: {
     async signup() {
-      // https://test.lifeni.life/api/register
+      this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/register', {
           phone: this.phone,
           pwd: this.password,
+          code: this.code.input,
         })
         .then((res) => {
           console.log(res)
-          this.$router.push({ path: '/' })
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = '注册成功，即将跳转'
+            this.disabled = true
+            setTimeout(() => {
+              this.$router.push({ path: '/' })
+            }, 1000)
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
         })
         .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
           console.error(err)
         })
-      // this.$router.push({ path: '/' })
+    },
+    async sendCode() {
+      this.code.text = `正在发送`
+      await this.$axios
+        .$post('https://test.lifeni.life/api/sendmessageregister', {
+          phone: this.phone,
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.code === 0) {
+            this.code.clock = 60
+            this.code.text = `秒后可重发`
+            setInterval(() => {
+              this.code.clock = this.code.clock - 1
+            }, 1000)
+            setTimeout(() => {
+              this.code.text = `重新发送`
+            }, 6000)
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+            this.code.text = `发送失败`
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.code.text = `发送失败`
+          console.error(err)
+        })
     },
   },
 }

@@ -8,7 +8,7 @@
       </v-btn>
       <v-toolbar-title> Room Title </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-chip outlined>{{ id }}</v-chip>
+      <v-chip color="grey lighten-4">{{ id }}</v-chip>
     </v-app-bar>
     <v-sheet class="window d-flex flex-column align-center justify-center">
       <h3 class="text-h6 grey--text lighten-2">没有消息</h3>
@@ -58,7 +58,6 @@
 
 <script>
 export default {
-  layout: 'default',
   asyncData({ params }) {
     return {
       id: params.id,

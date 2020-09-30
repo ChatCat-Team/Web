@@ -46,6 +46,7 @@
         <v-tab-item value="tab-password">
           <v-form
             v-model="valid.password"
+            :disabled="disabled"
             class="d-flex flex-column align-center"
           >
             <v-text-field
@@ -67,7 +68,9 @@
             <v-text-field
               id="input-password"
               v-model="password"
-              :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+              :append-icon="
+                show.password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+              "
               :type="show.password ? 'text' : 'password'"
               :rules="rules.password"
               label="密码"
@@ -96,6 +99,7 @@
                   large
                   aria-label="登录"
                   :disabled="!valid.password"
+                  :loading="loading"
                   v-bind="attrs"
                   v-on="on"
                   @click="captcha = ''"
@@ -107,12 +111,12 @@
               <v-card>
                 <v-form v-model="valid.captcha">
                   <v-card-title>图形验证</v-card-title>
-                  <v-card-text class="px-6 pb-2">
+                  <v-card-text class="px-4 pb-2">
                     若要继续，请输入下面的图形验证码。
                   </v-card-text>
                   <v-row no-gutters>
                     <v-col cols="6">
-                      <v-img :src="base64"></v-img>
+                      <v-img :src="base64" class="mx-4 mt-2 mr-0"></v-img>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
@@ -125,6 +129,7 @@
                         counter="4"
                         hint="4 个字符"
                         persistent-hint
+                        autofocus
                         :rules="rules.captcha"
                         class="mx-4 mt-2"
                       ></v-text-field>
@@ -154,9 +159,10 @@
             </v-dialog>
 
             <p class="grey--text darken-2 ma-0">
-              忘记密码？<NuxtLink
-                id="link-forgot-password-1"
-                to="/forgot-password"
+              忘记密码？
+              <NuxtLink
+                id="link-forget-password-1"
+                to="/forget-password"
                 class="text-decoration-none"
                 >重置密码</NuxtLink
               >
@@ -173,7 +179,11 @@
           </v-form>
         </v-tab-item>
         <v-tab-item value="tab-code">
-          <v-form v-model="valid.code" class="d-flex flex-column align-center">
+          <v-form
+            v-model="valid.code"
+            :disabled="disabled"
+            class="d-flex flex-column align-center"
+          >
             <v-text-field
               id="input-phone-2"
               v-model="phone"
@@ -221,14 +231,15 @@
               large
               aria-label="登录"
               :disabled="!valid.code"
-              @click="login"
+              :loading="loading"
+              @click="loginPassword"
             >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
             <p class="grey--text darken-2 ma-0">
               忘记密码？<NuxtLink
-                id="link-forgot-password-1"
-                to="/forgot-password"
+                id="link-forget-password-1"
+                to="/forget-password"
                 class="text-decoration-none"
                 >重置密码</NuxtLink
               >
@@ -260,7 +271,6 @@
 <script>
 import axios from 'axios'
 export default {
-  layout: 'blank',
   data() {
     return {
       tab: null,
@@ -271,7 +281,11 @@ export default {
       },
       phone: '',
       password: '',
-      code: '',
+      code: {
+        input: '',
+        clock: 0,
+        text: '发送验证码',
+      },
       snackbar: false,
       timeout: 2000,
       text: '',
@@ -289,6 +303,10 @@ export default {
           (v) => !!v || '密码为必填项',
           (v) => (v && v.length >= 8) || '最少 8 个字符',
           (v) => (v && v.length <= 24) || '最多 24 个字符',
+          (v) =>
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+              v
+            ) || '密码不符合要求',
         ],
         code: [
           (v) => !!v || '短信验证码为必填项',
@@ -306,10 +324,13 @@ export default {
         help: false,
         captcha: false,
       },
+      disabled: false,
+      loading: false,
     }
   },
   methods: {
     async loginPassword() {
+      this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/login', {
           phone: this.phone,
@@ -318,10 +339,12 @@ export default {
         })
         .then((res) => {
           console.log(res)
+          this.loading = false
           this.dialog.captcha = false
           if (res.code === 0) {
             this.snackbar = true
             this.text = '登录成功，即将跳转'
+            this.disabled = true
             setTimeout(() => {
               this.$router.push({ path: '/' })
             }, 1000)
@@ -331,6 +354,9 @@ export default {
           }
         })
         .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
           console.error(err)
         })
     },
@@ -341,14 +367,18 @@ export default {
     },
   },
   async asyncData() {
-    await axios
-      .post('https://test.lifeni.life/api/sendgraphicverification')
+    return await axios
+      .post('https://test.lifeni.life/api/sendgraphicverification', {})
       .then((res) => {
         if (res.data.code === 0) {
-          this.base64 = res.data.extend.imgStr
+          return {
+            base64: res.data.extend.imgStr,
+          }
         } else {
-          this.snackbar = true
-          this.text = res.msg
+          return {
+            snackbar: true,
+            text: res.msg,
+          }
         }
       })
       .catch((err) => {

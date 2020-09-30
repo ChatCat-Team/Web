@@ -10,7 +10,7 @@
         <h2 class="title text-h5 font-weight-light white--text">
           一个简单的聊天室
         </h2>
-        <v-chip outlined dark class="my-4 text-subtitle-1"> 演示版本 </v-chip>
+        <v-chip outlined dark class="my-4"> 演示版本 </v-chip>
         <v-spacer></v-spacer>
       </div>
       <div
@@ -72,7 +72,6 @@
 <script>
 import QrcodeVue from 'qrcode.vue'
 export default {
-  layout: 'blank',
   components: {
     QrcodeVue,
   },

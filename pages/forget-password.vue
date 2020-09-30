@@ -79,7 +79,9 @@
           </v-text-field>
           <v-text-field
             v-model="password.first"
-            :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="
+              show.password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+            "
             :type="show.password ? 'text' : 'password'"
             :rules="rules.password"
             label="新的密码"
@@ -97,7 +99,9 @@
           ></v-text-field>
           <v-text-field
             v-model="password.second"
-            :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="
+              show.password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+            "
             :type="show.password ? 'text' : 'password'"
             :rules="rules.password"
             label="再输入一次新的密码"
@@ -132,7 +136,6 @@
 
 <script>
 export default {
-  layout: 'blank',
   data() {
     return {
       tab: null,
@@ -158,6 +161,10 @@ export default {
           (v) => !!v || '密码为必填项',
           (v) => v.length >= 8 || '最少 8 个字符',
           (v) => v.length <= 24 || '最多 24 个字符',
+          (v) =>
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+              v
+            ) || '密码不符合要求',
         ],
         code: [(v) => !!v || '短信验证码为必填项'],
       },
