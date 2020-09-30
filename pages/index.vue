@@ -19,8 +19,8 @@
             background-color="grey lighten-4"
             clearable
             full-width
-            type="text"
-            label="加入一个聊天室"
+            type="number"
+            label="输入 ID 加入一个聊天室"
             prepend-inner-icon="mdi-magnify"
             append-icon="mdi-qrcode"
             hint="当前为演示版本，不代表最终效果"
@@ -121,8 +121,8 @@
             <v-text-field
               id="input-password"
               v-model="create.password"
-              :append-icon="show.password ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show.password ? 'text' : 'password'"
+              type="number"
+              pattern="[0-9]*"
               label="房间密码（可选）"
               prepend-inner-icon="mdi-form-textbox-password"
               hint="4 个字符的数字"
@@ -134,7 +134,6 @@
               counter="4"
               clearable
               class="full-width"
-              @click:append="show.password = !show.password"
             ></v-text-field>
           </v-form>
         </v-card>
@@ -155,23 +154,21 @@
           >
             <div class="full-width">
               <p class="text-caption font-weight-light ma-0 px-4 pt-4 pb-1">
-                <span class="font-weight-regular">{{ room.creator }}</span> 在
-                <span class="font-weight-regular">{{
-                  fromNow(room.date)
-                }}</span>
+                <span class="font-weight-medium">{{ room.creator }}</span> 在
+                <span class="font-weight-medium">{{ fromNow(room.date) }}</span>
                 创建
               </p>
-              <v-card-title class="text-h6 font-weight-regular py-0">{{
+              <v-card-title class="text-h6 font-weight-medium py-0">{{
                 room.title
               }}</v-card-title>
             </div>
             <p
               :class="`text-body-2 pt-0 px-4 d-flex align-center status ${
                 room.status.code === 0
-                  ? 'waiting font-weight-regular'
+                  ? 'waiting font-weight-medium'
                   : room.status.code === 1
-                  ? 'online font-weight-regular'
-                  : 'offline font-weight-light'
+                  ? 'online font-weight-medium'
+                  : 'offline font-weight-regular'
               }`"
             >
               {{

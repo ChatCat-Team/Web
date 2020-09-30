@@ -81,10 +81,11 @@ export default {
           'font-' +
           (this.$store.state.localStorage.settings.fontSize ||
             this.$store.state.localStorage.default.settings.fontSize)
-
+        this.$meta().refresh()
         this.$vuetify.theme.themes.light.primary =
           this.$store.state.localStorage.settings.themeColor ||
           this.$store.state.localStorage.default.settings.themeColor
+        // console.log(this.$vuetify.theme.themes.light.primary)
       }
     },
   },

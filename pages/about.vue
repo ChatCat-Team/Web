@@ -93,6 +93,6 @@ export default {
 
 <style scoped>
 h2 {
-  font-weight: normal;
+  font-weight: 500;
 }
 </style>

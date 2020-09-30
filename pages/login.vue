@@ -25,9 +25,9 @@
 
         <v-card>
           <v-card-title>使用帮助</v-card-title>
-          <v-card-text class="px-6 pb-4"
-            >登录时可以使用密码和短信验证码两种方式。</v-card-text
-          >
+          <v-card-text class="px-6 pb-4">
+            登录时可以使用密码和短信验证码两种方式。
+          </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
