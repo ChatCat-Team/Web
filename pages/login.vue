@@ -83,20 +83,77 @@
               class="full-width"
               @click:append="show.password = !show.password"
             ></v-text-field>
-            <v-btn
-              id="login-1"
-              fab
-              elevation="0"
-              color="primary"
-              class="mx-auto mt-6 mb-10"
-              large
-              aria-label="登录"
-              :disabled="!valid.password"
-              @click="login"
-            >
-              <v-icon>mdi-arrow-right</v-icon>
-            </v-btn>
-            <p class="grey--text darken-2 ma-1">
+
+            <v-dialog v-model="dialog.captcha" width="372">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon> </v-btn>
+                <v-btn
+                  id="login-1"
+                  fab
+                  elevation="0"
+                  color="primary"
+                  class="mx-auto mt-6 mb-10"
+                  large
+                  aria-label="登录"
+                  :disabled="!valid.password"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="captcha = ''"
+                >
+                  <v-icon>mdi-arrow-right</v-icon>
+                </v-btn>
+              </template>
+
+              <v-card>
+                <v-form v-model="valid.captcha">
+                  <v-card-title>图形验证</v-card-title>
+                  <v-card-text class="px-6 pb-2">
+                    若要继续，请输入下面的图形验证码。
+                  </v-card-text>
+                  <v-row no-gutters>
+                    <v-col cols="6">
+                      <v-img :src="base64"></v-img>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="captcha"
+                        solo
+                        flat
+                        height="56"
+                        background-color="grey lighten-4"
+                        clearable
+                        counter="4"
+                        hint="4 个字符"
+                        persistent-hint
+                        :rules="rules.captcha"
+                        class="mx-4 mt-2"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="deep-purple accent-4"
+                      @click="dialog.captcha = false"
+                    >
+                      取消登录
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="deep-purple accent-4"
+                      :disabled="!valid.captcha"
+                      @click="loginPassword"
+                    >
+                      验证
+                    </v-btn>
+                  </v-card-actions>
+                </v-form>
+              </v-card>
+            </v-dialog>
+
+            <p class="grey--text darken-2 ma-0">
               忘记密码？<NuxtLink
                 id="link-forgot-password-1"
                 to="/forgot-password"
@@ -104,7 +161,7 @@
                 >重置密码</NuxtLink
               >
             </p>
-            <p class="grey--text darken-2 ma-1">
+            <p class="grey--text darken-2 ma-0">
               还没有注册？
               <NuxtLink
                 id="link-signup-1"
@@ -168,7 +225,7 @@
             >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
-            <p class="grey--text darken-2 ma-1">
+            <p class="grey--text darken-2 ma-0">
               忘记密码？<NuxtLink
                 id="link-forgot-password-1"
                 to="/forgot-password"
@@ -176,7 +233,7 @@
                 >重置密码</NuxtLink
               >
             </p>
-            <p class="grey--text darken-2 ma-1">
+            <p class="grey--text darken-2 ma-0">
               还没有注册？
               <NuxtLink
                 id="link-signup-1"
@@ -201,6 +258,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   layout: 'blank',
   data() {
@@ -209,6 +267,7 @@ export default {
       valid: {
         password: false,
         code: false,
+        captcha: false,
       },
       phone: '',
       password: '',
@@ -216,6 +275,8 @@ export default {
       snackbar: false,
       timeout: 2000,
       text: '',
+      captcha: '',
+      base64: '',
       rules: {
         phone: [
           (v) => !!v || '手机号为必填项',
@@ -233,29 +294,37 @@ export default {
           (v) => !!v || '短信验证码为必填项',
           (v) => (v && v.length === 6) || '短信验证码为 6 个字符',
         ],
+        captcha: [
+          (v) => !!v || '必填项',
+          (v) => (v && v.length === 4) || '必须 4 个字符',
+        ],
       },
       show: {
         password: false,
       },
       dialog: {
         help: false,
+        captcha: false,
       },
     }
   },
   methods: {
-    async login() {
-      // https://test.lifeni.life/api/login
-      // http://192.168.43.179:8080/login
-      // http://localhost:8080/login
+    async loginPassword() {
       await this.$axios
         .$post('https://test.lifeni.life/api/login', {
           phone: this.phone,
           pwd: this.password,
+          code: this.captcha,
         })
         .then((res) => {
           console.log(res)
+          this.dialog.captcha = false
           if (res.code === 0) {
-            this.$router.push({ path: '/' })
+            this.snackbar = true
+            this.text = '登录成功，即将跳转'
+            setTimeout(() => {
+              this.$router.push({ path: '/' })
+            }, 1000)
           } else {
             this.snackbar = true
             this.text = res.msg
@@ -264,13 +333,27 @@ export default {
         .catch((err) => {
           console.error(err)
         })
-      // this.$router.push({ path: '/' })
     },
     to(n) {
       if (n === null) {
         return ''
       }
     },
+  },
+  async asyncData() {
+    await axios
+      .post('https://test.lifeni.life/api/sendgraphicverification')
+      .then((res) => {
+        if (res.data.code === 0) {
+          this.base64 = res.data.extend.imgStr
+        } else {
+          this.snackbar = true
+          this.text = res.msg
+        }
+      })
+      .catch((err) => {
+        console.error('获取图形验证码', err)
+      })
   },
 }
 </script>

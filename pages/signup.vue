@@ -115,7 +115,7 @@
           >
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
-          <p id="link-login" class="grey--text darken-2 ma-1">
+          <p id="link-login" class="grey--text darken-2 ma-0">
             已经注册过了？
             <NuxtLink to="/login" class="text-decoration-none">登录</NuxtLink>
           </p>
