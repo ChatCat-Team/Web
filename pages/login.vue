@@ -184,25 +184,27 @@
             :disabled="disabled"
             class="d-flex flex-column align-center"
           >
-            <v-text-field
-              id="input-phone-2"
-              v-model="phone"
-              :rules="rules.phone"
-              type="number"
-              label="手机号"
-              hint="仅限中国大陆 +86 手机号"
-              prepend-inner-icon="mdi-cellphone"
-              required
-              solo
-              flat
-              height="56"
-              background-color="grey lighten-4"
-              clearable
-              class="full-width"
-            ></v-text-field>
+            <v-form v-model="valid.phone" class="full-width">
+              <v-text-field
+                id="input-phone-2"
+                v-model="phone"
+                :rules="rules.phone"
+                type="number"
+                label="手机号"
+                hint="仅限中国大陆 +86 手机号"
+                prepend-inner-icon="mdi-cellphone"
+                required
+                solo
+                flat
+                height="56"
+                background-color="grey lighten-4"
+                clearable
+                class="full-width"
+              ></v-text-field>
+            </v-form>
             <v-text-field
               id="input-code"
-              v-model="code"
+              v-model="code.input"
               :rules="rules.code"
               type="number"
               label="验证码"
@@ -213,12 +215,21 @@
               height="56"
               background-color="grey lighten-4"
               clearable
+              :disabled="!valid.phone"
               class="full-width fix-margin"
               counter="6"
             >
               <template v-slot:append-outer>
-                <v-btn depressed x-large height="56" class="ml-4">
-                  发送验证码
+                <v-btn
+                  id="button-send-code"
+                  depressed
+                  x-large
+                  height="56"
+                  class="ml-4"
+                  :disabled="!!code.clock || !valid.phone"
+                  @click="sendCode"
+                >
+                  {{ (code.clock === 0 ? '' : code.clock + ' ') + code.text }}
                 </v-btn>
               </template>
             </v-text-field>
@@ -232,7 +243,7 @@
               aria-label="登录"
               :disabled="!valid.code"
               :loading="loading"
-              @click="loginPassword"
+              @click="loginCode"
             >
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
@@ -278,6 +289,7 @@ export default {
         password: false,
         code: false,
         captcha: false,
+        phone: false,
       },
       phone: '',
       password: '',
@@ -357,6 +369,70 @@ export default {
           this.snackbar = true
           this.text = '未知错误'
           this.loading = false
+          console.error(err)
+        })
+    },
+    async loginCode() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/loginByMessage', {
+          phone: this.phone,
+          code: this.code.input,
+        })
+        .then((res) => {
+          console.log(res)
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = '登录成功，即将跳转'
+            this.disabled = true
+            setTimeout(() => {
+              this.$router.push({ path: '/' })
+            }, 1000)
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
+    async sendCode() {
+      this.code.text = `正在发送`
+      await this.$axios
+        .$post('https://test.lifeni.life/api/sendmessagelogin', {
+          phone: this.phone,
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.code === 0) {
+            this.code.clock = 60
+            this.code.text = `秒后可重发`
+
+            const countdown = setInterval(() => {
+              this.code.clock = this.code.clock - 1
+              if (this.code.clock === 0) {
+                clearInterval(countdown)
+              }
+            }, 1000)
+
+            setTimeout(() => {
+              this.code.text = `重新发送`
+            }, 60000)
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+            this.code.text = `发送失败`
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.code.text = `发送失败`
           console.error(err)
         })
     },

@@ -97,7 +97,7 @@
             background-color="grey lighten-4"
             clearable
             counter="6"
-            :disabled="!!code.clock || !valid.phone"
+            :disabled="!valid.phone"
             class="full-width fix-margin"
           >
             <template v-slot:append-outer>
@@ -239,12 +239,17 @@ export default {
           if (res.code === 0) {
             this.code.clock = 60
             this.code.text = `秒后可重发`
-            setInterval(() => {
+
+            const countdown = setInterval(() => {
               this.code.clock = this.code.clock - 1
+              if (this.code.clock === 0) {
+                clearInterval(countdown)
+              }
             }, 1000)
+
             setTimeout(() => {
               this.code.text = `重新发送`
-            }, 6000)
+            }, 60000)
           } else {
             this.snackbar = true
             this.text = res.msg
