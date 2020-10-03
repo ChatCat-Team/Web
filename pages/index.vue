@@ -53,7 +53,7 @@
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-drawer></v-drawer>
+      <v-drawer v-if="drawer"></v-drawer>
     </v-navigation-drawer>
 
     <v-main id="attach">

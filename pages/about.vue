@@ -12,7 +12,7 @@
       temporary
       style="heigh: 100vh; z-index: 2000"
     >
-      <v-drawer></v-drawer>
+      <v-drawer v-if="drawer"></v-drawer>
     </v-navigation-drawer>
     <v-main>
       <article class="pa-8">

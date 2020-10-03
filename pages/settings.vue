@@ -12,7 +12,7 @@
       temporary
       style="heigh: 100vh; z-index: 2000"
     >
-      <v-drawer></v-drawer>
+      <v-drawer v-if="drawer"></v-drawer>
     </v-navigation-drawer>
     <v-list subheader two-line flat class="py-4">
       <v-subheader class="px-6">外观</v-subheader>
