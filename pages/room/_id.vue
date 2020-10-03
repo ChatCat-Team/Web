@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  middleware: ['fetch'],
+  middleware: ['check'],
   asyncData({ params }) {
     return {
       id: params.id,

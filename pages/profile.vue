@@ -435,7 +435,7 @@
               color="deep-purple accent-4"
               :disabled="!valid.password"
               :loading="loading"
-              @click="dialog.password = false"
+              @click="sendPassword"
             >
               确认修改
             </v-btn>
@@ -465,7 +465,7 @@
               text
               color="red accent-4"
               :loading="loading"
-              @click="dialog.delete = false"
+              @click="sendDelete"
             >
               确认删除
             </v-btn>
@@ -476,7 +476,7 @@
     <v-snackbar id="snackbar" v-model="snackbar" bottom class="mb-8">
       {{ text }}
       <template v-slot:action="{ attrs }">
-        <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
+        <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
           关闭
         </v-btn>
       </template>
@@ -581,11 +581,9 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          phone: this.user.phone,
           name: this.user.name,
         })
         .then((res) => {
-          // console.log(res)
           this.loading = false
           if (res.code === 0) {
             this.snackbar = true
@@ -607,11 +605,9 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          phone: this.user.phone,
           bio: this.user.bio,
         })
         .then((res) => {
-          // console.log(res)
           this.loading = false
           if (res.code === 0) {
             this.snackbar = true
@@ -633,17 +629,66 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          phone: this.user.phone,
           address: this.user.location,
         })
         .then((res) => {
-          // console.log(res)
           this.loading = false
           if (res.code === 0) {
             this.snackbar = true
             this.text = `名字修改成功：${this.user.location}`
             this.dialog.location = false
           } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
+    async sendPassword() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/resetpwd2', {
+          oldpwd: this.password.old,
+          newpwd: this.password.new,
+        })
+        .then((res) => {
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = `密码修改成功`
+            this.dialog.password = false
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
+    async sendDelete() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/delete', {})
+        .then((res) => {
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = `删除账号成功，即将跳转到首页`
+            this.dialog.delete = false
+            setTimeout(() => {
+              this.$router.push({ path: '/welcome' })
+            }, 2000)
+          } else {
+            this.dialog.delete = false
             this.snackbar = true
             this.text = res.msg
           }

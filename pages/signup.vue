@@ -207,7 +207,6 @@ export default {
           code: this.code.input,
         })
         .then((res) => {
-          // console.log(res)
           this.loading = false
           if (res.code === 0) {
             this.snackbar = true
@@ -215,7 +214,7 @@ export default {
             this.disabled = true
             setTimeout(() => {
               this.$router.push({ path: '/' })
-            }, 3000)
+            }, 2000)
           } else {
             this.snackbar = true
             this.text = res.msg
@@ -235,7 +234,6 @@ export default {
           phone: this.phone,
         })
         .then((res) => {
-          // console.log(res)
           if (res.code === 0) {
             this.code.clock = 60
             this.code.text = `秒后可重发`
