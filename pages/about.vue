@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; min-height: calc(100vh - 32px)">
+  <div style="position: relative; min-height: 100vh">
     <v-app-bar flat elevation="0" color="white" style="z-index: 1000">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">关于 ChatCat</v-toolbar-title>
@@ -81,6 +81,7 @@
 <script>
 import drawerItem from '../components/drawer'
 export default {
+  middleware: ['fetch'],
   components: {
     'v-drawer': drawerItem,
   },

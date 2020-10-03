@@ -116,7 +116,12 @@
                   </v-card-text>
                   <v-row no-gutters>
                     <v-col cols="6">
-                      <v-img :src="base64" class="mx-4 mt-2 mr-0"></v-img>
+                      <v-img
+                        :src="base64"
+                        class="mx-4 mt-2 mr-0"
+                        style="border-radius: 4px"
+                        @click="getCode"
+                      ></v-img>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
@@ -282,6 +287,25 @@
 <script>
 import axios from 'axios'
 export default {
+  async asyncData() {
+    return await axios
+      .post('https://test.lifeni.life/api/sendgraphicverification', {})
+      .then((res) => {
+        if (res.data.code === 0) {
+          return {
+            base64: res.data.extend.imgStr,
+          }
+        } else {
+          return {
+            snackbar: true,
+            text: res.msg,
+          }
+        }
+      })
+      .catch((err) => {
+        console.error('获取图形验证码', err)
+      })
+  },
   data() {
     return {
       tab: null,
@@ -350,22 +374,20 @@ export default {
           code: this.captcha,
         })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           this.loading = false
           this.dialog.captcha = false
           if (res.code === 0) {
-            this.snackbar = true
-            this.text = '登录成功，即将跳转'
             this.disabled = true
-            setTimeout(() => {
-              this.$router.push({ path: '/' })
-            }, 1000)
+            this.$router.push({ path: '/' })
           } else {
+            this.getCode()
             this.snackbar = true
             this.text = res.msg
           }
         })
         .catch((err) => {
+          this.getCode()
           this.snackbar = true
           this.text = '未知错误'
           this.loading = false
@@ -380,15 +402,11 @@ export default {
           code: this.code.input,
         })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           this.loading = false
           if (res.code === 0) {
-            this.snackbar = true
-            this.text = '登录成功，即将跳转'
             this.disabled = true
-            setTimeout(() => {
-              this.$router.push({ path: '/' })
-            }, 1000)
+            this.$router.push({ path: '/' })
           } else {
             this.snackbar = true
             this.text = res.msg
@@ -408,7 +426,7 @@ export default {
           phone: this.phone,
         })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             this.code.clock = 60
             this.code.text = `秒后可重发`
@@ -436,30 +454,26 @@ export default {
           console.error(err)
         })
     },
+    async getCode() {
+      await axios
+        .post('https://test.lifeni.life/api/sendgraphicverification', {})
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.base64 = res.data.extend.imgStr
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          console.error('获取图形验证码', err)
+        })
+    },
     to(n) {
       if (n === null) {
         return ''
       }
     },
-  },
-  async asyncData() {
-    return await axios
-      .post('https://test.lifeni.life/api/sendgraphicverification', {})
-      .then((res) => {
-        if (res.data.code === 0) {
-          return {
-            base64: res.data.extend.imgStr,
-          }
-        } else {
-          return {
-            snackbar: true,
-            text: res.msg,
-          }
-        }
-      })
-      .catch((err) => {
-        console.error('获取图形验证码', err)
-      })
   },
 }
 </script>

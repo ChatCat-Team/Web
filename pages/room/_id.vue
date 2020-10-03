@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; height: calc(100vh - 32px)">
+  <div style="position: relative; height: 100vh">
     <v-app-bar flat color="white" style="z-index: 1000">
       <v-btn icon>
         <NuxtLink to="/" class="text-decoration-none">
@@ -18,7 +18,6 @@
         v-model="message"
         solo
         flat
-        height="56"
         background-color="grey lighten-4"
         hide-details
         label="在此输入消息"
@@ -34,7 +33,7 @@
             width="48"
             height="48"
             min-width="48"
-            class="ml-4 my-1"
+            class="ml-4"
           >
             <v-icon>mdi-send-outline</v-icon>
           </v-btn>
@@ -58,6 +57,7 @@
 
 <script>
 export default {
+  middleware: ['fetch'],
   asyncData({ params }) {
     return {
       id: params.id,
@@ -76,7 +76,7 @@ export default {
 
 <style scoped>
 .window {
-  height: calc(100vh - 32px - 56px - 80px);
+  height: calc(100vh - 32px - 56px - 56px);
   background-color: #f0f0f0;
 }
 .bar {

@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; min-height: calc(100vh - 32px)">
+  <div style="position: relative; min-height: 100vh">
     <v-app-bar flat light color="white" elevation="0">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">个人资料</v-toolbar-title>
@@ -115,20 +115,23 @@
         </template>
         <v-card>
           <v-card-title>修改名字</v-card-title>
-          <v-text-field
-            v-model="user.name"
-            :placeholder="$store.state.localStorage.default.userData.name"
-            solo
-            flat
-            height="56"
-            background-color="grey lighten-4"
-            clearable
-            counter="24"
-            :rules="rules.name"
-            hint="名字最大 24 个字符"
-            persistent-hint
-            class="mx-4 mt-2"
-          ></v-text-field>
+          <v-form v-model="valid.name">
+            <v-text-field
+              v-model="user.name"
+              :placeholder="$store.state.localStorage.default.userData.name"
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              clearable
+              counter="24"
+              :rules="rules.name"
+              hint="名字最大 24 个字符"
+              persistent-hint
+              class="mx-4 mt-2"
+            ></v-text-field>
+          </v-form>
+
           <v-card-actions>
             <v-btn
               text
@@ -160,11 +163,13 @@
                   $store.state.localStorage.default.userData.name) ===
                   user.name ||
                 user.name === null ||
-                user.name === ''
+                user.name === '' ||
+                !valid.name
                   ? ''
                   : false
               "
-              @click="dialog.name = false"
+              :loading="loading"
+              @click="sendName"
             >
               确认修改
             </v-btn>
@@ -193,20 +198,23 @@
         </template>
         <v-card>
           <v-card-title>修改个性签名</v-card-title>
-          <v-textarea
-            v-model="user.bio"
-            :placeholder="$store.state.localStorage.default.userData.bio"
-            solo
-            flat
-            background-color="grey lighten-4"
-            clearable
-            auto-grow
-            counter="100"
-            :rules="rules.bio"
-            hint="个性签名最大 100 个字符"
-            persistent-hint
-            class="mx-4 mt-2"
-          ></v-textarea>
+          <v-form v-model="valid.bio">
+            <v-textarea
+              v-model="user.bio"
+              :placeholder="$store.state.localStorage.default.userData.bio"
+              solo
+              flat
+              background-color="grey lighten-4"
+              clearable
+              auto-grow
+              counter="100"
+              :rules="rules.bio"
+              hint="个性签名最大 100 个字符"
+              persistent-hint
+              class="mx-4 mt-2"
+            ></v-textarea>
+          </v-form>
+
           <v-card-actions>
             <v-btn
               text
@@ -236,11 +244,13 @@
                   $store.state.localStorage.default.userData.bio) ===
                   user.bio ||
                 user.bio === null ||
-                user.bio === ''
+                user.bio === '' ||
+                !valid.bio
                   ? ''
                   : false
               "
-              @click="dialog.bio = false"
+              :loading="loading"
+              @click="sendBio"
             >
               确认修改
             </v-btn>
@@ -269,20 +279,23 @@
         </template>
         <v-card>
           <v-card-title>修改位置</v-card-title>
-          <v-text-field
-            v-model="user.location"
-            :placeholder="$store.state.localStorage.default.userData.location"
-            solo
-            flat
-            height="56"
-            background-color="grey lighten-4"
-            clearable
-            counter="24"
-            :rules="rules.location"
-            hint="位置最大 24 个字符"
-            persistent-hint
-            class="mx-4 mt-2"
-          ></v-text-field>
+          <v-form v-model="valid.location">
+            <v-text-field
+              v-model="user.location"
+              :placeholder="$store.state.localStorage.default.userData.location"
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              clearable
+              counter="24"
+              :rules="rules.location"
+              hint="位置最大 24 个字符"
+              persistent-hint
+              class="mx-4 mt-2"
+            ></v-text-field>
+          </v-form>
+
           <v-card-actions>
             <v-btn
               text
@@ -315,11 +328,13 @@
                   $store.state.localStorage.default.userData.location) ===
                   user.location ||
                 user.location === null ||
-                user.location === ''
+                user.location === '' ||
+                !valid.location
                   ? ''
                   : false
               "
-              @click="dialog.location = false"
+              :loading="loading"
+              @click="sendLocation"
             >
               确认修改
             </v-btn>
@@ -361,44 +376,51 @@
         </template>
         <v-card>
           <v-card-title>修改密码</v-card-title>
-          <v-text-field
-            v-model="password.old"
-            :append-icon="show.old ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-            :type="show.old ? 'text' : 'password'"
-            :rules="rules.password"
-            label="旧的密码"
-            prepend-inner-icon="mdi-form-textbox-password"
-            hint="新旧密码必须不同"
-            persistent-hint
-            required
-            solo
-            flat
-            height="56"
-            background-color="grey lighten-4"
-            counter="24"
-            clearable
-            class="mx-4 mt-2"
-            @click:append="show.old = !show.old"
-          ></v-text-field>
-          <v-text-field
-            v-model="password.new"
-            :append-icon="show.new ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-            :type="show.new ? 'text' : 'password'"
-            :rules="rules.password"
-            label="新的密码"
-            prepend-inner-icon="mdi-form-textbox-password"
-            hint="8 - 24 个字符，且包含字母、数字、符号"
-            persistent-hint
-            required
-            solo
-            flat
-            height="56"
-            background-color="grey lighten-4"
-            counter="24"
-            clearable
-            class="mx-4 mt-2"
-            @click:append="show.new = !show.new"
-          ></v-text-field>
+          <v-form v-model="valid.password">
+            <v-text-field
+              v-model="password.old"
+              :append-icon="
+                show.old ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+              "
+              :type="show.old ? 'text' : 'password'"
+              :rules="rules.password"
+              label="旧的密码"
+              prepend-inner-icon="mdi-form-textbox-password"
+              hint="新旧密码必须不同"
+              persistent-hint
+              required
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              counter="24"
+              clearable
+              class="mx-4 mt-2"
+              @click:append="show.old = !show.old"
+            ></v-text-field>
+            <v-text-field
+              v-model="password.new"
+              :append-icon="
+                show.new ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+              "
+              :type="show.new ? 'text' : 'password'"
+              :rules="rules.confirm"
+              label="新的密码"
+              prepend-inner-icon="mdi-form-textbox-password"
+              hint="8 - 24 个字符，且包含字母、数字、符号"
+              persistent-hint
+              required
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              counter="24"
+              clearable
+              class="mx-4 mt-2"
+              @click:append="show.new = !show.new"
+            ></v-text-field>
+          </v-form>
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -411,6 +433,8 @@
             <v-btn
               text
               color="deep-purple accent-4"
+              :disabled="!valid.password"
+              :loading="loading"
               @click="dialog.password = false"
             >
               确认修改
@@ -437,19 +461,33 @@
           <v-card-text>删除账号的操作不可逆！</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="red accent-4" @click="dialog.delete = false">
+            <v-btn
+              text
+              color="red accent-4"
+              :loading="loading"
+              @click="dialog.delete = false"
+            >
               确认删除
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-list>
+    <v-snackbar id="snackbar" v-model="snackbar" bottom class="mb-8">
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
+          关闭
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import drawerItem from '../components/drawer'
 export default {
+  middleware: ['fetch'],
   components: {
     'v-drawer': drawerItem,
   },
@@ -472,6 +510,15 @@ export default {
         old: false,
         new: false,
       },
+      valid: {
+        name: false,
+        bio: false,
+        location: false,
+        password: false,
+      },
+      snackbar: false,
+      timeout: 2000,
+      text: '',
       user: {
         avatar:
           this.$store.state.localStorage.userData.avatar ||
@@ -508,15 +555,106 @@ export default {
         ],
         password: [
           (v) => !!v || '密码为必填项',
-          (v) => v.length >= 8 || '最少 8 个字符',
-          (v) => v.length <= 24 || '最多 24 个字符',
+          (v) => (v && v.length) >= 8 || '最少 8 个字符',
+          (v) => (v && v.length) <= 24 || '最多 24 个字符',
           (v) =>
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
               v
             ) || '密码不符合要求',
         ],
+        confirm: [
+          (v) => !!v || '密码为必填项',
+          (v) => (v && v.length) >= 8 || '最少 8 个字符',
+          (v) => (v && v.length) <= 24 || '最多 24 个字符',
+          (v) =>
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+              v
+            ) || '密码不符合要求',
+          (v) => v !== this.password.old || '新旧密码不能相同',
+        ],
       },
+      loading: false,
     }
+  },
+  methods: {
+    async sendName() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/update', {
+          phone: this.user.phone,
+          name: this.user.name,
+        })
+        .then((res) => {
+          // console.log(res)
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = `名字修改成功：${this.user.name}`
+            this.dialog.name = false
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
+    async sendBio() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/update', {
+          phone: this.user.phone,
+          bio: this.user.bio,
+        })
+        .then((res) => {
+          // console.log(res)
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = `个性签名修改成功：${this.user.bio}`
+            this.dialog.bio = false
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
+    async sendLocation() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/update', {
+          phone: this.user.phone,
+          address: this.user.location,
+        })
+        .then((res) => {
+          // console.log(res)
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = `名字修改成功：${this.user.location}`
+            this.dialog.location = false
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
   },
 }
 </script>

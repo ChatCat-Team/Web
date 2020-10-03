@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; min-height: calc(100vh - 32px)">
+  <div style="position: relative; min-height: 100vh">
     <v-app-bar
       flat
       color="white"
@@ -188,7 +188,6 @@
 
 <script>
 import dayjs from 'dayjs'
-import axios from 'axios'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import drawerItem from '../components/drawer'
@@ -196,19 +195,9 @@ dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
 
 export default {
+  middleware: ['fetch'],
   components: {
     'v-drawer': drawerItem,
-  },
-  async fetch({ store, params, redirect }) {
-    await axios.get('https://test.lifeni.life/api/user').then(async (res) => {
-      if (res.data.code === 0) {
-        console.log(res)
-        await store.commit('localStorage/setUserData', res.data.extend.user)
-      } else {
-        console.log('redirect to welcome')
-        // redirect('/welcome')
-      }
-    })
   },
   data: () => ({
     drawer: false,

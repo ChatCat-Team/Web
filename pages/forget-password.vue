@@ -38,26 +38,29 @@
     <v-main>
       <div class="pa-8">
         <v-form
-          v-model="valid.password"
+          v-model="valid.all"
+          :disabled="disabled"
           class="d-flex flex-column align-center"
         >
+          <v-form v-model="valid.phone" class="full-width">
+            <v-text-field
+              v-model="phone"
+              :rules="rules.phone"
+              type="number"
+              label="手机号"
+              hint="仅限中国大陆 +86 手机号"
+              prepend-inner-icon="mdi-cellphone"
+              required
+              solo
+              flat
+              height="56"
+              background-color="grey lighten-4"
+              clearable
+              class="full-width"
+            ></v-text-field>
+          </v-form>
           <v-text-field
-            v-model="phone"
-            :rules="rules.phone"
-            type="number"
-            label="手机号"
-            hint="仅限中国大陆 +86 手机号"
-            prepend-inner-icon="mdi-cellphone"
-            required
-            solo
-            flat
-            height="56"
-            background-color="grey lighten-4"
-            clearable
-            class="full-width"
-          ></v-text-field>
-          <v-text-field
-            v-model="code"
+            v-model="code.input"
             :rules="rules.code"
             type="number"
             label="验证码"
@@ -68,12 +71,21 @@
             height="56"
             background-color="grey lighten-4"
             clearable
+            :disabled="!valid.phone"
             class="full-width fix-margin"
             counter="6"
           >
             <template v-slot:append-outer>
-              <v-btn depressed x-large height="56" class="ml-4">
-                发送验证码
+              <v-btn
+                id="button-send-code"
+                depressed
+                x-large
+                height="56"
+                class="ml-4"
+                :disabled="!!code.clock || !valid.phone"
+                @click="sendCode"
+              >
+                {{ (code.clock === 0 ? '' : code.clock + ' ') + code.text }}
               </v-btn>
             </template>
           </v-text-field>
@@ -103,10 +115,10 @@
               show.password ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
             "
             :type="show.password ? 'text' : 'password'"
-            :rules="rules.password"
+            :rules="rules.confirm"
             label="再输入一次新的密码"
             prepend-inner-icon="mdi-form-textbox-password"
-            hint="两次输入的密码需要一致"
+            hint="8 - 24 个字符，且包含字母、数字、符号"
             required
             solo
             flat
@@ -124,12 +136,26 @@
             class="mx-auto mt-6 mb-10"
             large
             aria-label="保存"
-            @click="save"
+            :disabled="!valid.all"
+            :loading="loading"
+            @click="reset"
           >
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
+          <p id="link-login" class="grey--text darken-2 ma-0">
+            需要登录？
+            <NuxtLink to="/login" class="text-decoration-none">登录</NuxtLink>
+          </p>
         </v-form>
       </div>
+      <v-snackbar id="snackbar" v-model="snackbar" bottom class="mb-8">
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
+            关闭
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </div>
 </template>
@@ -140,15 +166,22 @@ export default {
     return {
       tab: null,
       valid: {
-        password: false,
-        code: false,
+        all: false,
+        phone: false,
       },
-      phone: null,
+      phone: '',
       password: {
         first: '',
         second: '',
       },
-      code: null,
+      code: {
+        input: '',
+        clock: 0,
+        text: '发送验证码',
+      },
+      snackbar: false,
+      timeout: 2000,
+      text: '',
       rules: {
         phone: [
           (v) => !!v || '手机号为必填项',
@@ -159,14 +192,27 @@ export default {
         ],
         password: [
           (v) => !!v || '密码为必填项',
-          (v) => v.length >= 8 || '最少 8 个字符',
-          (v) => v.length <= 24 || '最多 24 个字符',
+          (v) => (v && v.length >= 8) || '最少 8 个字符',
+          (v) => (v && v.length <= 24) || '最多 24 个字符',
           (v) =>
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
               v
             ) || '密码不符合要求',
         ],
-        code: [(v) => !!v || '短信验证码为必填项'],
+        confirm: [
+          (v) => !!v || '密码为必填项',
+          (v) => (v && v.length) >= 8 || '最少 8 个字符',
+          (v) => (v && v.length) <= 24 || '最多 24 个字符',
+          (v) =>
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+              v
+            ) || '密码不符合要求',
+          (v) => v === this.password.first || '两次输入不一致',
+        ],
+        code: [
+          (v) => !!v || '短信验证码为必填项',
+          (v) => (v && v.length === 6) || '短信验证码为 6 个字符',
+        ],
       },
       show: {
         password: false,
@@ -174,11 +220,72 @@ export default {
       dialog: {
         help: false,
       },
+      disabled: false,
+      loading: false,
     }
   },
   methods: {
-    save() {
-      this.$router.push({ path: '/' })
+    async reset() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/resetpwd', {
+          phone: this.phone,
+          pwd: this.password.first,
+          code: this.code.input,
+        })
+        .then((res) => {
+          // console.log(res)
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = '重置密码成功，请重新登录'
+            this.disabled = true
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
+    async sendCode() {
+      this.code.text = `正在发送`
+      await this.$axios
+        .$post('https://test.lifeni.life/api/resetpwdsendmessage', {
+          phone: this.phone,
+        })
+        .then((res) => {
+          // console.log(res)
+          if (res.code === 0) {
+            this.code.clock = 60
+            this.code.text = `秒后可重发`
+
+            const countdown = setInterval(() => {
+              this.code.clock = this.code.clock - 1
+              if (this.code.clock === 0) {
+                clearInterval(countdown)
+              }
+            }, 1000)
+
+            setTimeout(() => {
+              this.code.text = `重新发送`
+            }, 60000)
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+            this.code.text = `发送失败`
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.code.text = `发送失败`
+          console.error(err)
+        })
     },
   },
 }
