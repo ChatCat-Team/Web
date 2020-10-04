@@ -82,6 +82,11 @@ export default {
         this.$store.state.localStorage.default.userData,
     }
   },
+  mounted() {
+    this.user =
+      this.$store.state.localStorage.userData ||
+      this.$store.state.localStorage.default.userData
+  },
 }
 </script>
 
