@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default async function ({ store, redirect }) {
   try {
-    const res = await axios.get('https://test.lifeni.life/api/user')
+    const res = await axios.post('https://test.lifeni.life/api/user', {})
     if (res.data.code === 0) {
       const user = res.data.extend.user
       user.location = user.address
