@@ -13,7 +13,7 @@
       temporary
       style="heigh: 100vh; z-index: 2000"
     >
-      <v-drawer v-if="drawer"></v-drawer>
+      <v-drawer v-if="drawer" :u="user"></v-drawer>
     </v-navigation-drawer>
 
     <v-list two-line class="ma-4">

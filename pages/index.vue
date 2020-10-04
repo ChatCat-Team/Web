@@ -28,27 +28,6 @@
             class="full-width"
           >
           </v-text-field>
-
-          <!-- <v-chip-group
-            v-show="
-              ($store.state.localStorage.settings.enableSearchHistory ||
-                $store.state.localStorage.default.settings
-                  .enableSearchHistory) === 'enable'
-            "
-            class="pb-4 full-width"
-            column
-            active-class="primary--text"
-          >
-            <v-chip> 历史访问记录 </v-chip>
-            <v-chip
-              v-for="(record, i) in records"
-              :key="i"
-              close
-              close-icon="mdi-close"
-            >
-              {{ record }}
-            </v-chip>
-          </v-chip-group> -->
         </div>
       </template>
     </v-app-bar>
