@@ -74,7 +74,9 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    credentials: true,
+  },
   pwa: {
     icon: {
       source: './static/icon.png',
