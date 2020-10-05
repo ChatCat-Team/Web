@@ -289,11 +289,7 @@ import axios from 'axios'
 export default {
   async asyncData() {
     return await axios
-      .post(
-        'https://test.lifeni.life/api/sendgraphicverification',
-        {},
-        { withCredentials: true }
-      )
+      .post('/api/sendgraphicverification', {}, { withCredentials: true })
       .then((res) => {
         if (res.data.code === 0) {
           return {
@@ -372,7 +368,7 @@ export default {
     async loginPassword() {
       this.loading = true
       await this.$axios
-        .$post('https://test.lifeni.life/api/login', {
+        .$post('/api/login', {
           phone: this.phone,
           pwd: this.password,
           code: this.captcha,
@@ -400,7 +396,7 @@ export default {
     async loginCode() {
       this.loading = true
       await this.$axios
-        .$post('https://test.lifeni.life/api/loginByMessage', {
+        .$post('/api/loginByMessage', {
           phone: this.phone,
           code: this.code.input,
         })
@@ -424,7 +420,7 @@ export default {
     async sendCode() {
       this.code.text = `正在发送`
       await this.$axios
-        .$post('https://test.lifeni.life/api/sendmessagelogin', {
+        .$post('/api/sendmessagelogin', {
           phone: this.phone,
         })
         .then((res) => {
@@ -457,7 +453,7 @@ export default {
     },
     async getCode() {
       await axios
-        .post('https://test.lifeni.life/api/sendgraphicverification', {})
+        .post('/api/sendgraphicverification', {})
         .then((res) => {
           if (res.data.code === 0) {
             this.base64 = res.data.extend.imgStr

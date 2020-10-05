@@ -228,7 +228,7 @@ export default {
     async reset() {
       this.loading = true
       await this.$axios
-        .$post('https://test.lifeni.life/api/resetpwd', {
+        .$post('/api/resetpwd', {
           phone: this.phone,
           pwd: this.password.first,
           code: this.code.input,
@@ -254,7 +254,7 @@ export default {
     async sendCode() {
       this.code.text = `正在发送`
       await this.$axios
-        .$post('https://test.lifeni.life/api/resetpwdsendmessage', {
+        .$post('/api/resetpwdsendmessage', {
           phone: this.phone,
         })
         .then((res) => {

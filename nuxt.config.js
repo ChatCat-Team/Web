@@ -66,6 +66,7 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/proxy',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     'nuxt-vuex-localstorage',
@@ -75,7 +76,11 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
+    proxy: true,
     credentials: true,
+  },
+  proxy: {
+    '/api/': 'https://test.lifeni.life/api/',
   },
   pwa: {
     icon: {
