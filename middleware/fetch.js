@@ -3,7 +3,7 @@ axios.defaults.withCredentials = true
 export default async function ({ store, redirect }) {
   try {
     const res = await axios.post(
-      '/api/user',
+      'http://localhost:8080/api/user',
       {},
       { withCredentials: true }
     )

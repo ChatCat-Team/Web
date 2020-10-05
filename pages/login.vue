@@ -368,7 +368,7 @@ export default {
     async loginPassword() {
       this.loading = true
       await this.$axios
-        .$post('/api/login', {
+        .$post('http://localhost:8080/login', {
           phone: this.phone,
           pwd: this.password,
           code: this.captcha,
@@ -396,7 +396,7 @@ export default {
     async loginCode() {
       this.loading = true
       await this.$axios
-        .$post('/api/loginByMessage', {
+        .$post('http://localhost:8080/loginByMessage', {
           phone: this.phone,
           code: this.code.input,
         })
@@ -420,7 +420,7 @@ export default {
     async sendCode() {
       this.code.text = `正在发送`
       await this.$axios
-        .$post('/api/sendmessagelogin', {
+        .$post('http://localhost:8080/sendmessagelogin', {
           phone: this.phone,
         })
         .then((res) => {
