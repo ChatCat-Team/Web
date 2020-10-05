@@ -580,7 +580,7 @@ export default {
     async sendName() {
       this.loading = true
       await this.$axios
-        .$post('/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           name: this.user.name,
         })
         .then((res) => {
@@ -604,7 +604,7 @@ export default {
     async sendBio() {
       this.loading = true
       await this.$axios
-        .$post('/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           bio: this.user.bio,
         })
         .then((res) => {
@@ -628,7 +628,7 @@ export default {
     async sendLocation() {
       this.loading = true
       await this.$axios
-        .$post('/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           address: this.user.location,
         })
         .then((res) => {
@@ -652,7 +652,7 @@ export default {
     async sendPassword() {
       this.loading = true
       await this.$axios
-        .$post('/api/resetpwd2', {
+        .$post('https://test.lifeni.life/api/resetpwd2', {
           oldpwd: this.password.old,
           newpwd: this.password.new,
         })
@@ -677,7 +677,7 @@ export default {
     async sendDelete() {
       this.loading = true
       await this.$axios
-        .$post('/api/delete', {})
+        .$post('https://test.lifeni.life/api/delete', {})
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
