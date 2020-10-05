@@ -1,9 +1,9 @@
 import axios from 'axios'
-
+axios.defaults.withCredentials = true
 export default async function ({ store, redirect }) {
   try {
     const res = await axios.post(
-      'https://test.lifeni.life/api/user',
+      '/api/user',
       {},
       { withCredentials: true }
     )
