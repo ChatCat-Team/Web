@@ -3,7 +3,7 @@ axios.defaults.withCredentials = true
 export default async function ({ redirect }) {
   try {
     const res = await axios.post(
-      'https://test.lifeni.life/api/chestatus',
+      'https://test.lifeni.life/api/checkstatus',
       {},
       { withCredentials: true }
     )

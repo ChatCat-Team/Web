@@ -77,9 +77,6 @@ export default {
   axios: {
     credentials: true,
   },
-  router: {
-    middleware: 'check',
-  },
   pwa: {
     icon: {
       source: './static/icon.png',
