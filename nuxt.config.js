@@ -5,7 +5,6 @@ export default {
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
    */
-  mode: 'universal',
   /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
@@ -70,7 +69,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     'nuxt-vuex-localstorage',
-    // 'cookie-universal-nuxt',
+    'cookie-universal-nuxt',
   ],
   /*
    ** Axios module configuration

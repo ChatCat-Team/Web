@@ -73,7 +73,12 @@
 
 <script>
 export default {
-  props: { u: Object },
+  props: {
+    u: {
+      type: Object,
+      default: () => ({ name: '匿名', bio: '', avatar: '' }),
+    },
+  },
   data() {
     return {
       user:
@@ -84,10 +89,11 @@ export default {
   },
   methods: {
     async logout() {
-      await axios
-        .post('https://test.lifeni.life/api/logout', {})
+      await this.$axios
+        .$post('https://test.lifeni.life/api/logout', {})
         .then(() => {
-          this.$router.replace('/welcome')
+          this.$router.push({ path: '/welcome' })
+          localStorage.clear()
         })
         .catch((err) => {
           console.error(err)
