@@ -7,6 +7,7 @@ export default async function ({ store, redirect }) {
       {},
       { withCredentials: true }
     )
+    console.log('fetch', res)
     if (res.data.code === 0) {
       const user = res.data.extend.user
       user.location = user.address

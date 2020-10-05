@@ -7,6 +7,7 @@ export default async function ({ redirect }) {
       {},
       { withCredentials: true }
     )
+    console.log('check', res)
     if (res.data.code !== 0) {
       redirect('/welcome')
     }
