@@ -60,14 +60,12 @@
           </v-list-item>
         </NuxtLink>
 
-        <NuxtLink to="/welcome" class="text-decoration-none">
-          <v-list-item nuxt class="py-1 px-2">
-            <v-list-item-action>
-              <v-icon>mdi-close-circle-outline</v-icon>
-            </v-list-item-action>
-            <v-list-item-title>退出登录</v-list-item-title>
-          </v-list-item>
-        </NuxtLink>
+        <v-list-item nuxt class="py-1 px-2" @click="logout">
+          <v-list-item-action>
+            <v-icon>mdi-close-circle-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>退出登录</v-list-item-title>
+        </v-list-item>
       </v-list-item-group>
     </v-list>
   </div>
@@ -83,6 +81,18 @@ export default {
         this.$store.state.localStorage.userData ||
         this.$store.state.localStorage.default.userData,
     }
+  },
+  methods: {
+    async logout() {
+      await axios
+        .post('https://test.lifeni.life/api/logout', {})
+        .then(() => {
+          this.$router.replace('/welcome')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    },
   },
 }
 </script>
