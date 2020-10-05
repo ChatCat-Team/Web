@@ -70,6 +70,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     'nuxt-vuex-localstorage',
+    'cookie-universal-nuxt',
   ],
   /*
    ** Axios module configuration
@@ -80,7 +81,7 @@ export default {
     credentials: true,
   },
   proxy: {
-    '/api/': 'https://test.lifeni.life/api/',
+    '/api/': { target: 'https://test.lifeni.life/api/', ws: true },
   },
   pwa: {
     icon: {

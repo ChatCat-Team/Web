@@ -3,7 +3,7 @@ axios.defaults.withCredentials = true
 export default async function ({ redirect }) {
   try {
     const res = await axios.post(
-      '/api/checkstatus',
+      'https://test.lifeni.life/api/checkstatus',
       {},
       { withCredentials: true }
     )
@@ -12,7 +12,7 @@ export default async function ({ redirect }) {
       redirect('/welcome')
     }
   } catch (error) {
-    console.error(error)
+    console.error('check', error)
     redirect('/welcome')
   }
 }
