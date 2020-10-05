@@ -289,7 +289,11 @@ import axios from 'axios'
 export default {
   async asyncData() {
     return await axios
-      .post('https://test.lifeni.life/api/sendgraphicverification', {})
+      .post(
+        'https://test.lifeni.life/api/sendgraphicverification',
+        {},
+        { withCredentials: true }
+      )
       .then((res) => {
         if (res.data.code === 0) {
           return {
