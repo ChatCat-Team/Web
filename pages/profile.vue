@@ -51,7 +51,14 @@
                   class="upload mx-4"
                   @click="uploadAvatar"
                 >
-                  <v-img v-if="image" :src="image" alt="用户头像预览"></v-img>
+                  <v-img
+                    v-if="image"
+                    :src="image"
+                    width="100"
+                    height="100"
+                    style="border-radius: 100px"
+                    alt="用户头像预览"
+                  ></v-img>
                   <v-icon v-else x-large>mdi-camera-outline</v-icon>
                 </v-btn>
               </template>
@@ -62,7 +69,10 @@
               width="100"
               height="100"
               class="upload mx-4"
-              @click="user.avatar = null"
+              @click="
+                user.avatar = null
+                image = ''
+              "
             >
               <v-icon x-large>mdi-cancel</v-icon>
             </v-btn>
@@ -632,7 +642,7 @@ export default {
             const fileName = `avatar-${this.user.id}-${new Date().getTime()}.${
               files[0].type.split('/')[1]
             }`
-            const client = new OSS(keys)
+            const client = new OSS(keys.data)
             client
               .put(fileName, Buffer.from(files[0].buffer))
               .then((result) => {
