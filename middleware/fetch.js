@@ -14,16 +14,16 @@ export default async function ({ req, store, redirect }) {
         delete user.address
         await store.commit('localStorage/setUserData', user)
       } else {
-        // redirect('/welcome')
+        redirect('/welcome')
       }
     } catch (error) {
       console.error('fetch', error)
-      // redirect('/welcome')
+      redirect('/welcome')
     }
   } else {
     const cookies = req.headers.cookie
     if (!cookies) {
-      // redirect('/welcome')
+      redirect('/welcome')
     } else {
       try {
         const res = await axios.post(
@@ -42,11 +42,11 @@ export default async function ({ req, store, redirect }) {
           delete user.address
           await store.commit('localStorage/setUserData', user)
         } else {
-          // redirect('/welcome')
+          redirect('/welcome')
         }
       } catch (error) {
         console.error('fetch', error)
-        // redirect('/welcome')
+        redirect('/welcome')
       }
     }
   }

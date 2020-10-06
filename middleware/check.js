@@ -9,11 +9,11 @@ export default async function ({ app, redirect }) {
         { withCredentials: true }
       )
       if (res.data.code !== 0) {
-        // redirect('/welcome')
+        redirect('/welcome')
       }
     } catch (error) {
       console.error('check', error)
-      // redirect('/welcome')
+      redirect('/welcome')
     }
   }
 }

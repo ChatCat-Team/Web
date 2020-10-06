@@ -507,7 +507,6 @@
 
 <script>
 import OSS from 'ali-oss'
-import bufferFrom from 'buffer-from'
 
 import drawerItem from '../components/drawer'
 export default {
@@ -619,11 +618,6 @@ export default {
         input.addEventListener('change', async () => {
           const files = input.files
           console.log(files[0])
-          const reader = new FileReader()
-          reader.readAsDataURL(files[0])
-          reader.onload = (e) => {
-            this.image = e.target.result
-          }
 
           if (files[0].size > 1 * 1024 * 1024) {
             this.snackbar = true
@@ -638,17 +632,22 @@ export default {
             this.snackbar = true
             this.text = '图片格式不对'
           } else {
-            const formData = new FormData()
-            await formData.append('image', files[0])
             const fileName = `avatar-${this.user.id}-${new Date().getTime()}.${
               files[0].type.split('/')[1]
             }`
-            const client = new OSS(keys.data)
-            client
-              .put('chatcat/' + fileName, files[0])
+            const client = new OSS(JSON.parse(keys.data))
+            await client
+              .put(fileName, files[0])
               .then((result) => {
                 console.log(result)
                 this.user.avatar = result.url
+              })
+              .then(async () => {
+                const reader = new FileReader()
+                await reader.readAsDataURL(files[0])
+                reader.onload = (e) => {
+                  this.image = e.target.result
+                }
               })
               .catch((err) => {
                 console.log(err)
@@ -658,7 +657,7 @@ export default {
           }
         })
       } catch (error) {
-        console.log('STS', error)
+        console.log(error)
       }
     },
     async sendAvatar() {
