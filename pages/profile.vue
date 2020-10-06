@@ -30,37 +30,47 @@
         </template>
         <v-card>
           <v-card-title>修改头像</v-card-title>
-          <v-file-input
-            :rules="rules.avatar"
-            accept="image/png, image/jpeg, image/bmp, image/webp"
-            placeholder="选择一个图片"
-            prepend-icon=""
-            hide-input
-            label="Avatar"
-            class="mx-4 mt-4 mb-12 d-flex justify-space-around"
-          >
-            <template v-slot:append-outer>
-              <v-btn
-                rounded
-                elevation="0"
-                width="100"
-                height="100"
-                class="upload mx-4"
-              >
-                <v-icon x-large>mdi-camera-outline</v-icon>
-              </v-btn>
 
-              <v-btn
-                rounded
-                elevation="0"
-                width="100"
-                height="100"
-                class="upload mx-4"
-              >
-                <v-icon x-large>mdi-cancel</v-icon>
-              </v-btn>
-            </template>
-          </v-file-input>
+          <div class="mx-4 mt-4 mb-8 px-8 py-4 d-flex justify-space-around">
+            <v-file-input
+              id="file-input"
+              :rules="rules.avatar"
+              accept="image/png, image/jpeg, image/bmp, image/webp"
+              placeholder="选择一个图片"
+              prepend-icon=""
+              hide-input
+              label="Avatar"
+              class="ma-0 pa-0 fix-margin"
+            >
+              <template v-slot:append-outer>
+                <v-btn
+                  rounded
+                  elevation="0"
+                  width="100"
+                  height="100"
+                  class="upload mx-4"
+                  @click="uploadAvatar"
+                >
+                  <v-icon x-large>mdi-camera-outline</v-icon>
+                </v-btn>
+              </template>
+            </v-file-input>
+            <v-btn
+              rounded
+              elevation="0"
+              width="100"
+              height="100"
+              class="upload mx-4"
+              @click="user.avatar = null"
+            >
+              <v-icon x-large>mdi-cancel</v-icon>
+            </v-btn>
+          </div>
+
+          <v-card-text class="px-6 pb-2">
+            上传一张不超过 1MB 的图片（支持 .jpg .png .gif .webp
+            格式），或者清除你设置的头像
+          </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -90,7 +100,7 @@
               "
               @click="dialog.avatar = false"
             >
-              确认上传
+              确认修改
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -485,6 +495,8 @@
 </template>
 
 <script>
+import OSS from 'ali-oss'
+
 import drawerItem from '../components/drawer'
 export default {
   middleware: ['fetch'],
@@ -520,6 +532,9 @@ export default {
       timeout: 2000,
       text: '',
       user: {
+        id:
+          this.$store.state.localStorage.userData.id ||
+          this.$store.state.localStorage.default.userData.id,
         avatar:
           this.$store.state.localStorage.userData.avatar ||
           this.$store.state.localStorage.default.userData.avatar,
@@ -577,6 +592,86 @@ export default {
     }
   },
   methods: {
+    async uploadAvatar() {
+      try {
+        const keys = await this.$axios.$get(
+          'https://test.lifeni.life/sts?id=' + this.user.id,
+          { withCredentials: true, credentials: 'include' }
+        )
+        console.log(keys)
+
+        const input = document.querySelector('#file-input')
+        await input.click()
+
+        input.addEventListener('change', async () => {
+          const files = input.files
+          console.log(files[0])
+          const reader = new FileReader()
+          reader.readAsDataURL(files[0])
+          reader.onload = (e) => {
+            console.log(e.target.result)
+          }
+
+          if (files[0].size > 1 * 1024 * 1024) {
+            this.snackbar = true
+            this.text = '图片超过 1 MB，不能上传'
+          } else if (
+            !files[0].type.includes('png') &&
+            !files[0].type.includes('jpg') &&
+            !files[0].type.includes('jpeg') &&
+            !files[0].type.includes('webp') &&
+            !files[0].type.includes('gif')
+          ) {
+            this.snackbar = true
+            this.text = '图片格式不对'
+          } else {
+            const formData = new FormData()
+            await formData.append('image', files[0])
+            const fileName = `avatar-${this.user.id}-${new Date().getTime()}.${
+              files[0].mimetype.split('/')[1]
+            }`
+            const client = new OSS(keys)
+            client
+              .put(fileName, Buffer.from(files[0].buffer))
+              .then((result) => {
+                console.log(result)
+                this.user.avatar = result.url
+              })
+              .catch((err) => {
+                console.log(err)
+                this.snackbar = true
+                this.text = '上传图片失败'
+              })
+          }
+        })
+      } catch (error) {
+        console.log('STS', error)
+      }
+    },
+    async sendAvatar() {
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/api/update', {
+          avatar: this.user.avatar,
+        })
+        .then((res) => {
+          this.loading = false
+          if (res.code === 0) {
+            this.snackbar = true
+            this.text = `头像修改成功`
+            this.dialog.avatar = false
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
+    },
     async sendName() {
       this.loading = true
       await this.$axios

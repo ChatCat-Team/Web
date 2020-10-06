@@ -76,7 +76,12 @@ export default {
   props: {
     u: {
       type: Object,
-      default: () => ({ name: '匿名', bio: '', avatar: '' }),
+      default() {
+        return (
+          this.$store.state.localStorage.userData ||
+          this.$store.state.localStorage.default.userData
+        )
+      },
     },
   },
   data() {

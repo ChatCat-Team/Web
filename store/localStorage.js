@@ -1,5 +1,6 @@
 export const state = () => ({
   userData: {
+    id: null,
     avatar: null,
     name: null,
     bio: null,
@@ -13,6 +14,7 @@ export const state = () => ({
   },
   default: {
     userData: {
+      id: -1,
       avatar: '/default_avatar.png',
       name: '匿名',
       bio: '未设置签名',

@@ -15,6 +15,7 @@
     "@nuxtjs/axios": "^5.12.0",
     "@nuxtjs/proxy": "^2.0.1",
     "@nuxtjs/pwa": "^3.0.2",
+    "ali-oss": "^6.10.0",
     "cookie-universal-nuxt": "^2.1.4",
     "dayjs": "^1.8.36",
     "nuxt": "^2.14.0",
