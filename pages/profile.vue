@@ -635,7 +635,7 @@ export default {
             const fileName = `avatar-${this.user.id}-${new Date().getTime()}.${
               files[0].type.split('/')[1]
             }`
-            const client = new OSS(JSON.parse(keys.data))
+            const client = new OSS(keys.data)
             await client
               .put(fileName, files[0])
               .then((result) => {
