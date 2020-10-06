@@ -51,7 +51,8 @@
                   class="upload mx-4"
                   @click="uploadAvatar"
                 >
-                  <v-icon x-large>mdi-camera-outline</v-icon>
+                  <v-img v-if="image" :src="image" alt="用户头像预览"></v-img>
+                  <v-icon v-else x-large>mdi-camera-outline</v-icon>
                 </v-btn>
               </template>
             </v-file-input>
@@ -531,6 +532,7 @@ export default {
       snackbar: false,
       timeout: 2000,
       text: '',
+      image: '',
       user: {
         id:
           this.$store.state.localStorage.userData.id ||
@@ -609,7 +611,7 @@ export default {
           const reader = new FileReader()
           reader.readAsDataURL(files[0])
           reader.onload = (e) => {
-            console.log(e.target.result)
+            this.image = e.target.result
           }
 
           if (files[0].size > 1 * 1024 * 1024) {
@@ -628,7 +630,7 @@ export default {
             const formData = new FormData()
             await formData.append('image', files[0])
             const fileName = `avatar-${this.user.id}-${new Date().getTime()}.${
-              files[0].mimetype.split('/')[1]
+              files[0].type.split('/')[1]
             }`
             const client = new OSS(keys)
             client
