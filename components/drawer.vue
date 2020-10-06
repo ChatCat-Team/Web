@@ -2,7 +2,7 @@
   <div>
     <v-list class="mt-12">
       <v-list-item>
-        <v-avatar size="96" class="avatar ma-4">
+        <v-avatar size="120" class="avatar ma-4">
           <v-img
             v-show="$store.state.localStorage.status"
             :src="user.avatar || '/default_avatar.png'"

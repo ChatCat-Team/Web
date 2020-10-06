@@ -4,13 +4,24 @@
       flat
       color="white"
       elevation="0"
+      prominent
+      height="280"
       extended
       extension-height="56px"
     >
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-h6"> ChatCat </v-toolbar-title>
+      <v-toolbar-title class="text-h5 my-8">
+        {{ getHello() }}，{{
+          this.$store.state.localStorage.userData.name ||
+          this.$store.state.localStorage.default.userData.name + '用户'
+        }}
+        <br />
+        <span class="text-subtitle-1 my-2 d-inline-block"
+          >当前有 35 个人正在 5 个房间聊天</span
+        >
+      </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-chip color="grey lighten-4">演示版本</v-chip>
+      <v-chip class="my-2" color="grey lighten-4">演示版本</v-chip>
       <template v-slot:extension>
         <div class="d-flex flex-column full-width">
           <v-text-field
@@ -181,6 +192,7 @@ export default {
   data: () => ({
     drawer: false,
     fromNow: (d) => dayjs.unix(d).fromNow(),
+    count: 5,
     dialog: {
       new: false,
     },
@@ -250,6 +262,23 @@ export default {
       phone: 'XXX XXXX XXXX',
     },
   }),
+
+  methods: {
+    getHello() {
+      const hour = new Date().getHours()
+      if (hour >= 6 && hour < 9) {
+        return '早上好'
+      } else if (hour >= 9 && hour < 11) {
+        return '上午好'
+      } else if (hour >= 11 && hour < 14) {
+        return '中午好'
+      } else if (hour >= 14 && hour < 19) {
+        return '下午好'
+      } else if (hour >= 19 || hour < 6) {
+        return '晚上好'
+      }
+    },
+  },
 }
 </script>
 
