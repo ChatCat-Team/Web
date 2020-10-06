@@ -109,7 +109,7 @@
                   ? ''
                   : false
               "
-              @click="dialog.avatar = false"
+              @click="sendAvatar"
             >
               确认修改
             </v-btn>
