@@ -507,6 +507,7 @@
 
 <script>
 import OSS from 'ali-oss'
+import bufferFrom from 'buffer-from'
 
 import drawerItem from '../components/drawer'
 export default {
@@ -644,7 +645,7 @@ export default {
             }`
             const client = new OSS(keys.data)
             client
-              .put(fileName, Buffer.from(files[0].buffer))
+              .put(fileName, bufferFrom(files[0].buffer))
               .then((result) => {
                 console.log(result)
                 this.user.avatar = result.url
