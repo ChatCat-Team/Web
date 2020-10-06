@@ -637,7 +637,7 @@ export default {
             }`
             const client = new OSS(keys.data)
             await client
-              .put(fileName, files[0])
+              .put('chatcat/' + fileName, files[0])
               .then((result) => {
                 console.log(result)
                 this.user.avatar = result.url
