@@ -70,7 +70,7 @@
               height="100"
               class="upload mx-4"
               @click="
-                user.avatar = null
+                user.avatar = '/default_avatar.png'
                 image = ''
               "
             >
@@ -101,9 +101,7 @@
               text
               color="deep-purple accent-4"
               :disabled="
-                ($store.state.localStorage.userData.avatar ||
-                  $store.state.localStorage.default.userData.avatar) ===
-                  user.avatar ||
+                $store.state.localStorage.userData.avatar === user.avatar ||
                 user.avatar === null ||
                 user.avatar === ''
                   ? ''
