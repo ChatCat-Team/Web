@@ -660,6 +660,7 @@ export default {
           this.loading = false
           if (res.code === 0) {
             this.user.avatar = this.input.avatar
+            this.input.avatar = ''
             this.snackbar = true
             this.text = `头像修改成功`
             this.dialog.avatar = false
@@ -686,6 +687,7 @@ export default {
           this.loading = false
           if (res.code === 0) {
             this.user.name = this.input.name
+            this.input.name = ''
             this.snackbar = true
             this.text = `名字修改成功：${this.input.name}`
             this.dialog.name = false
@@ -712,6 +714,7 @@ export default {
           this.loading = false
           if (res.code === 0) {
             this.user.bio = this.input.bio
+            this.input.bio = ''
             this.snackbar = true
             this.text = `个性签名修改成功：${this.input.bio}`
             this.dialog.bio = false
@@ -738,6 +741,7 @@ export default {
           this.loading = false
           if (res.code === 0) {
             this.user.location = this.input.location
+            this.input.location = ''
             this.snackbar = true
             this.text = `位置修改成功：${this.input.location}`
             this.dialog.location = false
