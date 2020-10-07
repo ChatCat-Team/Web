@@ -67,7 +67,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     // '@nuxtjs/proxy',
     '@nuxtjs/axios',
-    // '@nuxtjs/pwa',
+    '@nuxtjs/pwa',
     'nuxt-vuex-localstorage',
     'cookie-universal-nuxt',
   ],
@@ -82,7 +82,7 @@ export default {
   /* proxy: {
     '/api/': { target: 'https://test.lifeni.life/api/', ws: true },
   }, */
-  /* pwa: {
+  pwa: {
     icon: {
       source: './static/icon.png',
       size: [64, 120, 144, 152, 192, 384, 512],
@@ -92,7 +92,7 @@ export default {
       short_name: 'ChatCat',
       description: '一个简单的聊天室',
     },
-  }, */
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
