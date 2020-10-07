@@ -89,7 +89,6 @@
 
             <v-dialog v-model="dialog.captcha" width="372">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn icon> </v-btn>
                 <v-btn
                   id="login-1"
                   fab
@@ -102,7 +101,7 @@
                   :loading="loading"
                   v-bind="attrs"
                   v-on="on"
-                  @click="captcha = ''"
+                  @click="getCode()"
                 >
                   <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
@@ -287,29 +286,6 @@
 <script>
 import axios from 'axios'
 export default {
-  async asyncData() {
-    return await axios
-      .post(
-        'https://test.lifeni.life/api/sendgraphicverification',
-        {},
-        { withCredentials: true }
-      )
-      .then((res) => {
-        if (res.data.code === 0) {
-          return {
-            base64: res.data.extend.imgStr,
-          }
-        } else {
-          return {
-            snackbar: true,
-            text: res.msg,
-          }
-        }
-      })
-      .catch((err) => {
-        console.error('获取图形验证码', err)
-      })
-  },
   data() {
     return {
       tab: null,
@@ -456,6 +432,7 @@ export default {
         })
     },
     async getCode() {
+      this.captcha = ''
       await axios
         .post('https://test.lifeni.life/api/sendgraphicverification', {})
         .then((res) => {
