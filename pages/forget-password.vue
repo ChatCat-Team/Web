@@ -38,27 +38,31 @@
     <v-main>
       <div class="pa-8">
         <v-form
-          v-model="valid.all"
+          v-model="valid.phone"
           :disabled="disabled"
           class="d-flex flex-column align-center"
         >
-          <v-form v-model="valid.phone" class="full-width">
-            <v-text-field
-              v-model="phone"
-              :rules="rules.phone"
-              type="number"
-              label="手机号"
-              hint="仅限中国大陆 +86 手机号"
-              prepend-inner-icon="mdi-cellphone"
-              required
-              solo
-              flat
-              height="56"
-              background-color="grey lighten-4"
-              clearable
-              class="full-width"
-            ></v-text-field>
-          </v-form>
+          <v-text-field
+            v-model="phone"
+            :rules="rules.phone"
+            type="number"
+            label="手机号"
+            hint="仅限中国大陆 +86 手机号"
+            prepend-inner-icon="mdi-cellphone"
+            required
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
+            clearable
+            class="full-width"
+          ></v-text-field>
+        </v-form>
+        <v-form
+          v-model="valid.password"
+          :disabled="disabled"
+          class="d-flex flex-column align-center"
+        >
           <v-text-field
             v-model="code.input"
             :rules="rules.code"
@@ -136,7 +140,7 @@
             class="mx-auto mt-6 mb-10"
             large
             aria-label="保存"
-            :disabled="!valid.all"
+            :disabled="!valid.phone || !valid.password"
             :loading="loading"
             @click="reset"
           >
@@ -166,7 +170,7 @@ export default {
     return {
       tab: null,
       valid: {
-        all: false,
+        password: false,
         phone: false,
       },
       phone: '',

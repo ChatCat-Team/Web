@@ -39,29 +39,32 @@
     <v-main>
       <div class="pa-8">
         <v-form
-          v-model="valid.all"
+          v-model="valid.phone"
           :disabled="disabled"
           class="d-flex flex-column align-center"
         >
-          <v-form v-model="valid.phone" class="full-width">
-            <v-text-field
-              id="input-phone"
-              v-model="phone"
-              :rules="rules.phone"
-              type="number"
-              label="手机号"
-              hint="仅限中国大陆 +86 手机号"
-              prepend-inner-icon="mdi-cellphone"
-              required
-              solo
-              flat
-              height="56"
-              background-color="grey lighten-4"
-              clearable
-              class="full-width"
-            ></v-text-field>
-          </v-form>
-
+          <v-text-field
+            id="input-phone"
+            v-model="phone"
+            :rules="rules.phone"
+            type="number"
+            label="手机号"
+            hint="仅限中国大陆 +86 手机号"
+            prepend-inner-icon="mdi-cellphone"
+            required
+            solo
+            flat
+            height="56"
+            background-color="grey lighten-4"
+            clearable
+            class="full-width"
+          ></v-text-field>
+        </v-form>
+        <v-form
+          v-model="valid.password"
+          :disabled="disabled"
+          class="d-flex flex-column align-center"
+        >
           <v-text-field
             id="input-password"
             v-model="password"
@@ -121,7 +124,7 @@
             color="primary"
             large
             aria-label="注册"
-            :disabled="!valid.all"
+            :disabled="!valid.phone || !valid.password"
             :loading="loading"
             class="mx-auto mt-6 mb-10"
             @click="signup"
@@ -152,7 +155,7 @@ export default {
     return {
       tab: null,
       valid: {
-        all: false,
+        password: false,
         phone: false,
       },
       phone: '',
@@ -178,7 +181,7 @@ export default {
           (v) => (v && v.length >= 8) || '最少 8 个字符',
           (v) => (v && v.length <= 24) || '最多 24 个字符',
           (v) =>
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?,.&])[A-Za-z\d$@$!%*#?,.&]{8,24}$/.test(
               v
             ) || '密码不符合要求',
         ],

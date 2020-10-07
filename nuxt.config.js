@@ -128,7 +128,13 @@ export default {
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
-  build: {},
+  build: {
+    babel: {
+      babelrc: false,
+      cacheDirectory: undefined,
+      presets: ['@nuxt/babel-preset-app'],
+    },
+  },
   server: {
     host: '0.0.0.0', // default: localhost
   },
