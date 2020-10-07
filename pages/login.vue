@@ -59,6 +59,7 @@
               prepend-inner-icon="mdi-cellphone"
               required
               solo
+              autofocus
               flat
               height="56"
               background-color="grey lighten-4"
@@ -92,6 +93,7 @@
                 <v-btn
                   id="login-1"
                   fab
+                  type="submit"
                   elevation="0"
                   color="primary"
                   class="mx-auto mt-6 mb-10"
@@ -101,7 +103,7 @@
                   :loading="loading"
                   v-bind="attrs"
                   v-on="on"
-                  @click="getCode()"
+                  @click="getCode"
                 >
                   <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
@@ -151,6 +153,7 @@
                     </v-btn>
                     <v-btn
                       text
+                      type="submit"
                       color="deep-purple accent-4"
                       :disabled="!valid.captcha"
                       @click="loginPassword"
@@ -240,6 +243,7 @@
             <v-btn
               id="login-2"
               fab
+              type="submit"
               elevation="0"
               color="primary"
               class="mx-auto mt-6 mb-10"
@@ -320,7 +324,7 @@ export default {
           (v) => (v && v.length >= 8) || '最少 8 个字符',
           (v) => (v && v.length <= 24) || '最多 24 个字符',
           (v) =>
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?,.&])[A-Za-z\d$@$!%*#?,.&]{8,24}$/.test(
               v
             ) || '密码不符合要求',
         ],
@@ -344,8 +348,10 @@ export default {
       loading: false,
     }
   },
+  mounted() {},
   methods: {
-    async loginPassword() {
+    async loginPassword(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/login', {
@@ -373,7 +379,8 @@ export default {
           console.error(err)
         })
     },
-    async loginCode() {
+    async loginCode(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/loginByMessage', {
@@ -397,7 +404,8 @@ export default {
           console.error(err)
         })
     },
-    async sendCode() {
+    async sendCode(e) {
+      e.preventDefault()
       this.code.text = `正在发送`
       await this.$axios
         .$post('https://test.lifeni.life/api/sendmessagelogin', {
@@ -431,7 +439,8 @@ export default {
           console.error(err)
         })
     },
-    async getCode() {
+    async getCode(e) {
+      e.preventDefault()
       this.captcha = ''
       await axios
         .post('https://test.lifeni.life/api/sendgraphicverification', {})

@@ -50,6 +50,7 @@
             hint="仅限中国大陆 +86 手机号"
             prepend-inner-icon="mdi-cellphone"
             required
+            autofocus
             solo
             flat
             height="56"
@@ -135,6 +136,7 @@
           ></v-text-field>
           <v-btn
             fab
+            type="submit"
             elevation="0"
             color="primary"
             class="mx-auto mt-6 mb-10"
@@ -199,7 +201,7 @@ export default {
           (v) => (v && v.length >= 8) || '最少 8 个字符',
           (v) => (v && v.length <= 24) || '最多 24 个字符',
           (v) =>
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?,.&])[A-Za-z\d$@$!%*#?,.&]{8,24}$/.test(
               v
             ) || '密码不符合要求',
         ],
@@ -208,7 +210,7 @@ export default {
           (v) => (v && v.length) >= 8 || '最少 8 个字符',
           (v) => (v && v.length) <= 24 || '最多 24 个字符',
           (v) =>
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,24}$/.test(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?,.&])[A-Za-z\d$@$!%*#?,.&]{8,24}$/.test(
               v
             ) || '密码不符合要求',
           (v) => v === this.password.first || '两次输入不一致',
@@ -229,7 +231,8 @@ export default {
     }
   },
   methods: {
-    async reset() {
+    async reset(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/resetpwd', {

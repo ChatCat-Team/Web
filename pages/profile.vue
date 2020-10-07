@@ -131,8 +131,8 @@
           </v-list-item>
         </template>
         <v-card>
-          <v-card-title>修改名字</v-card-title>
           <v-form v-model="valid.name">
+            <v-card-title>修改名字</v-card-title>
             <v-text-field
               v-model="input.name"
               :placeholder="user.name"
@@ -141,52 +141,54 @@
               height="56"
               background-color="grey lighten-4"
               clearable
+              autofocus
               counter="24"
               :rules="rules.name"
               hint="名字最大 24 个字符"
               persistent-hint
               class="mx-4 mt-2"
             ></v-text-field>
-          </v-form>
 
-          <v-card-actions>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              @click="
-                input.name = $store.state.localStorage.default.userData.name
-              "
-            >
-              恢复默认
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              @click="
-                dialog.name = false
-                input.name = ''
-              "
-            >
-              取消操作
-            </v-btn>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              :disabled="
-                input.name === user.name ||
-                input.name === null ||
-                input.name === '' ||
-                !valid.name
-                  ? ''
-                  : false
-              "
-              :loading="loading"
-              @click="sendName"
-            >
-              确认修改
-            </v-btn>
-          </v-card-actions>
+            <v-card-actions>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                @click="
+                  input.name = $store.state.localStorage.default.userData.name
+                "
+              >
+                恢复默认
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                @click="
+                  dialog.name = false
+                  input.name = ''
+                "
+              >
+                取消操作
+              </v-btn>
+              <v-btn
+                text
+                type="submit"
+                color="deep-purple accent-4"
+                :disabled="
+                  input.name === user.name ||
+                  input.name === null ||
+                  input.name === '' ||
+                  !valid.name
+                    ? ''
+                    : false
+                "
+                :loading="loading"
+                @click="sendName"
+              >
+                确认修改
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
 
@@ -210,8 +212,8 @@
           </v-list-item>
         </template>
         <v-card>
-          <v-card-title>修改个性签名</v-card-title>
           <v-form v-model="valid.bio">
+            <v-card-title>修改个性签名</v-card-title>
             <v-textarea
               v-model="input.bio"
               :placeholder="user.bio"
@@ -219,6 +221,7 @@
               flat
               background-color="grey lighten-4"
               clearable
+              autofocus
               auto-grow
               counter="100"
               :rules="rules.bio"
@@ -226,46 +229,47 @@
               persistent-hint
               class="mx-4 mt-2"
             ></v-textarea>
-          </v-form>
 
-          <v-card-actions>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              @click="
-                input.bio = $store.state.localStorage.default.userData.bio
-              "
-            >
-              恢复默认
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              @click="
-                dialog.bio = false
-                input.bio = ''
-              "
-            >
-              取消操作
-            </v-btn>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              :disabled="
-                input.bio === user.bio ||
-                input.bio === null ||
-                input.bio === '' ||
-                !valid.bio
-                  ? ''
-                  : false
-              "
-              :loading="loading"
-              @click="sendBio"
-            >
-              确认修改
-            </v-btn>
-          </v-card-actions>
+            <v-card-actions>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                @click="
+                  input.bio = $store.state.localStorage.default.userData.bio
+                "
+              >
+                恢复默认
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                @click="
+                  dialog.bio = false
+                  input.bio = ''
+                "
+              >
+                取消操作
+              </v-btn>
+              <v-btn
+                text
+                type="submit"
+                color="deep-purple accent-4"
+                :disabled="
+                  input.bio === user.bio ||
+                  input.bio === null ||
+                  input.bio === '' ||
+                  !valid.bio
+                    ? ''
+                    : false
+                "
+                :loading="loading"
+                @click="sendBio"
+              >
+                确认修改
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
 
@@ -289,8 +293,8 @@
           </v-list-item>
         </template>
         <v-card>
-          <v-card-title>修改位置</v-card-title>
           <v-form v-model="valid.location">
+            <v-card-title>修改位置</v-card-title>
             <v-text-field
               v-model="input.location"
               :placeholder="user.location"
@@ -299,53 +303,55 @@
               height="56"
               background-color="grey lighten-4"
               clearable
+              autofocus
               counter="24"
               :rules="rules.location"
               hint="位置最大 24 个字符"
               persistent-hint
               class="mx-4 mt-2"
             ></v-text-field>
-          </v-form>
 
-          <v-card-actions>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              @click="
-                input.location =
-                  $store.state.localStorage.default.userData.location
-              "
-            >
-              恢复默认
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              @click="
-                dialog.location = false
-                input.location = ''
-              "
-            >
-              取消操作
-            </v-btn>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-              :disabled="
-                input.location === user.location ||
-                input.location === null ||
-                input.location === '' ||
-                !valid.location
-                  ? ''
-                  : false
-              "
-              :loading="loading"
-              @click="sendLocation"
-            >
-              确认修改
-            </v-btn>
-          </v-card-actions>
+            <v-card-actions>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                @click="
+                  input.location =
+                    $store.state.localStorage.default.userData.location
+                "
+              >
+                恢复默认
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                @click="
+                  dialog.location = false
+                  input.location = ''
+                "
+              >
+                取消操作
+              </v-btn>
+              <v-btn
+                text
+                type="submit"
+                color="deep-purple accent-4"
+                :disabled="
+                  input.location === user.location ||
+                  input.location === null ||
+                  input.location === '' ||
+                  !valid.location
+                    ? ''
+                    : false
+                "
+                :loading="loading"
+                @click="sendLocation"
+              >
+                确认修改
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
 
@@ -395,6 +401,7 @@
               prepend-inner-icon="mdi-form-textbox-password"
               hint="新旧密码必须不同"
               persistent-hint
+              autofocus
               required
               solo
               flat
@@ -677,7 +684,8 @@ export default {
           console.error(err)
         })
     },
-    async sendName() {
+    async sendName(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
@@ -704,7 +712,8 @@ export default {
           console.error(err)
         })
     },
-    async sendBio() {
+    async sendBio(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
@@ -731,7 +740,8 @@ export default {
           console.error(err)
         })
     },
-    async sendLocation() {
+    async sendLocation(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {

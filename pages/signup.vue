@@ -54,6 +54,7 @@
             required
             solo
             flat
+            autofocus
             height="56"
             background-color="grey lighten-4"
             clearable
@@ -120,6 +121,7 @@
           <v-btn
             id="signup"
             fab
+            type="submit"
             elevation="0"
             color="primary"
             large
@@ -201,7 +203,8 @@ export default {
     }
   },
   methods: {
-    async signup() {
+    async signup(e) {
+      e.preventDefault()
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/register', {
