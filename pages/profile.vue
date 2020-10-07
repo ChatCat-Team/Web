@@ -639,6 +639,7 @@ export default {
               .then((result) => {
                 console.log(result)
                 this.user.avatar = result.url
+                this.$store.commit('localStorage/setUserData', this.user)
               })
               .then(async () => {
                 const reader = new FileReader()
@@ -670,7 +671,7 @@ export default {
             this.snackbar = true
             this.text = `头像修改成功`
             this.dialog.avatar = false
-            store.commit('localStorage/setUserData', this.user)
+            this.$store.commit('localStorage/setUserData', this.user)
           } else {
             this.snackbar = true
             this.text = res.msg
@@ -695,7 +696,7 @@ export default {
             this.snackbar = true
             this.text = `名字修改成功：${this.user.name}`
             this.dialog.name = false
-            store.commit('localStorage/setUserData', this.user)
+            this.$store.commit('localStorage/setUserData', this.user)
           } else {
             this.snackbar = true
             this.text = res.msg
@@ -720,7 +721,7 @@ export default {
             this.snackbar = true
             this.text = `个性签名修改成功：${this.user.bio}`
             this.dialog.bio = false
-            store.commit('localStorage/setUserData', this.user)
+            this.$store.commit('localStorage/setUserData', this.user)
           } else {
             this.snackbar = true
             this.text = res.msg
@@ -745,7 +746,7 @@ export default {
             this.snackbar = true
             this.text = `位置修改成功：${this.user.location}`
             this.dialog.location = false
-            store.commit('localStorage/setUserData', this.user)
+            this.$store.commit('localStorage/setUserData', this.user)
           } else {
             this.snackbar = true
             this.text = res.msg
