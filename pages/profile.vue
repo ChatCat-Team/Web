@@ -70,7 +70,7 @@
               height="100"
               class="upload mx-4"
               @click="
-                user.avatar = '/default_avatar.png'
+                input.avatar = '/default_avatar.png'
                 image = ''
               "
             >
@@ -90,9 +90,7 @@
               color="deep-purple accent-4"
               @click="
                 dialog.avatar = false
-                user.avatar =
-                  $store.state.localStorage.userData.avatar ||
-                  $store.state.localStorage.default.userData.avatar
+                input.avatar = ''
               "
             >
               取消操作
@@ -101,9 +99,9 @@
               text
               color="deep-purple accent-4"
               :disabled="
-                $store.state.localStorage.userData.avatar === user.avatar ||
-                user.avatar === null ||
-                user.avatar === ''
+                user.avatar === input.avatar ||
+                input.avatar === null ||
+                input.avatar === ''
                   ? ''
                   : false
               "
@@ -136,8 +134,8 @@
           <v-card-title>修改名字</v-card-title>
           <v-form v-model="valid.name">
             <v-text-field
-              v-model="user.name"
-              :placeholder="$store.state.localStorage.default.userData.name"
+              v-model="input.name"
+              :placeholder="user.name"
               solo
               flat
               height="56"
@@ -156,7 +154,7 @@
               text
               color="deep-purple accent-4"
               @click="
-                user.name = $store.state.localStorage.default.userData.name
+                input.name = $store.state.localStorage.default.userData.name
               "
             >
               恢复默认
@@ -167,9 +165,7 @@
               color="deep-purple accent-4"
               @click="
                 dialog.name = false
-                user.name =
-                  $store.state.localStorage.userData.name ||
-                  $store.state.localStorage.default.userData.name
+                input.name = ''
               "
             >
               取消操作
@@ -178,11 +174,9 @@
               text
               color="deep-purple accent-4"
               :disabled="
-                ($store.state.localStorage.userData.name ||
-                  $store.state.localStorage.default.userData.name) ===
-                  user.name ||
-                user.name === null ||
-                user.name === '' ||
+                input.name === user.name ||
+                input.name === null ||
+                input.name === '' ||
                 !valid.name
                   ? ''
                   : false
@@ -219,8 +213,8 @@
           <v-card-title>修改个性签名</v-card-title>
           <v-form v-model="valid.bio">
             <v-textarea
-              v-model="user.bio"
-              :placeholder="$store.state.localStorage.default.userData.bio"
+              v-model="input.bio"
+              :placeholder="user.bio"
               solo
               flat
               background-color="grey lighten-4"
@@ -238,7 +232,9 @@
             <v-btn
               text
               color="deep-purple accent-4"
-              @click="user.bio = $store.state.localStorage.default.userData.bio"
+              @click="
+                input.bio = $store.state.localStorage.default.userData.bio
+              "
             >
               恢复默认
             </v-btn>
@@ -248,9 +244,7 @@
               color="deep-purple accent-4"
               @click="
                 dialog.bio = false
-                user.bio =
-                  $store.state.localStorage.userData.bio ||
-                  $store.state.localStorage.default.userData.bio
+                input.bio = ''
               "
             >
               取消操作
@@ -259,11 +253,9 @@
               text
               color="deep-purple accent-4"
               :disabled="
-                ($store.state.localStorage.userData.bio ||
-                  $store.state.localStorage.default.userData.bio) ===
-                  user.bio ||
-                user.bio === null ||
-                user.bio === '' ||
+                input.bio === user.bio ||
+                input.bio === null ||
+                input.bio === '' ||
                 !valid.bio
                   ? ''
                   : false
@@ -300,8 +292,8 @@
           <v-card-title>修改位置</v-card-title>
           <v-form v-model="valid.location">
             <v-text-field
-              v-model="user.location"
-              :placeholder="$store.state.localStorage.default.userData.location"
+              v-model="input.location"
+              :placeholder="user.location"
               solo
               flat
               height="56"
@@ -320,7 +312,7 @@
               text
               color="deep-purple accent-4"
               @click="
-                user.location =
+                input.location =
                   $store.state.localStorage.default.userData.location
               "
             >
@@ -332,9 +324,7 @@
               color="deep-purple accent-4"
               @click="
                 dialog.location = false
-                user.location =
-                  $store.state.localStorage.userData.location ||
-                  $store.state.localStorage.default.userData.location
+                input.location = ''
               "
             >
               取消操作
@@ -343,11 +333,9 @@
               text
               color="deep-purple accent-4"
               :disabled="
-                ($store.state.localStorage.userData.location ||
-                  $store.state.localStorage.default.userData.location) ===
-                  user.location ||
-                user.location === null ||
-                user.location === '' ||
+                input.location === user.location ||
+                input.location === null ||
+                input.location === '' ||
                 !valid.location
                   ? ''
                   : false
@@ -561,6 +549,12 @@ export default {
           this.$store.state.localStorage.userData.phone ||
           this.$store.state.localStorage.default.userData.phone,
       },
+      input: {
+        avatar: '',
+        name: '',
+        bio: '',
+        location: '',
+      },
       rules: {
         avatar: [
           (v) =>
@@ -608,14 +602,12 @@ export default {
           'https://test.lifeni.life/sts?id=' + this.user.id,
           { withCredentials: true, credentials: 'include' }
         )
-        console.log(keys)
 
         const input = document.querySelector('#file-input')
         await input.click()
 
         input.addEventListener('change', async () => {
           const files = input.files
-          console.log(files[0])
 
           if (files[0].size > 1 * 1024 * 1024) {
             this.snackbar = true
@@ -637,8 +629,7 @@ export default {
             await client
               .put('chatcat/' + fileName, files[0])
               .then((result) => {
-                console.log(result)
-                this.user.avatar = result.url
+                this.input.avatar = result.url
                 this.$store.commit('localStorage/setUserData', this.user)
               })
               .then(async () => {
@@ -663,11 +654,12 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          avatar: this.user.avatar,
+          avatar: this.input.avatar,
         })
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
+            this.user.avatar = this.input.avatar
             this.snackbar = true
             this.text = `头像修改成功`
             this.dialog.avatar = false
@@ -688,13 +680,14 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          name: this.user.name,
+          name: this.input.name,
         })
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
+            this.user.name = this.input.name
             this.snackbar = true
-            this.text = `名字修改成功：${this.user.name}`
+            this.text = `名字修改成功：${this.input.name}`
             this.dialog.name = false
             this.$store.commit('localStorage/setUserData', this.user)
           } else {
@@ -713,13 +706,14 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          bio: this.user.bio,
+          bio: this.input.bio,
         })
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
+            this.user.bio = this.input.bio
             this.snackbar = true
-            this.text = `个性签名修改成功：${this.user.bio}`
+            this.text = `个性签名修改成功：${this.input.bio}`
             this.dialog.bio = false
             this.$store.commit('localStorage/setUserData', this.user)
           } else {
@@ -738,13 +732,14 @@ export default {
       this.loading = true
       await this.$axios
         .$post('https://test.lifeni.life/api/update', {
-          address: this.user.location,
+          address: this.input.location,
         })
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
+            this.user.location = this.input.location
             this.snackbar = true
-            this.text = `位置修改成功：${this.user.location}`
+            this.text = `位置修改成功：${this.input.location}`
             this.dialog.location = false
             this.$store.commit('localStorage/setUserData', this.user)
           } else {
