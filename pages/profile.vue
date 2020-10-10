@@ -22,7 +22,9 @@
           <v-list-item link class="mb-8" v-bind="attrs" v-on="on">
             <v-avatar class="avatar my-4 mx-auto" size="240">
               <v-img
-                :src="user.avatar || '/default_avatar.png'"
+                :src="
+                  user.avatar || 'https://test.lifeni.life/default_avatar.png'
+                "
                 alt="用户头像"
               ></v-img>
             </v-avatar>
@@ -70,7 +72,7 @@
               height="100"
               class="upload mx-4"
               @click="
-                input.avatar = '/default_avatar.png'
+                input.avatar = 'https://test.lifeni.life/default_avatar.png'
                 image = ''
               "
             >

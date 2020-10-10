@@ -155,7 +155,7 @@
     <v-snackbar v-model="snackbar" bottom class="mb-8">
       {{ text }}
       <template v-slot:action="{ attrs }">
-        <v-btn text color="success" v-bind="attrs" @click="snackbar = false">
+        <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
           关闭
         </v-btn>
       </template>

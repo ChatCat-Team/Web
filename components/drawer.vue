@@ -5,7 +5,7 @@
         <v-avatar size="120" class="avatar ma-4">
           <v-img
             v-show="$store.state.localStorage.status"
-            :src="user.avatar || '/default_avatar.png'"
+            :src="user.avatar || 'https://test.lifeni.life/default_avatar.png'"
             alt="Your Avatar"
           ></v-img>
         </v-avatar>

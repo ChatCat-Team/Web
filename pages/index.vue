@@ -16,9 +16,15 @@
           this.$store.state.localStorage.default.userData.name + '用户'
         }}
         <br />
-        <span class="text-subtitle-1 my-2 d-inline-block"
-          >当前有 35 个人正在 5 个房间聊天</span
-        >
+        <span v-if="status === -1" class="text-subtitle-1 my-2 status error">
+          连接服务器出现错误
+        </span>
+        <span v-if="status === 0" class="text-subtitle-1 my-2 status null">
+          未连接到服务器
+        </span>
+        <span v-if="status === 1" class="text-subtitle-1 my-2 status success">
+          已连接到服务器
+        </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-chip class="my-2" color="grey lighten-4">演示版本</v-chip>
@@ -71,11 +77,14 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>创建新的聊天室</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon @click="dialog.new = false">
+            <v-btn icon type="submit" :loading="loading" @click="sendNewRoom">
               <v-icon>mdi-check</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-form class="pa-4 pt-2 d-flex flex-column align-center">
+          <v-form
+            v-model="valid.create"
+            class="pa-4 pt-2 d-flex flex-column align-center"
+          >
             <v-text-field
               id="input-room-title"
               v-model="create.title"
@@ -87,6 +96,9 @@
               required
               solo
               flat
+              autofocus
+              aria-required
+              :rules="rules.create"
               height="56"
               background-color="grey lighten-4"
               counter="20"
@@ -101,6 +113,7 @@
               clearable
               auto-grow
               full-width
+              :rules="rules.description"
               counter="100"
               label="描述房间的信息（可选）"
               hint="最多 100 个字符"
@@ -117,6 +130,7 @@
               prepend-inner-icon="mdi-form-textbox-password"
               hint="4 个字符的数字"
               persistent-hint
+              :rules="rules.code"
               solo
               flat
               height="56"
@@ -137,6 +151,7 @@
           class="card d-flex text-decoration-none"
         >
           <v-card
+            v-if="room.userid === this.$store.state.localStorage.userData.id"
             ripple
             elevation="0"
             nuxt
@@ -144,34 +159,108 @@
           >
             <div class="full-width">
               <p class="text-caption font-weight-light ma-0 px-4 pt-4 pb-1">
-                <span class="font-weight-medium">{{ room.creator }}</span> 在
-                <span class="font-weight-medium">{{ fromNow(room.date) }}</span>
+                <span class="font-weight-medium">{{ room.creatername }}</span>
+                在
+                <span class="font-weight-medium">{{
+                  fromNow(room.starttime)
+                }}</span>
                 创建
               </p>
-              <v-card-title class="text-h6 font-weight-medium py-0">{{
-                room.title
-              }}</v-card-title>
+              <v-card-title
+                class="text-h6 font-weight-medium py-0"
+                :title="room.description"
+                >{{ room.title }}</v-card-title
+              >
             </div>
             <p
-              :class="`text-body-2 pt-0 px-4 d-flex align-center status ${
-                room.status.code === 0
-                  ? 'waiting font-weight-medium'
-                  : room.status.code === 1
-                  ? 'online font-weight-medium'
-                  : 'offline font-weight-regular'
-              }`"
+              v-if="room.status.code === 1"
+              class="text-body-2 pt-0 px-4 d-flex align-center status waiting font-weight-medium"
             >
-              {{
-                room.status.code === 0
-                  ? '等待加入'
-                  : room.status.code === 1
-                  ? `${room.status.count} 人在线`
-                  : '已结束'
-              }}
+              等待加入
+            </p>
+            <p
+              v-else-if="room.status.code === 2"
+              class="text-body-2 pt-0 px-4 d-flex align-center status success font-weight-medium"
+            >
+              正在进行
+            </p>
+            <p
+              v-else-if="room.status.code === 3"
+              class="text-body-2 pt-0 px-4 d-flex align-center status null font-weight-medium"
+            >
+              当前空闲
+            </p>
+            <p
+              v-else-if="room.status.code === 4"
+              class="text-body-2 pt-0 px-4 d-flex align-center status error font-weight-medium"
+            >
+              房间异常
+            </p>
+          </v-card>
+        </NuxtLink>
+        <NuxtLink
+          v-for="(room, i) in rooms"
+          :key="i"
+          :to="`/room/${room.id}`"
+          class="card d-flex text-decoration-none"
+        >
+          <v-card
+            v-if="room.userid !== this.$store.state.localStorage.userData.id"
+            ripple
+            elevation="0"
+            nuxt
+            class="grey full-width lighten-4 d-flex flex-column align-start justify-space-between"
+          >
+            <div class="full-width">
+              <p class="text-caption font-weight-light ma-0 px-4 pt-4 pb-1">
+                <span class="font-weight-medium">{{ room.creatername }}</span>
+                在
+                <span class="font-weight-medium">{{
+                  fromNow(room.starttime)
+                }}</span>
+                创建
+              </p>
+              <v-card-title
+                class="text-h6 font-weight-medium py-0"
+                :title="room.description"
+                >{{ room.title }}</v-card-title
+              >
+            </div>
+            <p
+              v-if="room.status.code === 1"
+              class="text-body-2 pt-0 px-4 d-flex align-center status waiting font-weight-medium"
+            >
+              等待加入
+            </p>
+            <p
+              v-else-if="room.status.code === 2"
+              class="text-body-2 pt-0 px-4 d-flex align-center status success font-weight-medium"
+            >
+              正在进行
+            </p>
+            <p
+              v-else-if="room.status.code === 3"
+              class="text-body-2 pt-0 px-4 d-flex align-center status null font-weight-medium"
+            >
+              当前空闲
+            </p>
+            <p
+              v-else-if="room.status.code === 4"
+              class="text-body-2 pt-0 px-4 d-flex align-center status error font-weight-medium"
+            >
+              房间异常
             </p>
           </v-card>
         </NuxtLink>
       </div>
+      <v-snackbar v-model="snackbar" bottom class="mb-8">
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
+            关闭
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </div>
 </template>
@@ -196,63 +285,30 @@ export default {
     dialog: {
       new: false,
     },
+    valid: {
+      create: false,
+    },
     create: {
       title: '',
       description: '',
       password: '',
     },
+    status: 0,
+    snackbar: false,
+    timeout: 2000,
+    text: '',
     show: {
       password: false,
     },
-    rooms: [
-      {
-        id: 454781,
-        title: '测试一下',
-        creator: '小白',
-        date: '1600694209',
-        status: {
-          code: 1,
-          count: 45,
-        },
-      },
-      {
-        id: 57471,
-        title: '这是一个长长长长长长标题',
-        creator: '隔壁老王',
-        date: '1600692209',
-        status: {
-          code: 2,
-        },
-      },
-      {
-        id: 5381,
-        title: '这是一个标题',
-        creator: '老黑',
-        date: '1600694109',
-        status: {
-          code: 0,
-        },
-      },
-      {
-        id: 781,
-        title: '讨论一下关于今天早上吃什么的问题',
-        creator: '匿名',
-        date: '1600634209',
-        status: {
-          code: 1,
-          count: 3,
-        },
-      },
-      {
-        id: 387954,
-        title: '前后端对接讨论',
-        creator: '张三',
-        date: '1600694009',
-        status: {
-          code: 2,
-        },
-      },
-    ],
+    rooms: [],
+    rules: {
+      title: [
+        (v) => !!v || '标题为必填项',
+        (v) => (v && v.length <= 20) || '最多 20 个字符',
+      ],
+      description: [(v) => (v && v.length <= 100) || '最多 100 个字符'],
+      code: [(v) => (v && v.length === 4) || '密码为 4 个字符'],
+    },
     records: ['这里', '显示的是', '曾经加入过的', '房间名', '默认开启'],
     user: {
       avatar: null,
@@ -261,8 +317,44 @@ export default {
       name: null,
       phone: 'XXX XXXX XXXX',
     },
+    loading: false,
   }),
+  mounted() {
+    const id = this.$store.state.localStorage.userData.id
+    const url = `wss://test.lifeni.life/chat/websocket/home/${id}`
+    const ws = new WebSocket(url)
 
+    ws.onopen = () => {
+      this.status = 1
+      console.log('连接已打开')
+      ws.send(
+        JSON.stringify({
+          code: 0,
+          msg: `用户 ${id} 已连接`,
+        })
+      )
+    }
+
+    ws.onmessage = (e) => {
+      console.log(e.data)
+      if (e.data.code === 0) {
+        this.rooms = e.data.extend.message.messageContent
+      } else {
+        this.snackbar = true
+        this.text = '获取数据失败'
+      }
+    }
+
+    ws.onclose = () => {
+      this.status = 0
+      console.log('连接已关闭')
+    }
+
+    ws.onerror = (err) => {
+      this.status = -1
+      console.error('连接出错', url, err)
+    }
+  },
   methods: {
     getHello() {
       const hour = new Date().getHours()
@@ -277,6 +369,31 @@ export default {
       } else if (hour >= 19 || hour < 6) {
         return '晚上好'
       }
+    },
+    async sendNewRoom(e) {
+      e.preventDefault()
+      this.loading = true
+      await this.$axios
+        .$post('https://test.lifeni.life/chat/chatRoom/createChatRoom', {
+          title: this.create.title,
+          description: this.create.description,
+          code: this.create.code,
+        })
+        .then((res) => {
+          this.loading = false
+          if (res.code === 0) {
+            this.$router.push({ path: `/room/${res.extend.id}` })
+          } else {
+            this.snackbar = true
+            this.text = res.msg
+          }
+        })
+        .catch((err) => {
+          this.snackbar = true
+          this.text = '未知错误'
+          this.loading = false
+          console.error(err)
+        })
     },
   },
 }
@@ -298,6 +415,12 @@ export default {
   padding: 0 16px;
 }
 
+.status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .status::before {
   content: '';
   display: inline-block;
@@ -308,7 +431,7 @@ export default {
   background-color: #ffffff;
 }
 
-.status.online::before {
+.status.success::before {
   background-color: #69c667;
 }
 
@@ -316,7 +439,11 @@ export default {
   background-color: #4fc3f7;
 }
 
-.status.offline::before {
+.status.error::before {
+  background-color: #ff8a65;
+}
+
+.status.null::before {
   background-color: #bdbdbd;
 }
 </style>
