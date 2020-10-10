@@ -40,6 +40,7 @@
       <template v-slot:extension>
         <div class="d-flex flex-column full-width">
           <v-text-field
+            v-model="search"
             solo
             flat
             height="56"
@@ -52,6 +53,7 @@
             append-icon="mdi-qrcode"
             hide-details
             class="full-width"
+            @keypress.enter="goToLink"
           >
           </v-text-field>
         </div>
@@ -153,6 +155,13 @@
       </v-dialog>
 
       <div class="board d-flex flex-row flex-wrap pa-2">
+        <p
+          v-show="rooms.length === 0"
+          class="text-body-1 full-width text-center grey--text lighten-2 ma-0"
+          style="padding: calc(50vh - 220px) 0"
+        >
+          目前没有聊天室
+        </p>
         <NuxtLink
           v-for="(room, i) in rooms"
           :key="i"
@@ -291,6 +300,7 @@ export default {
     drawer: false,
     fromNow: (d) => dayjs.unix(d).fromNow(),
     count: 5,
+    search: '',
     dialog: {
       new: false,
     },
@@ -380,6 +390,11 @@ export default {
         return '晚上好'
       }
     },
+    goToLink() {
+      if (this.search) {
+        this.$router.push({ path: `/room/${this.search}` })
+      }
+    },
     async sendNewRoom(e) {
       e.preventDefault()
       this.loading = true
@@ -392,7 +407,7 @@ export default {
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
-            this.$router.push({ path: `/room/${res.extend.id}` })
+            this.$router.push({ path: `/room/${res.extend.roomid}` })
           } else {
             this.snackbar = true
             this.text = res.msg

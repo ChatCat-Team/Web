@@ -3,19 +3,13 @@
     <div
       class="background d-flex flex-column align-center justify-space-around"
     >
-      <div class="header px-10 pt-12 full-width text-center">
-        <h1 class="title text-h4 font-weight-light white--text py-2">
-          ChatCat
+      <div class="header mb-12 px-10 py-12 full-width text-center">
+        <span>
+          <v-img src="/demo.svg" width="80" class="mx-auto"></v-img>
+        </span>
+        <h1 class="pb-12">
+          <v-img src="/logo.svg" width="200" class="mx-auto"></v-img>
         </h1>
-        <h2 class="title text-h5 font-weight-light white--text">
-          一个简单的聊天室
-        </h2>
-        <v-chip outlined dark class="my-4"> 演示版本 </v-chip>
-        <v-spacer></v-spacer>
-      </div>
-      <div
-        class="bar pa-8 full-width d-flex flex-column align-center justify-center"
-      >
         <v-dialog v-model="dialog" width="300">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -23,7 +17,6 @@
               icon
               x-large
               color="white"
-              class="my-4"
               v-bind="attrs"
               v-on="on"
             >
@@ -40,30 +33,39 @@
             ></qrcode-vue>
           </v-card>
         </v-dialog>
-        <NuxtLink class="link" to="/signup">
-          <v-btn
-            id="button-signup"
-            outlined
-            x-large
-            dark
-            nuxt
-            class="button text-center full-width"
-          >
-            注册
-          </v-btn>
-        </NuxtLink>
-        <NuxtLink class="link" to="/login">
-          <v-btn
-            id="button-login"
-            outlined
-            x-large
-            dark
-            nuxt
-            class="button text-center full-width"
-          >
-            登录
-          </v-btn>
-        </NuxtLink>
+        <v-spacer></v-spacer>
+      </div>
+      <div
+        class="bar pa-8 full-width d-flex flex-column align-center justify-center"
+      >
+        <div class="full-width d-flex align-center justify-center">
+          <NuxtLink class="link mr-8" to="/signup">
+            <v-btn
+              id="button-signup"
+              text
+              depressed
+              x-large
+              dark
+              nuxt
+              class="button text-center font-weight-bold"
+            >
+              注册
+            </v-btn>
+          </NuxtLink>
+          <NuxtLink class="link" to="/login">
+            <v-btn
+              id="button-login"
+              text
+              depressed
+              x-large
+              dark
+              nuxt
+              class="button text-center font-weight-bold"
+            >
+              登录
+            </v-btn>
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </div>
@@ -87,10 +89,16 @@ export default {
 </script>
 
 <style scoped>
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
 .container {
   min-height: 100vh;
   padding: 0;
-  background-image: url('/background.jpg');
+  background-image: url('https://lifeni-test.oss-cn-beijing.aliyuncs.com/background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -121,15 +129,11 @@ export default {
 
 .link {
   width: 100%;
-  margin: 8px 0;
   text-decoration: none;
 }
 
 .button {
   width: 100%;
-}
-
-.title {
-  text-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>
