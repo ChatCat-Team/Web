@@ -6,11 +6,14 @@
           <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
         </NuxtLink>
       </v-btn>
-      <v-toolbar-title> {{ meta.title }} </v-toolbar-title>
+      <v-toolbar-title> {{ meta.title || '聊天室' }} </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-chip color="grey lighten-4" style="min-width: 32px">
+      <v-btn icon>
+        <v-icon>mdi-share-variant-outline</v-icon>
+      </v-btn>
+      <!-- <v-chip color="grey lighten-4" style="min-width: 32px">
         {{ meta.id }}
-      </v-chip>
+      </v-chip> -->
     </v-app-bar>
     <v-sheet
       id="box"
@@ -73,6 +76,38 @@
       </v-list>
     </v-sheet>
     <div class="bar white pa-4 full-width">
+      <div class="d-flex flex-row align-center justify-start">
+        <v-chip
+          color="grey lighten-4"
+          pill
+          class="chip pa-0 mr-4 mb-4 d-flex align-center justify-center"
+        >
+          <v-avatar size="36">
+            <v-img
+              :src="
+                $store.state.localStorage.userData.avatar ||
+                $store.state.localStorage.default.userData.avatar
+              "
+            ></v-img
+          ></v-avatar>
+          <!-- <span class="px-3">
+            {{
+              $store.state.localStorage.userData.name ||
+              $store.state.localStorage.default.userData.name
+            }}
+          </span> -->
+        </v-chip>
+        <span v-if="status === -1" class="mb-4 status point-error">
+          服务器连接出现错误
+        </span>
+        <span v-if="status === 0" class="mb-4 status point-null">
+          未连接服务器
+        </span>
+        <span v-if="status === 1" class="mb-4 status point-success">
+          已连接服务器，当前 {{ members.length }} 人在线
+        </span>
+      </div>
+
       <v-text-field
         v-model="input"
         solo
@@ -80,14 +115,12 @@
         background-color="grey lighten-4"
         hide-details
         label="在此输入消息"
-        single-line
         type="text"
         class="fix-margin"
       >
         <template v-slot:append-outer>
           <client-only>
             <v-btn
-              v-show="input"
               rounded
               color="primary"
               elevation="0"
@@ -130,6 +163,7 @@ export default {
     input: '',
     ws: null,
     card: true,
+    status: 0,
   }),
   validate({ params }) {
     return /^\d+$/.test(params.id)
@@ -173,8 +207,8 @@ export default {
     }
 
     this.ws.onmessage = (e) => {
-      console.log(e.data)
       const data = JSON.parse(e.data)
+      console.log(data)
       if (data.code === 0) {
         if (data.extend.message.messageType === 'messageType') {
           const message = data.extend.message
@@ -219,7 +253,7 @@ export default {
 
 <style scoped>
 .window {
-  height: calc(100vh - 32px - 56px - 56px);
+  height: calc(100vh - 56px - 132px);
   overflow-y: auto;
 }
 .bar {
@@ -235,5 +269,49 @@ export default {
   overflow: unset;
   white-space: unset;
   text-emphasis: unset;
+}
+
+.chip {
+  min-width: 36px;
+  height: 36px;
+}
+
+.status {
+  width: fit-content;
+  height: 36px;
+  padding: 8px 12px;
+  border-radius: 48px;
+  color: #616161;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+}
+
+.status::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 12px;
+  border-radius: 1rem;
+  background-color: #ffffff;
+}
+
+.status.point-success::before {
+  background-color: #69c667;
+}
+
+.status.point-waiting::before {
+  background-color: #4fc3f7;
+}
+
+.status.point-error::before {
+  background-color: #ff8a65;
+}
+
+.status.point-null::before {
+  background-color: #bdbdbd;
 }
 </style>

@@ -97,11 +97,14 @@ export default {
       await this.$axios
         .$post('http://test.lifeni.life/api/logout', {})
         .then(() => {
-          this.$router.push({ path: '/welcome' })
-          localStorage.clear()
+          console.log('Logout')
         })
         .catch((err) => {
           console.error(err)
+        })
+        .finally(() => {
+          this.$router.push({ path: '/welcome' })
+          localStorage.clear()
         })
     },
   },
