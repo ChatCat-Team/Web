@@ -23,7 +23,9 @@
       >
         <v-card-subtitle> #{{ meta.id || 'XXX' }} </v-card-subtitle>
         <v-card-title> 欢迎来到 {{ meta.title || '聊天室' }} </v-card-title>
-        <v-card-subtitle> 由 隔壁老王 在 两天前 创建 </v-card-subtitle>
+        <v-card-subtitle>
+          由 {{ meta.creatername || '匿名用户' }} 创建
+        </v-card-subtitle>
         <v-card-text v-show="meta.description">
           {{ meta.description || '没有描述信息' }}
         </v-card-text>
@@ -83,34 +85,24 @@
         class="fix-margin"
       >
         <template v-slot:append-outer>
-          <v-btn
-            v-show="input"
-            rounded
-            color="primary"
-            elevation="0"
-            width="48"
-            height="48"
-            min-width="48"
-            :disabled="!input"
-            class="ml-4"
-            @click="sendMessage"
-          >
-            <v-icon>mdi-send-outline</v-icon>
-          </v-btn>
+          <client-only>
+            <v-btn
+              v-show="input"
+              rounded
+              color="primary"
+              elevation="0"
+              width="48"
+              height="48"
+              min-width="48"
+              :disabled="!input"
+              class="ml-4"
+              @keypress.enter="!input && sendMessage"
+              @click="sendMessage"
+            >
+              <v-icon>mdi-send-outline</v-icon>
+            </v-btn>
+          </client-only>
         </template>
-        <!-- <template v-slot:prepend>
-          <v-btn
-            rounded
-            color="secondary"
-            elevation="0"
-            width="48"
-            height="48"
-            min-width="48"
-            class="mr-4"
-          >
-            <v-icon>mdi-image-outline</v-icon>
-          </v-btn>
-        </template> -->
       </v-text-field>
     </div>
   </div>
@@ -120,8 +112,8 @@
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import calendar from 'dayjs/plugin/calendar'
-dayjs.locale('zh-cn')
 dayjs.extend(calendar)
+dayjs.locale('zh-cn')
 
 export default {
   middleware: ['check'],
@@ -142,9 +134,9 @@ export default {
   validate({ params }) {
     return /^\d+$/.test(params.id)
   },
-  method: {
-    sendMessage() {
-      this.ws.send(
+  methods: {
+    async sendMessage() {
+      await this.ws.send(
         JSON.stringify({
           messageContent: this.input,
           messageType: 'ChatMessage',

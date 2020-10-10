@@ -137,24 +137,6 @@
               prepend-inner-icon="mdi-text-box-outline"
               class="full-width"
             ></v-textarea>
-            <!-- <v-text-field
-              id="input-password"
-              v-model="create.password"
-              type="number"
-              pattern="[0-9]*"
-              label="房间密码（可选）"
-              prepend-inner-icon="mdi-form-textbox-password"
-              hint="4 个字符的数字"
-              persistent-hint
-              :rules="rules.code"
-              solo
-              flat
-              height="56"
-              background-color="grey lighten-4"
-              counter="4"
-              clearable
-              class="full-width"
-            ></v-text-field> -->
           </v-form>
         </v-card>
       </v-dialog>
@@ -167,60 +149,6 @@
         >
           目前没有聊天室
         </p>
-        <!-- <NuxtLink
-          v-for="(room, i) in rooms"
-          :key="i"
-          :to="`/room/${room.id}`"
-          class="card d-flex text-decoration-none"
-        >
-          <v-card
-            v-if="room.userid === $store.state.localStorage.userData.id"
-            ripple
-            elevation="0"
-            nuxt
-            class="grey full-width lighten-4 d-flex flex-column align-start justify-space-between"
-          >
-            <div class="full-width">
-              <p class="text-caption font-weight-light ma-0 px-4 pt-4 pb-1">
-                <span class="font-weight-medium">{{ room.creatername }}</span>
-                在
-                <span class="font-weight-medium">{{
-                  fromNow(Number(room.starttimeunix))
-                }}</span>
-                创建
-              </p>
-              <v-card-title
-                class="text-h6 font-weight-medium py-0"
-                :title="room.description"
-                >{{ room.title }}</v-card-title
-              >
-            </div>
-            <p
-              v-if="room.status.code === 1"
-              class="text-body-2 pt-0 px-4 d-flex align-center status point-waiting font-weight-medium"
-            >
-              等待加入
-            </p>
-            <p
-              v-else-if="room.status.code === 2"
-              class="text-body-2 pt-0 px-4 d-flex align-center status point-success font-weight-medium"
-            >
-              正在进行
-            </p>
-            <p
-              v-else-if="room.status.code === 3"
-              class="text-body-2 pt-0 px-4 d-flex align-center status point-null font-weight-medium"
-            >
-              当前空闲
-            </p>
-            <p
-              v-else-if="room.status.code === 4"
-              class="text-body-2 pt-0 px-4 d-flex align-center status point-error font-weight-medium"
-            >
-              房间异常
-            </p>
-          </v-card>
-        </NuxtLink> -->
         <NuxtLink
           v-for="(room, i) in rooms"
           :key="i"
@@ -249,25 +177,25 @@
               >
             </div>
             <p
-              v-if="room.status.code === 1"
-              class="text-body-2 pt-0 px-4 d-flex align-center status waiting font-weight-medium"
+              v-if="room.status === 1"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-waiting font-weight-medium"
             >
               等待加入
             </p>
             <p
-              v-else-if="room.status.code === 2"
+              v-else-if="room.status === 2"
               class="text-body-2 pt-0 px-4 d-flex align-center status point-success font-weight-medium"
             >
-              正在进行
+              正在进行，{{ room.userOnlineNumber }} 人在线
             </p>
             <p
-              v-else-if="room.status.code === 3"
+              v-else-if="room.status === 3"
               class="text-body-2 pt-0 px-4 d-flex align-center status point-null font-weight-medium"
             >
               当前空闲
             </p>
             <p
-              v-else-if="room.status.code === 4"
+              v-else-if="room.status === 4"
               class="text-body-2 pt-0 px-4 d-flex align-center status point-error font-weight-medium"
             >
               房间异常
@@ -316,7 +244,7 @@ export default {
   },
   data: () => ({
     drawer: false,
-    fromNow: (d) => dayjs.unix(d).fromNow(),
+    fromNow: (d) => dayjs(d).fromNow(),
     count: 5,
     search: '',
     dialog: {
@@ -337,7 +265,38 @@ export default {
     show: {
       password: false,
     },
-    rooms: [],
+    rooms: [
+      {
+        id: 5,
+        status: 1,
+        title: '工程实践',
+        description: '大家吃饭了吗',
+        creatername: 'nb',
+        userid: 10,
+        userOnlineNumber: 10,
+        starttimeunix: '1602335758370',
+      },
+      {
+        id: 3,
+        status: 1,
+        title: '工程实践',
+        description: '大家吃饭了吗',
+        creatername: 'nb',
+        userid: 10,
+        userOnlineNumber: 10,
+        starttimeunix: '1602335758370',
+      },
+      {
+        id: 4,
+        status: 1,
+        title: '工程实践',
+        description: '大家吃饭了吗',
+        creatername: 'nb',
+        userid: 10,
+        userOnlineNumber: 10,
+        starttimeunix: '1602335758370',
+      },
+    ],
     rules: {
       title: [
         (v) => !!v || '标题为必填项',
@@ -380,7 +339,9 @@ export default {
       const data = JSON.parse(e.data)
       console.log(data)
       if (data.code === 0) {
-        this.rooms = data.extend.message.messageContent
+        const array = data.extend.message.messageContent
+        array.sort((a, b) => a.starttimeunix < b.starttimeunix)
+        this.rooms = array
       } else {
         this.snackbar = true
         this.text = '获取数据失败'
