@@ -161,7 +161,9 @@ export default {
     })
 
     const user = this.$store.state.localStorage.userData.id
-    const url = `wss://test.lifeni.life/chat/websocket/chatroom/${this.id}/${user}`
+    const url = `wss://test.lifeni.life/chat/websocket/chatroom/${this.id}/${
+      user || '0'
+    }`
     this.ws = new WebSocket(url)
 
     this.ws.onopen = () => {

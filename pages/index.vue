@@ -168,7 +168,7 @@
           class="card d-flex text-decoration-none"
         >
           <v-card
-            v-if="room.userid === this.$store.state.localStorage.userData.id"
+            v-if="room.userid === $store.state.localStorage.userData.id"
             ripple
             elevation="0"
             nuxt
@@ -222,7 +222,7 @@
           class="card d-flex text-decoration-none"
         >
           <v-card
-            v-if="room.userid !== this.$store.state.localStorage.userData.id"
+            v-if="room.userid !== $store.state.localStorage.userData.id"
             ripple
             elevation="0"
             nuxt
