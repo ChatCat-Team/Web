@@ -265,38 +265,7 @@ export default {
     show: {
       password: false,
     },
-    rooms: [
-      {
-        id: 5,
-        status: 1,
-        title: '工程实践',
-        description: '大家吃饭了吗',
-        creatername: 'nb',
-        userid: 10,
-        userOnlineNumber: 10,
-        starttimeunix: '1602335758370',
-      },
-      {
-        id: 3,
-        status: 1,
-        title: '工程实践',
-        description: '大家吃饭了吗',
-        creatername: 'nb',
-        userid: 10,
-        userOnlineNumber: 10,
-        starttimeunix: '1602335758370',
-      },
-      {
-        id: 4,
-        status: 1,
-        title: '工程实践',
-        description: '大家吃饭了吗',
-        creatername: 'nb',
-        userid: 10,
-        userOnlineNumber: 10,
-        starttimeunix: '1602335758370',
-      },
-    ],
+    rooms: [],
     rules: {
       title: [
         (v) => !!v || '标题为必填项',
