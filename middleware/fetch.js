@@ -4,7 +4,7 @@ export default async function ({ req, store, redirect }) {
   if (!process.server) {
     try {
       const res = await axios.post(
-        'https://test.lifeni.life/api/user',
+        'http://test.lifeni.life/api/user',
         {},
         { withCredentials: true }
       )
@@ -27,7 +27,7 @@ export default async function ({ req, store, redirect }) {
     } else {
       try {
         const res = await axios.post(
-          'https://test.lifeni.life/api/user',
+          'http://test.lifeni.life/api/user',
           {},
           {
             withCredentials: true,

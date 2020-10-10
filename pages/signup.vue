@@ -207,7 +207,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('https://test.lifeni.life/api/register', {
+        .$post('http://test.lifeni.life/api/register', {
           phone: this.phone,
           pwd: this.password,
           code: this.code.input,
@@ -236,7 +236,7 @@ export default {
     async sendCode() {
       this.code.text = `正在发送`
       await this.$axios
-        .$post('https://test.lifeni.life/api/sendmessageregister', {
+        .$post('http://test.lifeni.life/api/sendmessageregister', {
           phone: this.phone,
         })
         .then((res) => {

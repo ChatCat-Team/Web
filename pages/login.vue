@@ -354,7 +354,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('https://test.lifeni.life/api/login', {
+        .$post('http://test.lifeni.life/api/login', {
           phone: this.phone,
           pwd: this.password,
           code: this.captcha,
@@ -383,7 +383,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('https://test.lifeni.life/api/loginByMessage', {
+        .$post('http://test.lifeni.life/api/loginByMessage', {
           phone: this.phone,
           code: this.code.input,
         })
@@ -408,7 +408,7 @@ export default {
       e.preventDefault()
       this.code.text = `正在发送`
       await this.$axios
-        .$post('https://test.lifeni.life/api/sendmessagelogin', {
+        .$post('http://test.lifeni.life/api/sendmessagelogin', {
           phone: this.phone,
         })
         .then((res) => {
@@ -443,7 +443,7 @@ export default {
       e.preventDefault()
       this.captcha = ''
       await axios
-        .post('https://test.lifeni.life/api/sendgraphicverification', {})
+        .post('http://test.lifeni.life/api/sendgraphicverification', {})
         .then((res) => {
           if (res.data.code === 0) {
             this.base64 = res.data.extend.imgStr

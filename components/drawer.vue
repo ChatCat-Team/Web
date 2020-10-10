@@ -5,7 +5,7 @@
         <v-avatar size="120" class="avatar ma-4">
           <v-img
             v-show="$store.state.localStorage.status"
-            :src="user.avatar || 'https://test.lifeni.life/default_avatar.png'"
+            :src="user.avatar || 'http://test.lifeni.life/default_avatar.png'"
             alt="Your Avatar"
           ></v-img>
         </v-avatar>
@@ -95,7 +95,7 @@ export default {
   methods: {
     async logout() {
       await this.$axios
-        .$post('https://test.lifeni.life/api/logout', {})
+        .$post('http://test.lifeni.life/api/logout', {})
         .then(() => {
           this.$router.push({ path: '/welcome' })
           localStorage.clear()

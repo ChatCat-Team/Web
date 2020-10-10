@@ -77,11 +77,11 @@ export default {
   },
   data: () => ({
     dialog: false,
-    page: 'https://test.lifeni.life',
+    page: 'http://test.lifeni.life',
     size: 240,
   }),
   mounted() {
-    this.page = 'https://test.lifeni.life' + this.$route.fullPath
+    this.page = 'http://test.lifeni.life' + this.$route.fullPath
   },
 }
 </script>
