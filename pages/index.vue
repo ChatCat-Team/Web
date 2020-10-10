@@ -108,7 +108,7 @@
               flat
               autofocus
               aria-required
-              :rules="rules.create"
+              :rules="rules.title"
               height="56"
               background-color="grey lighten-4"
               counter="20"
