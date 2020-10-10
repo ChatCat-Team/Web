@@ -12,8 +12,8 @@
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h5 my-8">
         {{ getHello() }}，{{
-          this.$store.state.localStorage.userData.name ||
-          this.$store.state.localStorage.default.userData.name + '用户'
+          $store.state.localStorage.userData.name ||
+          $store.state.localStorage.default.userData.name + '用户'
         }}
         <br />
         <span
@@ -50,7 +50,6 @@
             type="number"
             label="输入 ID 加入一个聊天室"
             prepend-inner-icon="mdi-magnify"
-            append-icon="mdi-qrcode"
             hide-details
             class="full-width"
             @keypress.enter="goToLink"
@@ -271,7 +270,21 @@
           </v-card>
         </NuxtLink>
       </div>
-      <v-snackbar v-model="snackbar" bottom class="mb-8">
+      <v-snackbar
+        id="snackbar"
+        v-model="snackbar"
+        text
+        vertical
+        bottom
+        dark
+        transition="slide-y-reverse-transition"
+        timeout="8000"
+        class="snackbar mb-8"
+      >
+        <strong style="line-height: 1.75rem">
+          提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
+        </strong>
+        <br />
         {{ text }}
         <template v-slot:action="{ attrs }">
           <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
@@ -415,7 +428,7 @@ export default {
         })
         .catch((err) => {
           this.snackbar = true
-          this.text = '未知错误'
+          this.text = '未知错误，请查看浏览器控制台获取错误的详细信息'
           this.loading = false
           console.error(err)
         })

@@ -152,10 +152,24 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-snackbar v-model="snackbar" bottom class="mb-8">
+    <v-snackbar
+      id="snackbar"
+      v-model="snackbar"
+      text
+      vertical
+      bottom
+      dark
+      transition="slide-y-reverse-transition"
+      timeout="8000"
+      class="snackbar mb-8"
+    >
+      <strong style="line-height: 1.75rem">
+        提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
+      </strong>
+      <br />
       {{ text }}
       <template v-slot:action="{ attrs }">
-        <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
+        <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
           关闭
         </v-btn>
       </template>

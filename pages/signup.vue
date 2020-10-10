@@ -139,7 +139,21 @@
           </p>
         </v-form>
       </div>
-      <v-snackbar id="snackbar" v-model="snackbar" bottom class="mb-8">
+      <v-snackbar
+        id="snackbar"
+        v-model="snackbar"
+        text
+        vertical
+        bottom
+        dark
+        transition="slide-y-reverse-transition"
+        timeout="8000"
+        class="snackbar mb-8"
+      >
+        <strong style="line-height: 1.75rem">
+          提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
+        </strong>
+        <br />
         {{ text }}
         <template v-slot:action="{ attrs }">
           <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
@@ -228,7 +242,7 @@ export default {
         })
         .catch((err) => {
           this.snackbar = true
-          this.text = '未知错误'
+          this.text = '未知错误，请查看浏览器控制台获取错误的详细信息'
           this.loading = false
           console.error(err)
         })
@@ -262,7 +276,7 @@ export default {
         })
         .catch((err) => {
           this.snackbar = true
-          this.text = '未知错误'
+          this.text = '未知错误，请查看浏览器控制台获取错误的详细信息'
           this.code.text = `发送失败`
           console.error(err)
         })

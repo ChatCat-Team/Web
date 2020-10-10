@@ -18,7 +18,6 @@ export default async function ({ req, store, redirect }) {
       }
     } catch (error) {
       console.error('fetch', error)
-      redirect('/welcome')
     }
   } else {
     const cookies = req.headers.cookie
@@ -46,7 +45,6 @@ export default async function ({ req, store, redirect }) {
         }
       } catch (error) {
         console.error('fetch', error)
-        redirect('/welcome')
       }
     }
   }

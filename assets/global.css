@@ -38,6 +38,14 @@
   width: 50%;
 }
 
+.v-snack__wrapper {
+  width: 100%;
+  z-index: 10000;
+  max-width: 420px !important;
+  margin: 0 !important;
+  /* background-color: #ffffff !important; */
+}
+
 html {
   overflow-y: overlay !important;
 }
