@@ -167,7 +167,7 @@
         >
           目前没有聊天室
         </p>
-        <NuxtLink
+        <!-- <NuxtLink
           v-for="(room, i) in rooms"
           :key="i"
           :to="`/room/${room.id}`"
@@ -220,7 +220,7 @@
               房间异常
             </p>
           </v-card>
-        </NuxtLink>
+        </NuxtLink> -->
         <NuxtLink
           v-for="(room, i) in rooms"
           :key="i"
@@ -228,7 +228,6 @@
           class="card d-flex text-decoration-none"
         >
           <v-card
-            v-if="room.userid !== $store.state.localStorage.userData.id"
             ripple
             elevation="0"
             nuxt
@@ -344,7 +343,11 @@ export default {
         (v) => !!v || '标题为必填项',
         (v) => (v && v.length <= 20) || '最多 20 个字符',
       ],
-      description: [(v) => v.length <= 100 || '最多 100 个字符'],
+      description: [
+        (v) =>
+          (v !== undefined && v !== null && v.length <= 100) ||
+          '最多 100 个字符',
+      ],
       code: [(v) => (v && v.length === 4) || '密码为 4 个字符'],
     },
     records: ['这里', '显示的是', '曾经加入过的', '房间名', '默认开启'],
