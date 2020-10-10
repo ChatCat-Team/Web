@@ -130,7 +130,7 @@
               prepend-inner-icon="mdi-text-box-outline"
               class="full-width"
             ></v-textarea>
-            <v-text-field
+            <!-- <v-text-field
               id="input-password"
               v-model="create.password"
               type="number"
@@ -147,7 +147,7 @@
               counter="4"
               clearable
               class="full-width"
-            ></v-text-field>
+            ></v-text-field> -->
           </v-form>
         </v-card>
       </v-dialog>
@@ -384,10 +384,10 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/chat/chatRoom/createChatRoom', {
+        .$post('http://test.lifeni.life/chat/chatroom/createChatRoom', {
           title: this.create.title,
           description: this.create.description,
-          code: this.create.code,
+          // code: this.create.code,
         })
         .then((res) => {
           this.loading = false
