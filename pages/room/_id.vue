@@ -12,9 +12,12 @@
         meta.id
       }}</v-chip>
     </v-app-bar>
-    <v-sheet class="window px-4 d-flex flex-column align-center justify-start">
+    <v-sheet
+      id="box"
+      class="window px-4 d-flex flex-column align-center justify-start"
+    >
       <v-card
-        ripple
+        v-show="card"
         elevation="0"
         class="grey my-4 full-width lighten-4 d-flex flex-column align-start justify-space-between"
       >
@@ -25,7 +28,7 @@
           {{ meta.description || '没有描述信息' }}
         </v-card-text>
         <v-card-actions>
-          <v-btn color="deep-purple lighten-2" text> 知道了 </v-btn>
+          <v-btn color="primary" text @click="card = false"> 知道了 </v-btn>
         </v-card-actions>
       </v-card>
       <p
@@ -34,15 +37,34 @@
       >
         目前没有消息
       </p>
-      <v-list v-show="messages.length !== 0" three-line>
+      <v-list v-show="messages.length !== 0" two-line class="full-width">
         <template v-for="(message, index) in messages">
-          <v-list-item :key="index">
-            <v-list-item-avatar>
-              <v-img></v-img>
+          <v-list-item v-if="message.self" :key="index" ripple>
+            <v-list-item-content>
+              <v-list-item-title class="content">
+                {{ message.messageContent }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="py-1">
+                {{ message.name }}
+                {{ message.date }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-avatar color="grey lighten-4">
+              <v-img :src="message.avatar"></v-img>
+            </v-list-item-avatar>
+          </v-list-item>
+          <v-list-item v-else :key="index" ripple>
+            <v-list-item-avatar color="grey lighten-4">
+              <v-img :src="message.avatar"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title></v-list-item-title>
-              <v-list-item-subtitle></v-list-item-subtitle>
+              <v-list-item-title class="content">
+                {{ message.messageContent }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="py-1">
+                {{ message.name }}
+                {{ message.date }}
+              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -94,6 +116,12 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import calendar from 'dayjs/plugin/calendar'
+dayjs.locale('zh-cn')
+dayjs.extend(calendar)
+
 export default {
   middleware: ['check'],
   asyncData({ params }) {
@@ -107,23 +135,39 @@ export default {
     messages: [],
     members: [],
     input: '',
+    ws: null,
+    card: true,
   }),
   validate({ params }) {
     return /^\d+$/.test(params.id)
+  },
+  method: {
+    sendMessage() {
+      this.ws.send({
+        messageContent: this.input,
+        messageType: 'ChatMessage',
+      })
+    },
   },
   mounted() {
     this.meta =
       this.$store.state.sessionStorage.roomData ||
       this.$store.state.sessionStorage.default.roomData
 
+    const box = document.querySelector('#box')
+
+    this.$nextTick(() => {
+      box.scrollTop = box.scrollHeight // 滚动高度
+    })
+
     const user = this.$store.state.localStorage.userData.id
     const url = `wss://test.lifeni.life/chat/websocket/chatroom/${this.id}/${user}`
-    const ws = new WebSocket(url)
+    this.ws = new WebSocket(url)
 
-    ws.onopen = () => {
+    this.ws.onopen = () => {
       this.status = 1
       console.log('连接已打开')
-      ws.send(
+      this.ws.send(
         JSON.stringify({
           code: 0,
           msg: `房间 ${this.id} 用户 ${user} 已连接`,
@@ -131,13 +175,31 @@ export default {
       )
     }
 
-    ws.onmessage = (e) => {
+    this.ws.onmessage = (e) => {
       console.log(e.data)
-      if (e.data.code === 0) {
-        if (e.data.extend.message.messageType === 'messageType') {
-          this.messages.push(e.data.extend.message)
-        } else if (e.data.extend.message.messageType === 'SystemNotify') {
-          this.members = e.data.extend.message.messageContent
+      const data = JSON.parse(e.data)
+      if (data.code === 0) {
+        if (data.extend.message.messageType === 'messageType') {
+          const message = data.extend.message
+          const user = this.members.find((m) => m.id === message.from)
+          message.avatar = user.avatar
+          message.name = user.name
+          message.time = dayjs(message.date).calendar(null, {
+            sameDay: '[今天] h:mm A', // The same day ( Today at 2:30 AM )
+            nextDay: '[明天] h:mm A', // The next day ( Tomorrow at 2:30 AM )
+            nextWeek: 'dddd h:mm A', // The next week ( Sunday at 2:30 AM )
+            lastDay: '[昨天] h:mm A', // The day before ( Yesterday at 2:30 AM )
+            lastWeek: '[上周] dddd h:mm A', // Last week ( Last Monday at 2:30 AM )
+            sameElse: 'YYYY/MM/DD h:mm A', // Everything else ( 17/10/2011 )
+          })
+          message.self = this.message.from === user
+          this.messages.push(message)
+
+          this.$nextTick(() => {
+            box.scrollTop = box.scrollHeight // 滚动高度
+          })
+        } else if (data.extend.message.messageType === 'SystemNotify') {
+          this.members = data.extend.message.messageContent
         }
       } else {
         this.snackbar = true
@@ -145,18 +207,15 @@ export default {
       }
     }
 
-    ws.onclose = () => {
+    this.ws.onclose = () => {
       this.status = 0
       console.log('连接已关闭')
     }
 
-    ws.onerror = (err) => {
+    this.ws.onerror = (err) => {
       this.status = -1
       console.error('连接出错', url, err)
     }
-  },
-  method: {
-    async sendMessage() {},
   },
 }
 </script>
@@ -172,5 +231,12 @@ export default {
   left: 0;
   width: 100%;
   max-width: 420px;
+}
+
+.content {
+  line-height: 1.5 !important;
+  overflow: unset;
+  white-space: unset;
+  text-emphasis: unset;
 }
 </style>

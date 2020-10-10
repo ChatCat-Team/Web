@@ -16,13 +16,22 @@
           this.$store.state.localStorage.default.userData.name + '用户'
         }}
         <br />
-        <span v-if="status === -1" class="text-subtitle-1 my-2 status error">
+        <span
+          v-if="status === -1"
+          class="text-subtitle-1 my-2 status point-error"
+        >
           连接服务器出现错误
         </span>
-        <span v-if="status === 0" class="text-subtitle-1 my-2 status null">
+        <span
+          v-if="status === 0"
+          class="text-subtitle-1 my-2 status point-null"
+        >
           未连接到服务器
         </span>
-        <span v-if="status === 1" class="text-subtitle-1 my-2 status success">
+        <span
+          v-if="status === 1"
+          class="text-subtitle-1 my-2 status point-success"
+        >
           已连接到服务器
         </span>
       </v-toolbar-title>
@@ -162,7 +171,7 @@
                 <span class="font-weight-medium">{{ room.creatername }}</span>
                 在
                 <span class="font-weight-medium">{{
-                  fromNow(room.starttime)
+                  fromNow(Number(room.starttimeunix))
                 }}</span>
                 创建
               </p>
@@ -174,25 +183,25 @@
             </div>
             <p
               v-if="room.status.code === 1"
-              class="text-body-2 pt-0 px-4 d-flex align-center status waiting font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-waiting font-weight-medium"
             >
               等待加入
             </p>
             <p
               v-else-if="room.status.code === 2"
-              class="text-body-2 pt-0 px-4 d-flex align-center status success font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-success font-weight-medium"
             >
               正在进行
             </p>
             <p
               v-else-if="room.status.code === 3"
-              class="text-body-2 pt-0 px-4 d-flex align-center status null font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-null font-weight-medium"
             >
               当前空闲
             </p>
             <p
               v-else-if="room.status.code === 4"
-              class="text-body-2 pt-0 px-4 d-flex align-center status error font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-error font-weight-medium"
             >
               房间异常
             </p>
@@ -216,7 +225,7 @@
                 <span class="font-weight-medium">{{ room.creatername }}</span>
                 在
                 <span class="font-weight-medium">{{
-                  fromNow(room.starttime)
+                  fromNow(Number(room.starttimeunix))
                 }}</span>
                 创建
               </p>
@@ -234,19 +243,19 @@
             </p>
             <p
               v-else-if="room.status.code === 2"
-              class="text-body-2 pt-0 px-4 d-flex align-center status success font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-success font-weight-medium"
             >
               正在进行
             </p>
             <p
               v-else-if="room.status.code === 3"
-              class="text-body-2 pt-0 px-4 d-flex align-center status null font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-null font-weight-medium"
             >
               当前空闲
             </p>
             <p
               v-else-if="room.status.code === 4"
-              class="text-body-2 pt-0 px-4 d-flex align-center status error font-weight-medium"
+              class="text-body-2 pt-0 px-4 d-flex align-center status point-error font-weight-medium"
             >
               房间异常
             </p>
@@ -337,8 +346,9 @@ export default {
 
     ws.onmessage = (e) => {
       console.log(e.data)
-      if (e.data.code === 0) {
-        this.rooms = e.data.extend.message.messageContent
+      const data = JSON.parse(e.data)
+      if (data.code === 0) {
+        this.rooms = data.extend.message.messageContent
       } else {
         this.snackbar = true
         this.text = '获取数据失败'
@@ -431,19 +441,19 @@ export default {
   background-color: #ffffff;
 }
 
-.status.success::before {
+.status.point-success::before {
   background-color: #69c667;
 }
 
-.status.waiting::before {
+.status.point-waiting::before {
   background-color: #4fc3f7;
 }
 
-.status.error::before {
+.status.point-error::before {
   background-color: #ff8a65;
 }
 
-.status.null::before {
+.status.point-null::before {
   background-color: #bdbdbd;
 }
 </style>
