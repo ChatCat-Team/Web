@@ -87,7 +87,13 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>创建新的聊天室</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon type="submit" :loading="loading" @click="sendNewRoom">
+            <v-btn
+              icon
+              type="submit"
+              :loading="loading"
+              :disabled="!valid.create"
+              @click="sendNewRoom"
+            >
               <v-icon>mdi-check</v-icon>
             </v-btn>
           </v-toolbar>
@@ -338,7 +344,7 @@ export default {
         (v) => !!v || '标题为必填项',
         (v) => (v && v.length <= 20) || '最多 20 个字符',
       ],
-      description: [(v) => (v && v.length <= 100) || '最多 100 个字符'],
+      description: [(v) => v.length <= 100 || '最多 100 个字符'],
       code: [(v) => (v && v.length === 4) || '密码为 4 个字符'],
     },
     records: ['这里', '显示的是', '曾经加入过的', '房间名', '默认开启'],
@@ -368,8 +374,8 @@ export default {
     }
 
     ws.onmessage = (e) => {
-      console.log(e.data)
       const data = JSON.parse(e.data)
+      console.log(data)
       if (data.code === 0) {
         this.rooms = data.extend.message.messageContent
       } else {

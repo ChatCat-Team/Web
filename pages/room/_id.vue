@@ -8,16 +8,16 @@
       </v-btn>
       <v-toolbar-title> {{ meta.title }} </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-chip color="grey lighten-4" style="min-width: 32px">{{
-        meta.id
-      }}</v-chip>
+      <v-chip color="grey lighten-4" style="min-width: 32px">
+        {{ meta.id }}
+      </v-chip>
     </v-app-bar>
     <v-sheet
       id="box"
       class="window px-4 d-flex flex-column align-center justify-start"
     >
       <v-card
-        v-show="card"
+        v-if="card"
         elevation="0"
         class="grey my-4 full-width lighten-4 d-flex flex-column align-start justify-space-between"
       >
@@ -33,7 +33,7 @@
       </v-card>
       <p
         v-show="messages.length === 0"
-        class="text-body-1 grey--text lighten-2 ma-0"
+        class="text-body-1 grey--text lighten-2 ma-4"
       >
         目前没有消息
       </p>
@@ -93,6 +93,7 @@
             min-width="48"
             :disabled="!input"
             class="ml-4"
+            @click="sendMessage"
           >
             <v-icon>mdi-send-outline</v-icon>
           </v-btn>
@@ -143,10 +144,12 @@ export default {
   },
   method: {
     sendMessage() {
-      this.ws.send({
-        messageContent: this.input,
-        messageType: 'ChatMessage',
-      })
+      this.ws.send(
+        JSON.stringify({
+          messageContent: this.input,
+          messageType: 'ChatMessage',
+        })
+      )
     },
   },
   mounted() {
@@ -161,9 +164,9 @@ export default {
     })
 
     const user = this.$store.state.localStorage.userData.id
-    const url = `wss://test.lifeni.life/chat/websocket/chatroom/${this.id}/${
-      user || '0'
-    }`
+    const url = `wss://test.lifeni.life/chat/websocket/chatroom/${
+      this.id || '0'
+    }/${user || '0'}`
     this.ws = new WebSocket(url)
 
     this.ws.onopen = () => {
