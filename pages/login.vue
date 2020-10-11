@@ -118,6 +118,7 @@
                   <v-row no-gutters>
                     <v-col cols="6">
                       <v-img
+                        id="img-captcha"
                         :src="base64"
                         class="mx-4 mt-2 mr-0"
                         style="border-radius: 4px"
@@ -126,6 +127,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
+                        id="input-captcha"
                         v-model="captcha"
                         solo
                         flat
@@ -145,6 +147,7 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
+                      id="button-cancel-captcha"
                       text
                       color="deep-purple accent-4"
                       @click="dialog.captcha = false"
@@ -152,6 +155,7 @@
                       取消登录
                     </v-btn>
                     <v-btn
+                      id="button-send-captcha"
                       text
                       type="submit"
                       color="deep-purple accent-4"

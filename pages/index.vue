@@ -13,7 +13,7 @@
         id="button-menu"
         @click="drawer = true"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-h5 my-8">
+      <v-toolbar-title id="text-hello" class="text-h5 my-8">
         {{ getHello() }}，{{
           $store.state.localStorage.userData.name ||
           $store.state.localStorage.default.userData.name + '用户'
@@ -43,6 +43,7 @@
       <template v-slot:extension>
         <div class="d-flex flex-column full-width">
           <v-text-field
+            id="input-search"
             v-model="search"
             solo
             flat
@@ -69,6 +70,7 @@
       <v-dialog v-model="dialog.new" class="dialog" width="372" persistent>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
+            id="button-new-room"
             fixed
             dark
             fab
@@ -84,13 +86,14 @@
         </template>
         <v-card>
           <v-toolbar flat>
-            <v-btn icon @click="dialog.new = false">
+            <v-btn id="buton-cancel-create" icon @click="dialog.new = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-toolbar-title>创建新的聊天室</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn
+              id="buton-send-create"
               icon
               type="submit"
               :loading="loading"
@@ -125,6 +128,7 @@
               class="full-width"
             ></v-text-field>
             <v-textarea
+              id="input-room-description"
               v-model="create.description"
               solo
               flat

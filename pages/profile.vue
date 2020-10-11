@@ -7,7 +7,7 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">个人资料</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-chip color="grey lighten-4" style="min-width: 32px">
+      <v-chip id="user-id" color="grey lighten-4" style="min-width: 32px">
         UID {{ user.id || 'XXX' }}
       </v-chip>
     </v-app-bar>
@@ -123,7 +123,7 @@
 
       <v-dialog v-model="dialog.name" width="372" persistent>
         <template v-slot:activator="{ on, attrs }">
-          <v-list-item link v-bind="attrs" v-on="on">
+          <v-list-item id="list-item-name" link v-bind="attrs" v-on="on">
             <v-list-item-icon>
               <v-icon color="indigo">mdi-account-box-outline</v-icon>
             </v-list-item-icon>
@@ -142,6 +142,7 @@
           <v-form v-model="valid.name">
             <v-card-title>修改名字</v-card-title>
             <v-text-field
+              id="input-name"
               v-model="input.name"
               :placeholder="user.name"
               solo
@@ -159,6 +160,7 @@
 
             <v-card-actions>
               <v-btn
+                id="button-reset-name"
                 text
                 color="deep-purple accent-4"
                 @click="
@@ -169,6 +171,7 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn
+                id="button-cancel-name"
                 text
                 color="deep-purple accent-4"
                 @click="
@@ -179,6 +182,7 @@
                 取消操作
               </v-btn>
               <v-btn
+                id="button-send-name"
                 text
                 type="submit"
                 color="deep-purple accent-4"
@@ -202,7 +206,7 @@
 
       <v-dialog v-model="dialog.bio" width="372" persistent>
         <template v-slot:activator="{ on, attrs }">
-          <v-list-item link v-bind="attrs" v-on="on">
+          <v-list-item id="list-item-bio" link v-bind="attrs" v-on="on">
             <v-list-item-icon>
               <v-icon color="indigo">mdi-card-text-outline</v-icon>
             </v-list-item-icon>
@@ -223,6 +227,7 @@
           <v-form v-model="valid.bio">
             <v-card-title>修改个性签名</v-card-title>
             <v-textarea
+              id="input-bio"
               v-model="input.bio"
               :placeholder="user.bio"
               solo
@@ -240,6 +245,7 @@
 
             <v-card-actions>
               <v-btn
+                id="button-reset-bio"
                 text
                 color="deep-purple accent-4"
                 @click="
@@ -250,6 +256,7 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn
+                id="button-cancel-bio"
                 text
                 color="deep-purple accent-4"
                 @click="
@@ -260,6 +267,7 @@
                 取消操作
               </v-btn>
               <v-btn
+                id="button-send-bio"
                 text
                 type="submit"
                 color="deep-purple accent-4"
@@ -283,7 +291,7 @@
 
       <v-dialog v-model="dialog.location" width="372" persistent>
         <template v-slot:activator="{ on, attrs }">
-          <v-list-item link v-bind="attrs" v-on="on">
+          <v-list-item id="list-item-location" link v-bind="attrs" v-on="on">
             <v-list-item-icon>
               <v-icon color="indigo">mdi-map-marker-outline</v-icon>
             </v-list-item-icon>
@@ -304,6 +312,7 @@
           <v-form v-model="valid.location">
             <v-card-title>修改位置</v-card-title>
             <v-text-field
+              id="input-location"
               v-model="input.location"
               :placeholder="user.location"
               solo
@@ -321,6 +330,7 @@
 
             <v-card-actions>
               <v-btn
+                id="button-reset-location"
                 text
                 color="deep-purple accent-4"
                 @click="
@@ -332,6 +342,7 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn
+                id="button-cancel-location"
                 text
                 color="deep-purple accent-4"
                 @click="
@@ -342,6 +353,7 @@
                 取消操作
               </v-btn>
               <v-btn
+                id="button-send-location"
                 text
                 type="submit"
                 color="deep-purple accent-4"

@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative; height: 100vh">
     <v-app-bar flat color="white" style="z-index: 1000">
-      <v-btn icon>
+      <v-btn id="button-back" icon>
         <NuxtLink to="/" class="text-decoration-none">
           <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
         </NuxtLink>
