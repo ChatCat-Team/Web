@@ -458,7 +458,9 @@ export default {
         })
     },
     async getCode(e) {
-      e.preventDefault()
+      if (e) {
+        e.preventDefault()
+      }
       this.captcha = ''
       await axios
         .post('https://test.lifeni.life/api/sendgraphicverification', {})
