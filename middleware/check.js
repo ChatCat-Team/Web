@@ -12,9 +12,9 @@ export default async function ({ req, params, store, redirect }) {
         const room = res.data.extend.chatroom
         await store.commit('sessionStorage/setRoomData', room)
       } else if (res.data.code === 2) {
-        // redirect(`/not-found?id=${params.id}`)
+        redirect(`/not-found?id=${params.id}`)
       } else if (res.data.code === 3) {
-        // redirect('/welcome')
+        redirect('/welcome')
       } else {
         this.$nuxt.error({
           statusCode: 400,
@@ -27,7 +27,7 @@ export default async function ({ req, params, store, redirect }) {
   } else {
     const cookies = req.headers.cookie
     if (!cookies) {
-      // redirect('/welcome')
+      redirect('/welcome')
     } else {
       try {
         const res = await axios.post(
@@ -39,9 +39,9 @@ export default async function ({ req, params, store, redirect }) {
           const room = res.data.extend.chatroom
           await store.commit('sessionStorage/setRoomData', room)
         } else if (res.data.code === 2) {
-          // redirect(`/not-found?id=${params.id}`)
+          redirect(`/not-found?id=${params.id}`)
         } else if (res.data.code === 3) {
-          // redirect('/welcome')
+          redirect('/welcome')
         } else {
           this.$nuxt.error({
             statusCode: 400,
