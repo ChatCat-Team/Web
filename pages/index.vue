@@ -365,7 +365,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/chat/chatroom/createChatRoom', {
+        .$post('https://test.lifeni.life/chat/chatroom/createChatRoom', {
           title: this.create.title,
           description: this.create.description,
           // code: this.create.code,

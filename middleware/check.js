@@ -4,7 +4,7 @@ export default async function ({ req, params, store, redirect }) {
   if (!process.server) {
     try {
       const res = await axios.post(
-        'http://test.lifeni.life/chat/chatroom/join',
+        'https://test.lifeni.life/chat/chatroom/join',
         { roomid: Number(params.id) },
         { withCredentials: true }
       )
@@ -31,7 +31,7 @@ export default async function ({ req, params, store, redirect }) {
     } else {
       try {
         const res = await axios.post(
-          'http://test.lifeni.life/chat/chatroom/join',
+          'https://test.lifeni.life/chat/chatroom/join',
           { roomid: Number(params.id) },
           { withCredentials: true }
         )

@@ -15,7 +15,7 @@ export const state = () => ({
   default: {
     userData: {
       id: -1,
-      avatar: 'http://test.lifeni.life/default_avatar.png',
+      avatar: 'https://test.lifeni.life/default_avatar.png',
       name: '匿名',
       bio: '未设置签名',
       location: '地球某处',

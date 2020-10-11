@@ -80,7 +80,7 @@ export default {
     credentials: true,
   },
   /* proxy: {
-    '/api/': { target: 'http://test.lifeni.life/api/', ws: true },
+    '/api/': { target: 'https://test.lifeni.life/api/', ws: true },
   }, */
   // pwa: {
   //   icon: {

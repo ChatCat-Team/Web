@@ -29,7 +29,7 @@
             <v-avatar class="avatar my-4 mx-auto" size="240">
               <v-img
                 :src="
-                  user.avatar || 'http://test.lifeni.life/default_avatar.png'
+                  user.avatar || 'https://test.lifeni.life/default_avatar.png'
                 "
                 alt="用户头像"
               ></v-img>
@@ -78,7 +78,7 @@
               height="100"
               class="upload mx-4"
               @click="
-                input.avatar = 'http://test.lifeni.life/default_avatar.png'
+                input.avatar = 'https://test.lifeni.life/default_avatar.png'
                 image = ''
               "
             >
@@ -628,7 +628,7 @@ export default {
     async uploadAvatar() {
       try {
         const keys = await this.$axios.$get(
-          'http://test.lifeni.life/sts?id=' + this.user.id,
+          'https://test.lifeni.life/sts?id=' + this.user.id,
           { withCredentials: true, credentials: 'include' }
         )
 
@@ -682,7 +682,7 @@ export default {
     async sendAvatar() {
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           avatar: this.input.avatar,
         })
         .then((res) => {
@@ -710,7 +710,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           name: this.input.name,
         })
         .then((res) => {
@@ -738,7 +738,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           bio: this.input.bio,
         })
         .then((res) => {
@@ -766,7 +766,7 @@ export default {
       e.preventDefault()
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/api/update', {
+        .$post('https://test.lifeni.life/api/update', {
           address: this.input.location,
         })
         .then((res) => {
@@ -793,7 +793,7 @@ export default {
     async sendPassword() {
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/api/resetpwd2', {
+        .$post('https://test.lifeni.life/api/resetpwd2', {
           oldpwd: this.password.old,
           newpwd: this.password.new,
         })
@@ -818,7 +818,7 @@ export default {
     async sendDelete() {
       this.loading = true
       await this.$axios
-        .$post('http://test.lifeni.life/api/delete', {})
+        .$post('https://test.lifeni.life/api/delete', {})
         .then((res) => {
           this.loading = false
           if (res.code === 0) {
