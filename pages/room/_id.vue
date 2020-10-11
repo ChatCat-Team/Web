@@ -164,19 +164,10 @@ export default {
     ws: null,
     card: true,
     status: 0,
+    ping: null,
   }),
   validate({ params }) {
     return /^\d+$/.test(params.id)
-  },
-  methods: {
-    async sendMessage() {
-      await this.ws.send(
-        JSON.stringify({
-          messageContent: this.input,
-          messageType: 'ChatMessage',
-        })
-      )
-    },
   },
   mounted() {
     this.meta =
@@ -193,11 +184,15 @@ export default {
     const url = `wss://test.lifeni.life/chat/websocket/chatroom/${
       this.id || '0'
     }/${user || '0'}`
+
     this.ws = new WebSocket(url)
 
-    this.ws.onopen = () => {
+    this.ws.onopen = (e) => {
       this.status = 1
-      console.log('连接已打开')
+      console.log('连接已打开', e)
+      this.ping = setInterval(() => {
+        this.ws.send(JSON.stringify('ping'))
+      }, 30000)
       this.ws.send(
         JSON.stringify({
           code: 0,
@@ -209,7 +204,9 @@ export default {
     this.ws.onmessage = (e) => {
       const data = JSON.parse(e.data)
       console.log(data)
-      if (data.code === 0) {
+      if (data === 'pong') {
+        console.log('ping-pong')
+      } else if (data.code === 0) {
         if (data.extend.message.messageType === 'messageType') {
           const message = data.extend.message
           const user = this.members.find((m) => m.id === message.from)
@@ -238,15 +235,25 @@ export default {
       }
     }
 
-    this.ws.onclose = () => {
+    this.ws.onclose = (e) => {
       this.status = 0
-      console.log('连接已关闭')
+      console.log('连接已关闭', e)
     }
 
     this.ws.onerror = (err) => {
       this.status = -1
       console.error('连接出错', url, err)
     }
+  },
+  methods: {
+    async sendMessage() {
+      await this.ws.send(
+        JSON.stringify({
+          messageContent: this.input,
+          messageType: 'ChatMessage',
+        })
+      )
+    },
   },
 }
 </script>

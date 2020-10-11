@@ -287,16 +287,21 @@ export default {
       phone: 'XXX XXXX XXXX',
     },
     loading: false,
+    ws: null,
+    ping: null,
   }),
   mounted() {
     const id = this.$store.state.localStorage.userData.id
     const url = `wss://test.lifeni.life/chat/websocket/home/${id}`
-    const ws = new WebSocket(url)
+    this.ws = new WebSocket(url)
 
-    ws.onopen = () => {
+    this.ws.onopen = (e) => {
       this.status = 1
-      console.log('连接已打开')
-      ws.send(
+      console.log('连接已打开', e)
+      this.ping = setInterval(() => {
+        this.ws.send(JSON.stringify('ping'))
+      }, 30000)
+      this.ws.send(
         JSON.stringify({
           code: 0,
           msg: `用户 ${id} 已连接`,
@@ -304,10 +309,12 @@ export default {
       )
     }
 
-    ws.onmessage = (e) => {
+    this.ws.onmessage = (e) => {
       const data = JSON.parse(e.data)
       console.log(data)
-      if (data.code === 0) {
+      if (data === 'pong') {
+        console.log('ping-pong')
+      } else if (data.code === 0) {
         const array = data.extend.message.messageContent
         array.sort((a, b) => a.starttimeunix < b.starttimeunix)
         this.rooms = array
@@ -317,15 +324,19 @@ export default {
       }
     }
 
-    ws.onclose = () => {
+    this.ws.onclose = (e) => {
       this.status = 0
-      console.log('连接已关闭')
+      console.log('连接已关闭', e)
     }
 
-    ws.onerror = (err) => {
+    this.ws.onerror = (err) => {
       this.status = -1
       console.error('连接出错', url, err)
     }
+  },
+  destroyed() {
+    this.ws.close()
+    clearInterval(this.ping)
   },
   methods: {
     getHello() {
