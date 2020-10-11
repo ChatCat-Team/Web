@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-list class="mt-12">
+    <v-list class="mt-8">
       <v-list-item>
-        <v-avatar size="120" class="avatar ma-4">
+        <v-avatar size="140" class="avatar ma-4">
           <v-img
             v-show="$store.state.localStorage.status"
             :src="user.avatar || 'http://test.lifeni.life/default_avatar.png'"
@@ -24,7 +24,7 @@
     </v-list>
     <v-list nav>
       <v-list-item-group>
-        <NuxtLink to="/" class="text-decoration-none">
+        <NuxtLink id="nav-home" to="/" class="text-decoration-none">
           <v-list-item nuxt class="py-1 px-2">
             <v-list-item-action>
               <v-icon>mdi-view-dashboard-outline</v-icon>
@@ -33,7 +33,7 @@
           </v-list-item>
         </NuxtLink>
 
-        <NuxtLink to="/profile" class="text-decoration-none">
+        <NuxtLink id="nav-profile" to="/profile" class="text-decoration-none">
           <v-list-item nuxt class="py-1 px-2">
             <v-list-item-action>
               <v-icon>mdi-account-circle-outline</v-icon>
@@ -42,7 +42,7 @@
           </v-list-item>
         </NuxtLink>
 
-        <NuxtLink nuxt to="/settings" class="text-decoration-none">
+        <NuxtLink id="nav-settings" to="/settings" class="text-decoration-none">
           <v-list-item nuxt class="py-1 px-2">
             <v-list-item-action>
               <v-icon>mdi-cog-outline</v-icon>
@@ -51,7 +51,7 @@
           </v-list-item>
         </NuxtLink>
 
-        <NuxtLink to="/about" class="text-decoration-none">
+        <NuxtLink id="nav-about" to="/about" class="text-decoration-none">
           <v-list-item nuxt class="py-1 px-2">
             <v-list-item-action>
               <v-icon>mdi-information-outline</v-icon>
@@ -59,8 +59,20 @@
             <v-list-item-title>关于 ChatCat</v-list-item-title>
           </v-list-item>
         </NuxtLink>
-
-        <v-list-item nuxt class="py-1 px-2" @click="logout">
+      </v-list-item-group>
+      <v-list-item-group>
+        <v-list-item
+          id="switch-account"
+          nuxt
+          class="mt-4 mb-0 py-1 px-2"
+          @click="switchAccount"
+        >
+          <v-list-item-action>
+            <v-icon>mdi-account-supervisor-circle-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>切换账号</v-list-item-title>
+        </v-list-item>
+        <v-list-item id="logout" nuxt class="py-1 px-2" @click="logout">
           <v-list-item-action>
             <v-icon>mdi-close-circle-outline</v-icon>
           </v-list-item-action>
@@ -104,6 +116,20 @@ export default {
         })
         .finally(() => {
           this.$router.push({ path: '/welcome' })
+          localStorage.clear()
+        })
+    },
+    async switchAccount() {
+      await this.$axios
+        .$post('http://test.lifeni.life/api/logout', {})
+        .then(() => {
+          console.log('Switch Account')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+        .finally(() => {
+          this.$router.push({ path: '/login' })
           localStorage.clear()
         })
     },

@@ -1,9 +1,15 @@
 <template>
   <div style="position: relative; min-height: 100vh">
     <v-app-bar flat light color="white" elevation="0">
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        id="button-menu"
+        @click="drawer = true"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">个人资料</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-chip color="grey lighten-4" style="min-width: 32px">
+        UID {{ user.id || 'XXX' }}
+      </v-chip>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -504,7 +510,7 @@
         提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
       </strong>
       <br />
-      {{ text }}
+      <span class="text-body-1">{{ text }}</span>
       <template v-slot:action="{ attrs }">
         <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
           关闭

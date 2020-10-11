@@ -1,7 +1,10 @@
 <template>
   <div style="position: relative; min-height: 100vh">
     <v-app-bar flat elevation="0" color="white" style="z-index: 1000">
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        id="button-menu"
+        @click="drawer = true"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">关于 ChatCat</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>

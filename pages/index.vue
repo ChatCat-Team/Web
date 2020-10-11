@@ -9,7 +9,10 @@
       extended
       extension-height="56px"
     >
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        id="button-menu"
+        @click="drawer = true"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h5 my-8">
         {{ getHello() }}，{{
           $store.state.localStorage.userData.name ||
@@ -218,7 +221,7 @@
           提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
         </strong>
         <br />
-        {{ text }}
+        <span class="text-body-1">{{ text }}</span>
         <template v-slot:action="{ attrs }">
           <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
             关闭

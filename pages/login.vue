@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative; height: 100%">
     <v-app-bar prominent height="240" extended>
-      <v-btn icon>
+      <v-btn id="button-back" icon>
         <NuxtLink to="/welcome" class="text-decoration-none">
           <v-icon color="grey darken-2">mdi-arrow-left</v-icon>
         </NuxtLink>
@@ -18,7 +18,7 @@
 
       <v-dialog v-model="dialog.help" width="372">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
+          <v-btn id="button-help" icon v-bind="attrs" v-on="on">
             <v-icon>mdi-help-circle-outline</v-icon>
           </v-btn>
         </template>
@@ -290,7 +290,7 @@
           提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
         </strong>
         <br />
-        {{ text }}
+        <span class="text-body-1">{{ text }}</span>
         <template v-slot:action="{ attrs }">
           <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
             关闭

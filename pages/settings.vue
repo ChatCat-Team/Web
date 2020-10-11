@@ -1,7 +1,10 @@
 <template>
   <div style="position: relative; min-height: 100vh">
     <v-app-bar flat elevation="0" color="white">
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        id="button-menu"
+        @click="drawer = true"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="text-h6">设置</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
@@ -167,9 +170,9 @@
         提示信息 - {{ (snackbar && new Date().toLocaleString()) || '' }}
       </strong>
       <br />
-      {{ text }}
+      <span class="text-body-1">{{ text }}</span>
       <template v-slot:action="{ attrs }">
-        <v-btn text color="error" v-bind="attrs" @click="snackbar = false">
+        <v-btn text color="primary" v-bind="attrs" @click="snackbar = false">
           关闭
         </v-btn>
       </template>
