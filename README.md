@@ -15,7 +15,17 @@
 
 ## 设计
 
-界面和图标设计使用 Figma，设计稿：[Figma](https://www.figma.com/file/WohAxhrVUF0bo0mC1YMj3B/ChatCat-Home?node-id=0%3A1) 。
+界面和图标设计使用 Figma，部分设计稿：[Figma](https://www.figma.com/file/WohAxhrVUF0bo0mC1YMj3B/ChatCat-Home?node-id=0%3A1) 。
+
+下面是程序 `v0.1` 的截图：
+
+![欢迎欢迎、登录和注册页面](screenshot-1.jpg)
+
+![主页和侧栏](screenshot-2.jpg)
+
+![用户信息修改页面](screenshot-3.jpg)
+
+![设置页面](screenshot-4.jpg)
 
 ## 开发
 
@@ -36,7 +46,7 @@ $ yarn dev
 运行生产版本：
 
 ```bash
-$ yarn build 
+$ yarn build
 $ yarn start
 ```
 
