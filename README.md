@@ -1,4 +1,4 @@
-![banner](banner.png)
+![banner](banner.jpg)
 
 <h1 align="center">ChatCat Web</h1>
 <p align="center">ChatCat 的 Web 端，使用 Nuxt.js 搭建。</p>
