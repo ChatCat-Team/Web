@@ -14,6 +14,7 @@
 ## 技术
 
 - 前端框架 Vue2
+
 - 服务端渲染 Nuxt.js
 - UI 框架 Vuetify
 
@@ -21,7 +22,7 @@
 
 界面和图标设计使用 Figma，部分设计稿：[Figma](https://www.figma.com/file/WohAxhrVUF0bo0mC1YMj3B/ChatCat-Home?node-id=0%3A1) 。
 
-### 截图
+## 截图
 
 ![欢迎欢迎、登录和注册页面](docs/screenshot-1.jpg)
 
